@@ -1,6 +1,6 @@
-package hi
+package ru.srms.larp.platform
 
-
+import ru.srms.larp.platform.mail.Letter
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional

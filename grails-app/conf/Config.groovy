@@ -41,6 +41,9 @@ grails.views.default.codec = "html"
 // If unspecified, controllers are prototype scoped.
 grails.controllers.defaultScope = 'singleton'
 
+// the default value is true
+//grails.databinding.convertEmptyStringsToNull = false
+
 // GSP settings
 grails {
     views {
@@ -85,6 +88,12 @@ grails.hibernate.pass.readonly = false
 // configure passing read-only to OSIV session by default, requires "singleSession = false" OSIV mode
 grails.hibernate.osiv.readonly = false
 
+// default constraits
+//grails.gorm.default.constraints = {
+//    '*'(nullable: true, size: 1..20)
+//    myShared(blank: false)
+//}
+
 environments {
     development {
         grails.logging.jul.usebridge = true
@@ -94,6 +103,9 @@ environments {
         // TODO: grails.serverURL = "http://www.changeme.com"
     }
 }
+
+// user config
+grails.security.publicControllers = ['assets']
 
 // log4j configuration
 log4j.main = {

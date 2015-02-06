@@ -1,4 +1,4 @@
-package hi
+package ru.srms.larp.platform.mail
 
 class Letter {
 

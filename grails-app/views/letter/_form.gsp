@@ -1,4 +1,4 @@
-<%@ page import="hi.Letter" %>
+<%@ page import="ru.srms.larp.platform.mail.Letter" %>
 
 
 

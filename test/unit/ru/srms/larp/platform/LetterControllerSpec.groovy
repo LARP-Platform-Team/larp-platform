@@ -1,8 +1,9 @@
-package hi
+package ru.srms.larp.platform
 
 
 
 import grails.test.mixin.*
+import ru.srms.larp.platform.mail.Letter
 import spock.lang.*
 
 @TestFor(LetterController)
