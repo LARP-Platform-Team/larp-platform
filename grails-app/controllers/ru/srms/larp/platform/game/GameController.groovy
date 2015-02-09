@@ -1,6 +1,7 @@
 package ru.srms.larp.platform.game
 
 import grails.plugin.springsecurity.annotation.Secured
+import org.springframework.security.access.prepost.PreAuthorize
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
@@ -16,14 +17,17 @@ class GameController {
         respond Game.list(params), model:[gameInstanceCount: Game.count()]
     }
 
+    @Secured(['permitAll'])
     def show(Game gameInstance) {
         respond gameInstance
     }
 
+    @Secured(['IS_AUTHENTICATED_FULLY'])
     def create() {
         respond new Game(params)
     }
 
+    @Secured(['IS_AUTHENTICATED_FULLY'])
     @Transactional
     def save(Game gameInstance) {
         if (gameInstance == null) {
@@ -47,11 +51,14 @@ class GameController {
         }
     }
 
-
+    @Secured(['IS_AUTHENTICATED_FULLY'])
+    @PreAuthorize("hasPermission(#gameInstance, admin)")
     def edit(Game gameInstance) {
         respond gameInstance
     }
 
+    @Secured(['IS_AUTHENTICATED_FULLY'])
+    @PreAuthorize("hasPermission(#gameInstance, admin)")
     @Transactional
     def update(Game gameInstance) {
         if (gameInstance == null) {
@@ -75,6 +82,8 @@ class GameController {
         }
     }
 
+    @Secured(['IS_AUTHENTICATED_FULLY'])
+    @PreAuthorize("hasPermission(#gameInstance, admin)")
     @Transactional
     def delete(Game gameInstance) {
 
@@ -94,6 +103,7 @@ class GameController {
         }
     }
 
+    @Secured(['permitAll'])
     protected void notFound() {
         request.withFormat {
             form multipartForm {
