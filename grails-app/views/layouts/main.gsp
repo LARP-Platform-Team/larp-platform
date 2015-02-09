@@ -1,3 +1,4 @@
+<%@ page import="grails.plugin.springsecurity.SpringSecurityService" %>
 <!DOCTYPE html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
@@ -19,7 +20,11 @@
 	<body>
 		<div id="grailsLogo" role="banner"><a href="http://grails.org"><asset:image src="grails_logo.png" alt="Grails"/></a></div>
 		<g:layoutBody/>
-		<div class="footer" role="contentinfo"></div>
+    <div class="footer" role="contentinfo">
+        <sec:ifLoggedIn>
+            <a href="/j_spring_security_logout">Logout</a>
+        </sec:ifLoggedIn>
+    </div>
 		<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
 	</body>
 </html>

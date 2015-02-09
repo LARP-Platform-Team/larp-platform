@@ -39,10 +39,9 @@ class BootStrap {
                     .save()
 
 
-            // have to be authenticated as an admin to create ACLs
-//            SCH.context.authentication = new UsernamePasswordAuthenticationToken(
-//                    'admin', 'admin1',
-//                    AuthorityUtils.createAuthorityList('ROLE_ADMIN'))
+//            have to be authenticated as an admin to create ACLs
+            SCH.context.authentication = new UsernamePasswordAuthenticationToken(
+                    'admin', 'admin1', AuthorityUtils.createAuthorityList('ROLE_ADMIN'))
 
             aclUtilService.addPermission(game1, gm1.username, ADMINISTRATION)
 

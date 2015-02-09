@@ -1,7 +1,14 @@
 package ru.srms.larp.platform.game
 
+import grails.plugin.springsecurity.acl.AclService
+import grails.plugin.springsecurity.acl.AclUtilService
 import grails.plugin.springsecurity.annotation.Secured
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.acls.domain.BasePermission
+import org.springframework.security.core.context.SecurityContextHolder
+import ru.srms.larp.platform.sec.SpringUser
+
+import java.security.BasicPermission
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
@@ -10,13 +17,23 @@ import grails.transaction.Transactional
 class GameController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    def springSecurityService
+    def aclUtilService
 
     @Secured(['permitAll'])
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond Game.list(params), model:[gameInstanceCount: Game.count()]
+        println springSecurityService.currentUser?.username
+        println SecurityContextHolder.getContext().getAuthentication()?.getName()
+
+
+        println aclUtilService.hasPermission(SecurityContextHolder.getContext().getAuthentication()
+                , Game.get(9), BasePermission.ADMINISTRATION)
+
     }
 
+    @Transactional
     @Secured(['permitAll'])
     def show(Game gameInstance) {
         respond gameInstance
@@ -51,14 +68,17 @@ class GameController {
         }
     }
 
-    @Secured(['IS_AUTHENTICATED_FULLY'])
-    @PreAuthorize("hasPermission(#gameInstance, admin)")
+    @PreAuthorize("hasPermission(#gameInstance, 'ADMINISTRATION')")
     def edit(Game gameInstance) {
         respond gameInstance
     }
 
-    @Secured(['IS_AUTHENTICATED_FULLY'])
-    @PreAuthorize("hasPermission(#gameInstance, admin)")
+    @PreAuthorize("hasPermission(#gameInstance, ADMINISTRATION)")
+    def edit1(Game gameInstance) {
+        respond gameInstance
+    }
+
+    @PreAuthorize("hasPermission(#gameInstance, 'ADMINISTRATION')")
     @Transactional
     def update(Game gameInstance) {
         if (gameInstance == null) {
@@ -82,8 +102,7 @@ class GameController {
         }
     }
 
-    @Secured(['IS_AUTHENTICATED_FULLY'])
-    @PreAuthorize("hasPermission(#gameInstance, admin)")
+    @Secured(['ROLE_ADMIN'])
     @Transactional
     def delete(Game gameInstance) {
 
