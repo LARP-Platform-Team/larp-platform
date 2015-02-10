@@ -13,12 +13,18 @@ import java.security.BasicPermission
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
+@Secured(['IS_AUTHENTICATED_FULLY'])
 @Transactional(readOnly = true)
 class GameController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
     def springSecurityService
     def aclUtilService
+
+    def gameService
+
+    /** Dependency injection for permissionEvaluator. */
+    def permissionEvaluator
 
     @Secured(['permitAll'])
     def index(Integer max) {
@@ -29,22 +35,21 @@ class GameController {
 
 
         println aclUtilService.hasPermission(SecurityContextHolder.getContext().getAuthentication()
-                , Game.get(9), BasePermission.ADMINISTRATION)
+                , Game.get(10), BasePermission.ADMINISTRATION)
+        println permissionEvaluator.hasPermission(SecurityContextHolder.getContext().getAuthentication()
+                , Game.get(10), 'ADMINISTRATION')
 
     }
 
-    @Transactional
     @Secured(['permitAll'])
     def show(Game gameInstance) {
         respond gameInstance
     }
 
-    @Secured(['IS_AUTHENTICATED_FULLY'])
     def create() {
         respond new Game(params)
     }
 
-    @Secured(['IS_AUTHENTICATED_FULLY'])
     @Transactional
     def save(Game gameInstance) {
         if (gameInstance == null) {
@@ -68,17 +73,10 @@ class GameController {
         }
     }
 
-    @PreAuthorize("hasPermission(#gameInstance, 'ADMINISTRATION')")
     def edit(Game gameInstance) {
         respond gameInstance
     }
 
-    @PreAuthorize("hasPermission(#gameInstance, ADMINISTRATION)")
-    def edit1(Game gameInstance) {
-        respond gameInstance
-    }
-
-    @PreAuthorize("hasPermission(#gameInstance, 'ADMINISTRATION')")
     @Transactional
     def update(Game gameInstance) {
         if (gameInstance == null) {
@@ -91,7 +89,7 @@ class GameController {
             return
         }
 
-        gameInstance.save flush:true
+        gameService.update(gameInstance)
 
         request.withFormat {
             form multipartForm {

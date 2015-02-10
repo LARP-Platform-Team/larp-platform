@@ -1,3 +1,6 @@
+import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.acls.model.NotFoundException
+
 class UrlMappings {
 
 	static mappings = {
@@ -8,6 +11,11 @@ class UrlMappings {
         }
 
         "/"(controller:'Game')
-        "500"(view:'/error')
+        "403"(controller: "errors", action: "error403")
+        "500"(controller: "errors", action: "error500")
+        "500"(controller: "errors", action: "error403",
+                exception: AccessDeniedException)
+        "500"(controller: "errors", action: "error403",
+                exception: NotFoundException)
 	}
 }

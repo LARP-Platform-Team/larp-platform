@@ -71,7 +71,7 @@ grails.project.dependency.resolution = {
 //        compile ':shiro:1.2.1'
 //        compile ":nimble:0.7"
 
-        compile ':spring-security-core:2.0-RC4'
+//        compile ':spring-security-core:2.0-RC4'
         compile ":spring-security-acl:2.0-RC2"
 
         // Uncomment these to enable additional asset-pipeline capabilities

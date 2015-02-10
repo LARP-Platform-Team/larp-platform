@@ -22,7 +22,7 @@
 		<g:layoutBody/>
     <div class="footer" role="contentinfo">
         <sec:ifLoggedIn>
-            <a href="/j_spring_security_logout">Logout</a>
+            <a href="/larp.platfrom/j_spring_security_logout">Logout</a>
         </sec:ifLoggedIn>
     </div>
 		<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
