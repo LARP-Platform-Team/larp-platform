@@ -1,20 +1,47 @@
 package ru.srms.larp.platform.game
 
+import grails.plugin.springsecurity.acl.AclService
+import grails.plugin.springsecurity.acl.AclUtilService
+import grails.plugin.springsecurity.annotation.Secured
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.acls.domain.BasePermission
+import org.springframework.security.core.context.SecurityContextHolder
+import ru.srms.larp.platform.sec.SpringUser
 
+import java.security.BasicPermission
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
+@Secured(['IS_AUTHENTICATED_FULLY'])
 @Transactional(readOnly = true)
 class GameController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    def springSecurityService
+    def aclUtilService
 
+    def gameService
+
+    /** Dependency injection for permissionEvaluator. */
+    def permissionEvaluator
+
+    @Secured(['permitAll'])
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond Game.list(params), model:[gameInstanceCount: Game.count()]
+        println springSecurityService.currentUser?.username
+        println SecurityContextHolder.getContext().getAuthentication()?.getName()
+
+
+        println aclUtilService.hasPermission(SecurityContextHolder.getContext().getAuthentication()
+                , Game.get(10), BasePermission.ADMINISTRATION)
+        println permissionEvaluator.hasPermission(SecurityContextHolder.getContext().getAuthentication()
+                , Game.get(10), 'ADMINISTRATION')
+
     }
 
+    @Secured(['permitAll'])
     def show(Game gameInstance) {
         respond gameInstance
     }
@@ -46,7 +73,6 @@ class GameController {
         }
     }
 
-
     def edit(Game gameInstance) {
         respond gameInstance
     }
@@ -63,7 +89,7 @@ class GameController {
             return
         }
 
-        gameInstance.save flush:true
+        gameService.update(gameInstance)
 
         request.withFormat {
             form multipartForm {
@@ -74,6 +100,7 @@ class GameController {
         }
     }
 
+    @Secured(['ROLE_ADMIN'])
     @Transactional
     def delete(Game gameInstance) {
 
@@ -93,6 +120,7 @@ class GameController {
         }
     }
 
+    @Secured(['permitAll'])
     protected void notFound() {
         request.withFormat {
             form multipartForm {

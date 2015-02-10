@@ -1,10 +1,21 @@
-import org.apache.shiro.crypto.hash.Sha256Hash
+import org.springframework.security.acls.domain.BasePermission
+import org.springframework.security.acls.model.Permission
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.authority.AuthorityUtils
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.character.GameCharacter
 import ru.srms.larp.platform.mail.Letter
-import ru.srms.larp.platform.sec.ShiroUser
+import ru.srms.larp.platform.sec.SpringRole
+import ru.srms.larp.platform.sec.SpringUser
+import ru.srms.larp.platform.sec.SpringUserSpringRole
+import org.springframework.security.core.context.SecurityContextHolder as SCH
+
+import static org.springframework.security.acls.domain.BasePermission.ADMINISTRATION
 
 class BootStrap {
+
+    def aclService
+    def aclUtilService
 
     def init = { servletContext ->
         if(Letter.count == 0)
@@ -12,49 +23,47 @@ class BootStrap {
             new Letter(subject: "hi", text: "howdy?").save()
             new Letter(subject: "привет", text: "какчо?").save()
 
-            def admin = new ShiroUser(username: "admin", passwordHash: new Sha256Hash("admin1").toHex())
-            admin.addToPermissions("*:*")
-            admin.save()
+            def roleAdmin = new SpringRole(authority: 'ROLE_ADMIN').save()
+            def roleGm = new SpringRole(authority: 'ROLE_GM').save()
 
-            def gm1 = new ShiroUser(username: "gm1", passwordHash: new Sha256Hash("admin1").toHex())
-            gm1.save()
+            def admin = new SpringUser(username: 'admin', password: 'admin1').save()
+            SpringUserSpringRole.create(admin, roleAdmin)
 
-            def gm2 = new ShiroUser(username: "gm2", passwordHash: new Sha256Hash("admin1").toHex())
-            gm2.save()
+            def gm1 = new SpringUser(username: "gm1", password: "admin1").save()
+            SpringUserSpringRole.create(gm1, roleGm)
+            def gm2 = new SpringUser(username: "gm2", password: "admin1").save()
 
-            def usr1 = new ShiroUser(username: "usr1", passwordHash: new Sha256Hash("admin1").toHex())
-            usr1.save()
-
-            def usr2 = new ShiroUser(username: "usr2", passwordHash: new Sha256Hash("admin1").toHex())
-            usr2.save()
+            def usr1 = new SpringUser(username: "usr1", password: "admin1").save()
+            def usr2 = new SpringUser(username: "usr2", password: "admin1").save()
 
             Game game1 = new Game(title: "Красная шапочка")
-            game1.addToMasters(gm1)
+                    .addToMasters(gm1)
+                    .save()
+
+
+//            have to be authenticated as an admin to create ACLs
+            SCH.context.authentication = new UsernamePasswordAuthenticationToken(
+                    'admin', 'admin1', AuthorityUtils.createAuthorityList('ROLE_ADMIN'))
+
+            aclUtilService.addPermission(game1, gm1.username, ADMINISTRATION)
+
+            def redHat = new GameCharacter(name: "красная шапочка", game: game1).save()
+            def wolf = new GameCharacter(name: "волк", game: game1).save()
             game1.save()
 
-            def redHat = new GameCharacter(name: "красная шапочка", game: game1)
-            redHat.save()
-            def wolf = new GameCharacter(name: "волк", game: game1)
-            wolf.save()
+            usr1.addToCharacters(wolf).save()
 
-            game1.save()
-
-            usr1.addToCharacters(wolf)
-            usr1.save()
-
-
+            // game 2
             Game game2 = new Game(title: "Камелот")
-            game2.addToMasters(gm1).addToMasters(gm2)
-            game2.save()
+            game2.addToMasters(gm1).addToMasters(gm2).save()
 
             def king = new GameCharacter(name: "Король Артур", game: game2, player: usr1).save()
             def lancelot = new GameCharacter(name: "Ланселот", game: game2, player: usr2).save()
             def merlin = new GameCharacter(name: "Мерлин", game: game2, player: usr2).save()
 
             game2.save()
-//            merlin.player = usr2
-//            merlin.save()
-
+            merlin.player = usr2
+            merlin.save()
         }
 
     }
