@@ -1,17 +1,11 @@
 package ru.srms.larp.platform.game
 
-import grails.plugin.springsecurity.acl.AclService
-import grails.plugin.springsecurity.acl.AclUtilService
 import grails.plugin.springsecurity.annotation.Secured
-import org.springframework.security.access.prepost.PreAuthorize
+import grails.transaction.Transactional
 import org.springframework.security.acls.domain.BasePermission
 import org.springframework.security.core.context.SecurityContextHolder
-import ru.srms.larp.platform.sec.SpringUser
-
-import java.security.BasicPermission
 
 import static org.springframework.http.HttpStatus.*
-import grails.transaction.Transactional
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 @Transactional(readOnly = true)
@@ -44,6 +38,11 @@ class GameController {
     @Secured(['permitAll'])
     def show(Game gameInstance) {
         respond gameInstance
+    }
+
+    @Secured(['permitAll'])
+    def play() {
+        render(view: "show", model: [gameInstance: Game.findByAlias(params.alias)])
     }
 
     def create() {

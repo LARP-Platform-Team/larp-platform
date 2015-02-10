@@ -1,14 +1,12 @@
-import org.springframework.security.acls.domain.BasePermission
-import org.springframework.security.acls.model.Permission
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.AuthorityUtils
+import org.springframework.security.core.context.SecurityContextHolder as SCH
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.character.GameCharacter
-import ru.srms.larp.platform.mail.Letter
+import ru.srms.larp.platform.game.mail.Letter
 import ru.srms.larp.platform.sec.SpringRole
 import ru.srms.larp.platform.sec.SpringUser
 import ru.srms.larp.platform.sec.SpringUserSpringRole
-import org.springframework.security.core.context.SecurityContextHolder as SCH
 
 import static org.springframework.security.acls.domain.BasePermission.ADMINISTRATION
 
@@ -36,7 +34,7 @@ class BootStrap {
             def usr1 = new SpringUser(username: "usr1", password: "admin1").save()
             def usr2 = new SpringUser(username: "usr2", password: "admin1").save()
 
-            Game game1 = new Game(title: "Красная шапочка")
+            Game game1 = new Game(title: "Красная шапочка", alias: "the-red-hat")
                     .addToMasters(gm1)
                     .save()
 
@@ -54,7 +52,7 @@ class BootStrap {
             usr1.addToCharacters(wolf).save()
 
             // game 2
-            Game game2 = new Game(title: "Камелот")
+            Game game2 = new Game(title: "Камелот", alias: "CamelotAge77")
             game2.addToMasters(gm1).addToMasters(gm2).save()
 
             def king = new GameCharacter(name: "Король Артур", game: game2, player: usr1).save()

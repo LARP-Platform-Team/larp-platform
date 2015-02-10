@@ -1,7 +1,7 @@
 package ru.srms.larp.platform
 
 import grails.test.mixin.TestFor
-import ru.srms.larp.platform.mail.Letter
+import ru.srms.larp.platform.game.mail.Letter
 import spock.lang.Specification
 
 /**

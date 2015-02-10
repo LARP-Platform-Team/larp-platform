@@ -32,7 +32,7 @@
 				<g:each in="${gameInstanceList}" status="i" var="gameInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
-						<td><g:link action="show" id="${gameInstance.id}">${fieldValue(bean: gameInstance, field: "title")}</g:link></td>
+						<td><g:link action="play" params="[alias: gameInstance.alias]">${fieldValue(bean: gameInstance, field: "title")}</g:link></td>
 					
 					</tr>
 				</g:each>

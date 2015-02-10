@@ -1,10 +1,9 @@
 package ru.srms.larp.platform
 
-
-
-import grails.test.mixin.*
-import ru.srms.larp.platform.mail.Letter
-import spock.lang.*
+import grails.test.mixin.Mock
+import grails.test.mixin.TestFor
+import ru.srms.larp.platform.game.mail.Letter
+import spock.lang.Specification
 
 @TestFor(LetterController)
 @Mock(Letter)

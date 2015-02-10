@@ -1,9 +1,9 @@
 package ru.srms.larp.platform
 
-import ru.srms.larp.platform.mail.Letter
+import grails.transaction.Transactional
+import ru.srms.larp.platform.game.mail.Letter
 
 import static org.springframework.http.HttpStatus.*
-import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class LetterController {
