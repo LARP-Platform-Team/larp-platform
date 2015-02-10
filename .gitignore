@@ -115,4 +115,4 @@ hs_err_pid*
 # "temporary" build files
 /target
 
-
+!wrapper/*
