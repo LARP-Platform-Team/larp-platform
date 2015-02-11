@@ -7,10 +7,12 @@ class Game {
 
     String title
     String alias
+    String overview
     static hasMany = [masters: SpringUser, characters: GameCharacter]
 
     static constraints = {
         alias matches:/^[A-Za-z0-9\-]+$/
+        overview maxSize: 9999
     }
 
     static mapping = {

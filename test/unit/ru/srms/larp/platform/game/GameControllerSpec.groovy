@@ -1,8 +1,8 @@
 package ru.srms.larp.platform.game
 
-
-import grails.test.mixin.*
-import spock.lang.*
+import grails.test.mixin.Mock
+import grails.test.mixin.TestFor
+import spock.lang.Specification
 
 @TestFor(GameController)
 @Mock(Game)
@@ -52,23 +52,23 @@ class GameControllerSpec extends Specification {
 
         controller.save(game)
 
-        then: "A redirect is issued to the show action"
-        response.redirectedUrl == '/game/show/1'
+        then: "A redirect is issued to the play action"
+        response.redirectedUrl == '/game/play/1'
         controller.flash.message != null
         Game.count() == 1
     }
 
     void "Test that the show action returns the correct model"() {
-        when: "The show action is executed with a null domain"
-        controller.show(null)
+        when: "The play action is executed with a null domain"
+        controller.play(null)
 
         then: "A 404 error is returned"
         response.status == 404
 
-        when: "A domain instance is passed to the show action"
+        when: "A domain instance is passed to the play action"
         populateValidParams(params)
         def game = new Game(params)
-        controller.show(game)
+        controller.play(game)
 
         then: "A model is populated containing the domain instance"
         model.gameInstance == game
@@ -117,8 +117,8 @@ class GameControllerSpec extends Specification {
         game = new Game(params).save(flush: true)
         controller.update(game)
 
-        then: "A redirect is issues to the show action"
-        response.redirectedUrl == "/game/show/$game.id"
+        then: "A redirect is issues to the play action"
+        response.redirectedUrl == "/game/play/$game.id"
         flash.message != null
     }
 

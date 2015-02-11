@@ -2,8 +2,6 @@ package ru.srms.larp.platform.game
 
 import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
-import org.springframework.security.acls.domain.BasePermission
-import org.springframework.security.core.context.SecurityContextHolder
 
 import static org.springframework.http.HttpStatus.*
 
@@ -11,38 +9,18 @@ import static org.springframework.http.HttpStatus.*
 @Transactional(readOnly = true)
 class GameController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
-    def springSecurityService
-    def aclUtilService
-
+    static allowedMethods = [save: "POST", update: "POST"]
     def gameService
-
-    /** Dependency injection for permissionEvaluator. */
-    def permissionEvaluator
 
     @Secured(['permitAll'])
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond Game.list(params), model:[gameInstanceCount: Game.count()]
-        println springSecurityService.currentUser?.username
-        println SecurityContextHolder.getContext().getAuthentication()?.getName()
-
-
-        println aclUtilService.hasPermission(SecurityContextHolder.getContext().getAuthentication()
-                , Game.get(10), BasePermission.ADMINISTRATION)
-        println permissionEvaluator.hasPermission(SecurityContextHolder.getContext().getAuthentication()
-                , Game.get(10), 'ADMINISTRATION')
-
-    }
-
-    @Secured(['permitAll'])
-    def show(Game gameInstance) {
-        respond gameInstance
     }
 
     @Secured(['permitAll'])
     def play() {
-        render(view: "show", model: [gameInstance: Game.findByAlias(params.alias)])
+        respond Game.findByAlias(params.alias)
     }
 
     def create() {
@@ -72,8 +50,8 @@ class GameController {
         }
     }
 
-    def edit(Game gameInstance) {
-        respond gameInstance
+    def edit(Long id) {
+        respond gameService.edit(id)
     }
 
     @Transactional

@@ -34,7 +34,8 @@ class BootStrap {
             def usr1 = new SpringUser(username: "usr1", password: "admin1").save()
             def usr2 = new SpringUser(username: "usr2", password: "admin1").save()
 
-            Game game1 = new Game(title: "Красная шапочка", alias: "the-red-hat")
+            Game game1 = new Game(title: "Красная шапочка", alias: "the-red-hat",
+                    overview: "Игра по знаменитой сказке.")
                     .addToMasters(gm1)
                     .save()
 
@@ -52,7 +53,8 @@ class BootStrap {
             usr1.addToCharacters(wolf).save()
 
             // game 2
-            Game game2 = new Game(title: "Камелот", alias: "CamelotAge77")
+            Game game2 = new Game(title: "Камелот", alias: "CamelotAge77",
+                    overview: "Игра о славных ряцарях камелота.")
             game2.addToMasters(gm1).addToMasters(gm2).save()
 
             def king = new GameCharacter(name: "Король Артур", game: game2, player: usr1).save()
