@@ -2,6 +2,7 @@ package ru.srms.larp.platform.game
 
 import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
+import ru.srms.larp.platform.GameService
 
 import static org.springframework.http.HttpStatus.*
 
@@ -10,7 +11,7 @@ import static org.springframework.http.HttpStatus.*
 class GameController {
 
     static allowedMethods = [save: "POST", update: "POST"]
-    def gameService
+    GameService gameService
 
     @Secured(['permitAll'])
     def index(Integer max) {
@@ -19,8 +20,10 @@ class GameController {
     }
 
     @Secured(['permitAll'])
-    def play() {
-        respond Game.findByAlias(params.alias)
+    def play(String alias) {
+        def game = Game.findByAlias(alias)
+        respond game,
+                model: [characters: gameService.getAvailableCharacters(game)]
     }
 
     def create() {
@@ -71,7 +74,7 @@ class GameController {
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'Game.label', default: 'Game'), gameInstance.id])
-                redirect gameInstance
+                redirect action: 'play'
             }
             '*'{ respond gameInstance, [status: OK] }
         }

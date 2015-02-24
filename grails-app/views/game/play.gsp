@@ -26,22 +26,14 @@
 </div>
 
 <div id="show-game" class="content scaffold-show" role="main">
-    <h1><g:message code="default.show.label" args="[entityName]"/></h1>
+
+    <h1><g:fieldValue bean="${gameInstance}" field="title"/></h1>
+
     <g:if test="${flash.message}">
         <div class="message" role="status">${flash.message}</div>
     </g:if>
+
     <ol class="property-list game">
-
-        <g:if test="${gameInstance?.alias}">
-            <li class="fieldcontain">
-                <span id="alias-label" class="property-label"><g:message code="game.alias.label"
-                                                                         default="Alias"/></span>
-
-                <span class="property-value" aria-labelledby="alias-label"><g:fieldValue
-                        bean="${gameInstance}" field="alias"/></span>
-
-            </li>
-        </g:if>
 
         <g:if test="${gameInstance?.overview}">
             <li class="fieldcontain">
@@ -54,22 +46,20 @@
             </li>
         </g:if>
 
-        <g:if test="${gameInstance?.characters}">
+        <g:if test="${characters}">
             <li class="fieldcontain">
-                <span id="characters-label" class="property-label"><g:message
-                        code="game.characters.label" default="Characters"/></span>
+                <span id="characters-label" class="property-label">Вы можете играть за:</span>
 
-                <g:each in="${gameInstance.characters}" var="c">
-                    <span class="property-value" aria-labelledby="characters-label"><g:link
-                            controller="gameCharacter" action="show"
-                            id="${c.id}">${c?.encodeAsHTML()}</g:link></span>
+                <g:each in="${characters}" var="c">
+                    <span class="property-value" aria-labelledby="characters-label">
+                        <link:playAs charAlias="${c.alias}" gameAlias="${gameInstance.alias}">${c.name}</link:playAs>
+                    </span>
                 </g:each>
-
             </li>
         </g:if>
 
-        <g:if test="${gameInstance?.masters}">
-            <li class="fieldcontain">
+
+        <li class="fieldcontain">
                 <span id="masters-label" class="property-label"><g:message code="game.masters.label"
                                                                            default="Masters"/></span>
 
@@ -80,18 +70,6 @@
                 </g:each>
 
             </li>
-        </g:if>
-
-        <g:if test="${gameInstance?.title}">
-            <li class="fieldcontain">
-                <span id="title-label" class="property-label"><g:message code="game.title.label"
-                                                                         default="Title"/></span>
-
-                <span class="property-value" aria-labelledby="title-label"><g:fieldValue
-                        bean="${gameInstance}" field="title"/></span>
-
-            </li>
-        </g:if>
 
     </ol>
         <fieldset class="buttons">

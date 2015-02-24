@@ -11,7 +11,8 @@ class Game {
     static hasMany = [masters: SpringUser, characters: GameCharacter]
 
     static constraints = {
-        alias matches:/^[A-Za-z0-9\-]+$/
+        title unique: true
+        alias matches:/^[A-Za-z0-9\-]+$/, unique: true
         overview maxSize: 9999
     }
 

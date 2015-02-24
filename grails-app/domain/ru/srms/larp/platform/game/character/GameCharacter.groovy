@@ -7,13 +7,15 @@ import ru.srms.larp.platform.sec.SpringUser
 class GameCharacter implements InGameStuff {
 
     String name
+    String alias
     Boolean isDead = false
 
     static belongsTo = [player: SpringUser, game: Game]
 
     static constraints = {
-        // character names must be unique in the game context
+        // character names and aliases must be unique in the game context
         name maxSize: 64, validator: {val, obj -> GameCharacter.findByGameAndName(obj.game, val) == null}
+        alias matches:/^[A-Za-z0-9\-]+$/, validator: {val, obj -> GameCharacter.findByGameAndAlias(obj.game, val) == null}
         player nullable: true
     }
 

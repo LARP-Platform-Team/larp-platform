@@ -10,18 +10,17 @@ class UrlMappings {
             }
         }
 
-        "/play/$alias/" {
-            controller = 'game'
-            action = 'play'
-        }
+        name game: "/play/$alias/" (controller: 'game', action: 'play')
+        name playAs: "/play/$gameAlias/as/$charAlias"(controller: 'gameCharacter', action: 'playAs')
 
         "/"(controller:'game')
 
         "403"(controller: "errors", action: "error403")
+        "404"(controller: "errors", action: "error404")
         "500"(controller: "errors", action: "error500")
         "500"(controller: "errors", action: "error403",
                 exception: AccessDeniedException)
-        "500"(controller: "errors", action: "error403",
+        "500"(controller: "errors", action: "error404",
                 exception: NotFoundException)
 	}
 }

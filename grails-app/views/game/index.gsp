@@ -42,8 +42,11 @@
         <g:each in="${gameInstanceList}" status="i" var="gameInstance">
             <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 
-                <td><g:link action="play" params="[alias: gameInstance.alias]">
-                    ${fieldValue(bean: gameInstance, field: "title")}</g:link></td>
+                <td>
+                    <link:game alias="${gameInstance.alias}">${gameInstance.title}</link:game>
+                    %{--<g:link action="play" params="[alias: gameInstance.alias]">--}%
+                    %{--${fieldValue(bean: gameInstance, field: "title")}</g:link>--}%
+                </td>
 
                 <td>${fieldValue(bean: gameInstance, field: "overview")}</td>
 
