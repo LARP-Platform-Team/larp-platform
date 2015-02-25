@@ -83,6 +83,10 @@ ul {
 	padding: 0;
 }
 
+ul, ol {
+    list-style-position: inside;
+}
+
 img {
 	border: 0;
 }

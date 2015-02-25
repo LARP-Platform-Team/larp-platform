@@ -76,6 +76,9 @@
             <sec:permitted object="${gameInstance}" permission="administration">
                 <g:link class="edit" action="edit" resource="${gameInstance}"><g:message
                     code="default.button.edit.label" default="Edit"/></g:link>
+                <g:link class="btn-info" controller="newsFeed"action="create" params="[gameAlias: gameInstance.alias]">
+                    Добавить новостную ленту
+                </g:link>
             </sec:permitted>
 
             <sec:ifAllGranted roles="ROLE_ADMIN">

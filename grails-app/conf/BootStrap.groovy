@@ -5,6 +5,8 @@ import org.springframework.security.core.context.SecurityContextHolder as SCH
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.character.GameCharacter
 import ru.srms.larp.platform.game.mail.Letter
+import ru.srms.larp.platform.game.news.NewsFeed
+import ru.srms.larp.platform.game.news.NewsItem
 import ru.srms.larp.platform.sec.SpringRole
 import ru.srms.larp.platform.sec.SpringUser
 import ru.srms.larp.platform.sec.SpringUserSpringRole
@@ -53,6 +55,7 @@ class BootStrap {
             aclService.createAcl(new ObjectIdentityImpl(wolf))
             game1.save()
 
+            // TODO проверить - кажется, не сохраняется
             usr1.addToCharacters(wolf).save()
             aclUtilService.addPermission(wolf, usr1.username, READ)
             aclUtilService.addPermission(wolf, usr1.username, WRITE)
@@ -77,6 +80,18 @@ class BootStrap {
 
             game2.save()
 
+            def feed = new NewsFeed(game: game2, title: "Круглый стол").save()
+
+            def now = new Date().getTime()
+            new NewsItem(feed: feed, title: "Новость раз", text: "Все хорошо", created: new Date(now - 2400000)).save()
+            new NewsItem(feed: feed, title: "Новость два", text: "Все плохо", created: new Date(now - 3600000)).save()
+            new NewsItem(feed: feed, title: "Новость три", text: "Все норм", created: new Date(now - 1200000)).save()
+
+            feed = new NewsFeed(game: game2, title: "Новости магии").save()
+
+            new NewsItem(feed: feed, title: "Новость магии раз", text: "Все хорошо у магов").save()
+            new NewsItem(feed: feed, title: "Новость магии два", text: "Все хорошо!").save()
+            new NewsItem(feed: feed, title: "Новость магии три", text: "Все хорошо!!! Дада.").save()
         }
 
     }

@@ -20,34 +20,34 @@
 </div>
 
 <div id="show-gameCharacter" class="content scaffold-show" role="main">
-    <h1>${gameCharacterInstance?.name}</h1>
+    <h1>${character?.name}</h1>
     <g:if test="${flash.message}">
         <div class="message" role="status">${flash.message}</div>
     </g:if>
     <ol class="property-list gameCharacter">
-        <g:if test="${gameCharacterInstance?.player}">
+        <g:if test="${character?.player}">
             <li class="fieldcontain">
                 <span id="player-label" class="property-label"><g:message
                         code="gameCharacter.player.label" default="Player"/></span>
 
                 <span class="property-value" aria-labelledby="player-label"><g:link
                         controller="springUser" action="show"
-                        id="${gameCharacterInstance?.player?.id}">${gameCharacterInstance?.player?.encodeAsHTML()}</g:link></span>
+                        id="${character?.player?.id}">${character?.player?.encodeAsHTML()}</g:link></span>
 
             </li>
         </g:if>
 
-        <g:if test="${gameCharacterInstance?.isDead}">
-            <li class="fieldcontain">
-                <span id="isDead-label" class="property-label"><g:message
-                        code="gameCharacter.isDead.label" default="Is Dead"/></span>
+        <li class="fieldcontain">
+            <span id="isDead-label" class="property-label"><g:message
+                    code="gameCharacter.isDead.label" default="Is Dead"/></span>
 
-                <span class="property-value" aria-labelledby="isDead-label"><g:formatBoolean
-                        boolean="${gameCharacterInstance?.isDead}"/></span>
+            <span class="property-value" aria-labelledby="isDead-label"><g:formatBoolean
+                    boolean="${character?.isDead}"/></span>
 
-            </li>
-        </g:if>
+        </li>
     </ol>
+
+    <g:render template="/newsFeed/feedsList" model="[feeds: newsFeeds, character: character]"/>
 </div>
 </body>
 </html>
