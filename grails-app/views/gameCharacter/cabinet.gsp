@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="main">
+    <meta name="layout" content="game">
     <g:set var="entityName"
            value="${message(code: 'gameCharacter.label', default: 'GameCharacter')}"/>
     <title><g:message code="default.show.label" args="[entityName]"/></title>
@@ -47,7 +47,6 @@
         </li>
     </ol>
 
-    <g:render template="/newsFeed/feedsList" model="[feeds: newsFeeds, character: character]"/>
 </div>
 </body>
 </html>

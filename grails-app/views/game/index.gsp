@@ -43,9 +43,7 @@
             <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 
                 <td>
-                    <link:game alias="${gameInstance.alias}">${gameInstance.title}</link:game>
-                    %{--<g:link action="play" params="[alias: gameInstance.alias]">--}%
-                    %{--${fieldValue(bean: gameInstance, field: "title")}</g:link>--}%
+                    <link:game gameAlias="${gameInstance.alias}">${gameInstance.title}</link:game>
                 </td>
 
                 <td>${fieldValue(bean: gameInstance, field: "overview")}</td>

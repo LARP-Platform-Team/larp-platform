@@ -20,10 +20,9 @@ class GameController {
     }
 
     @Secured(['permitAll'])
-    def play(String alias) {
-        def game = Game.findByAlias(alias)
-        respond game,
-                model: [characters: gameService.getAvailableCharacters(game)]
+    def play() {
+        respond params.game,
+                model: [characters: gameService.getAvailableCharacters(params.game)]
     }
 
     def create() {

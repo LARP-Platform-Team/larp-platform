@@ -2,6 +2,7 @@ package ru.srms.larp.platform.game.news
 
 import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
+import ru.srms.larp.platform.NewsService
 
 import static org.springframework.http.HttpStatus.*
 
@@ -9,8 +10,11 @@ import static org.springframework.http.HttpStatus.*
 @Transactional(readOnly = true)
 class NewsFeedController {
 
+    NewsService newsService
+
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+    // TODO reconsider, was generated
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond NewsFeed.list(params), model:[newsFeedInstanceCount: NewsFeed.count()]

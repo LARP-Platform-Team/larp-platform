@@ -13,7 +13,7 @@ class UrlMappings {
         }
 
         // game controller
-        name game: "/play/$alias/" (controller: 'game', action: 'play')
+        name game: "/play/$gameAlias/" (controller: 'game', action: 'play')
 
         // game administration
         "/play/$gameAlias/admin/$controller/$action?/$id?" {
