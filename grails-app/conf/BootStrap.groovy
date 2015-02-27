@@ -60,6 +60,14 @@ class BootStrap {
             aclUtilService.addPermission(wolf, usr1.username, READ)
             aclUtilService.addPermission(wolf, usr1.username, WRITE)
 
+
+            def feed = new NewsFeed(game: game1, title: "Новости леса").save()
+
+            def now = new Date().getTime()
+            new NewsItem(feed: feed, title: "Новость раз", text: "Все умерли", created: new Date(now - 2400000)).save()
+
+
+
             // game 2
             Game game2 = new Game(title: "Камелот", alias: "CamelotAge77",
                     overview: "Игра о славных ряцарях камелота.")
@@ -80,9 +88,9 @@ class BootStrap {
 
             game2.save()
 
-            def feed = new NewsFeed(game: game2, title: "Круглый стол").save()
+            feed = new NewsFeed(game: game2, title: "Круглый стол").save()
 
-            def now = new Date().getTime()
+            now = new Date().getTime()
             new NewsItem(feed: feed, title: "Новость раз", text: "Все хорошо", created: new Date(now - 2400000)).save()
             new NewsItem(feed: feed, title: "Новость два", text: "Все плохо", created: new Date(now - 3600000)).save()
             new NewsItem(feed: feed, title: "Новость три", text: "Все норм", created: new Date(now - 1200000)).save()

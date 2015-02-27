@@ -10,5 +10,7 @@ class NewsFeed {
     static hasMany = [newsItems: NewsItem]
 
     static constraints = {
+        // TODO make it case-insensitive
+        title validator: {val, obj -> NewsFeed.findByGameAndTitle(obj.game, val) == null}
     }
 }

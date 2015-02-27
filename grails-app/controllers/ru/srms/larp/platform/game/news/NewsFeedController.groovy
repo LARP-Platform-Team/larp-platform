@@ -14,18 +14,16 @@ class NewsFeedController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    // TODO reconsider, was generated
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond NewsFeed.list(params), model:[newsFeedInstanceCount: NewsFeed.count()]
-    }
 
-    def show(NewsFeed newsFeedInstance) {
-        respond newsFeedInstance
+    def index(Integer max) {
+        render(view: 'index', model: [feeds: newsService.listAdminFeeds(params.game)])
+        // TODO pagination
+//        params.max = Math.min(max ?: 10, 100)
+//        respond NewsFeed.list(params), model:[newsFeedInstanceCount: NewsFeed.count()]
     }
 
     def create() {
-        respond new NewsFeed(params)
+        respond newsService.createFeed(params.game)
     }
 
     @Transactional
@@ -36,11 +34,11 @@ class NewsFeedController {
         }
 
         if (newsFeedInstance.hasErrors()) {
-            respond newsFeedInstance.errors, view:'create'
+            respond newsFeedInstance.errors, view: 'create'
             return
         }
 
-        newsFeedInstance.save flush:true
+        newsService.saveFeed(newsFeedInstance)
 
         request.withFormat {
             form multipartForm {
@@ -50,6 +48,13 @@ class NewsFeedController {
             '*' { respond newsFeedInstance, [status: CREATED] }
         }
     }
+
+    // TODO reconsider, was generated
+
+    def show(NewsFeed newsFeedInstance) {
+        respond newsFeedInstance
+    }
+
 
     def edit(NewsFeed newsFeedInstance) {
         respond newsFeedInstance

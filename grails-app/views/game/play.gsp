@@ -74,16 +74,12 @@
     </ol>
         <fieldset class="buttons">
             <sec:permitted object="${gameInstance}" permission="administration">
-                <g:link class="edit" action="edit" resource="${gameInstance}"><g:message
-                    code="default.button.edit.label" default="Edit"/></g:link>
-                <g:link class="btn-info" controller="newsFeed"action="create" params="[gameAlias: gameInstance.alias]">
-                    Добавить новостную ленту
-                </g:link>
+               <tmpl:gmControls game="${gameInstance}"/>
             </sec:permitted>
 
+
             <sec:ifAllGranted roles="ROLE_ADMIN">
-                <g:link class="edit" action="edit" resource="${gameInstance}"><g:message
-                        code="default.button.edit.label" default="Edit"/></g:link>
+                <tmpl:gmControls game="${gameInstance}"/>
                 <g:link class="delete" action="delete" resource="${gameInstance}"
                         onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
                     ${message(code: 'default.button.delete.label', default: 'Delete')}

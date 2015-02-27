@@ -12,7 +12,7 @@
 		<div class="nav" role="navigation">
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
+				<li><g:gameLink class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:gameLink></li>
 			</ul>
 		</div>
 		<div id="list-newsFeed" class="content scaffold-list" role="main">
@@ -23,28 +23,26 @@
 			<table>
 			<thead>
 					<tr>
-					
-						<th><g:message code="newsFeed.game.label" default="Game" /></th>
-					
 						<g:sortableColumn property="title" title="${message(code: 'newsFeed.title.label', default: 'Title')}" />
-					
+                        <th>Actions</th>
 					</tr>
 				</thead>
 				<tbody>
-				<g:each in="${newsFeedInstanceList}" status="i" var="newsFeedInstance">
+				<g:each in="${feeds}" status="i" var="feed">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-					
-						<td><g:link action="show" id="${newsFeedInstance.id}">${fieldValue(bean: newsFeedInstance, field: "game")}</g:link></td>
-					
-						<td>${fieldValue(bean: newsFeedInstance, field: "title")}</td>
-					
+						<td><g:gameLink action="show" id="${feed.id}">${feed.title}</g:gameLink></td>
+					    <td>
+                            <g:gameLink action="edit" id="${feed.id}" class="edit">Edit</g:gameLink>
+                            <g:gameLink class="delete" action="delete" id="${feed.id}"
+                                        onclick="return confirm('Are you sure?');">Delete</g:gameLink>
+                        </td>
 					</tr>
 				</g:each>
 				</tbody>
 			</table>
-			<div class="pagination">
-				<g:paginate total="${newsFeedInstanceCount ?: 0}" />
-			</div>
+			%{--<div class="pagination">--}%
+				%{--<g:paginate total="${feedsCount ?: 0}" />--}%
+			%{--</div>--}%
 		</div>
 	</body>
 </html>
