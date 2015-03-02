@@ -3,6 +3,7 @@ package ru.srms.larp.platform
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import ru.srms.larp.platform.game.mail.Letter
+import ru.srms.larp.platform.mail.LetterController
 import spock.lang.Specification
 
 @TestFor(LetterController)

@@ -22,7 +22,7 @@
 		<g:layoutBody/>
         <aside class="content">
             <h1>Прочее</h1>
-            <g:feeds/>
+            <g:newsFeeds/>
         </aside>
     <div class="footer" role="contentinfo">
         <sec:ifLoggedIn>

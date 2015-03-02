@@ -8,7 +8,7 @@ class NewsTagLib {
 
     NewsService newsService
 
-    def feeds = {attrs, body ->
+    def newsFeeds = {attrs, body ->
         out << render(template: '/newsFeed/feedsList', model: [
                 feeds: newsService.findFeedsByGame(attrs.game ?: params.game)])
     }

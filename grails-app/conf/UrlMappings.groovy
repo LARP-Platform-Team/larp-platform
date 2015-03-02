@@ -12,6 +12,9 @@ class UrlMappings {
             controller = 'login'
         }
 
+        // game root actions
+        "/game/$action?/$id?"(controller: 'game')
+
         // game controller
         name game: "/play/$gameAlias/" (controller: 'game', action: 'play')
 

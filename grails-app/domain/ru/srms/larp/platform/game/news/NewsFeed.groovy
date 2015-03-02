@@ -11,6 +11,7 @@ class NewsFeed {
 
     static constraints = {
         // TODO make it case-insensitive
-        title validator: {val, obj -> NewsFeed.findByGameAndTitle(obj.game, val) == null}
+        title validator: {val, obj ->
+            NewsFeed.findByGameAndTitleIlikeAndIdNotEqual(obj.game, val, obj.id) == null}
     }
 }

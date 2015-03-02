@@ -7,6 +7,7 @@ import ru.srms.larp.platform.GameService
 import static org.springframework.http.HttpStatus.*
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
+// TODO extend from BaseController
 @Transactional(readOnly = true)
 class GameController {
 

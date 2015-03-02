@@ -2,18 +2,20 @@ package ru.srms.larp.platform.game.news
 
 import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
+import org.springframework.http.HttpStatus
+import ru.srms.larp.platform.BaseController
 import ru.srms.larp.platform.NewsService
 
 import static org.springframework.http.HttpStatus.*
 
 @Secured(['permitAll'])
+// TODO надо ли делать контроллер Transactional, если у нас таков сервис?
 @Transactional(readOnly = true)
-class NewsFeedController {
+class NewsFeedController extends BaseController {
 
     NewsService newsService
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
-
+    static allowedMethods = [save: "POST", update: "POST"]
 
     def index(Integer max) {
         render(view: 'index', model: [feeds: newsService.listAdminFeeds(params.game)])
@@ -22,93 +24,58 @@ class NewsFeedController {
 //        respond NewsFeed.list(params), model:[newsFeedInstanceCount: NewsFeed.count()]
     }
 
+    def show(NewsFeed feed) {
+        respond newsService.readFeed(feed)
+    }
+
     def create() {
         respond newsService.createFeed(params.game)
     }
 
-    @Transactional
-    def save(NewsFeed newsFeedInstance) {
-        if (newsFeedInstance == null) {
-            notFound()
-            return
-        }
-
-        if (newsFeedInstance.hasErrors()) {
-            respond newsFeedInstance.errors, view: 'create'
-            return
-        }
-
-        newsService.saveFeed(newsFeedInstance)
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'newsFeed.label', default: 'NewsFeed'), newsFeedInstance.id])
-                redirect action: 'index', params: [gameAlias: params.gameAlias]
-            }
-            '*' { respond newsFeedInstance, [status: CREATED] }
-        }
-    }
-
-    // TODO reconsider, was generated
-
-    def show(NewsFeed newsFeedInstance) {
-        respond newsFeedInstance
-    }
-
-
-    def edit(NewsFeed newsFeedInstance) {
-        respond newsFeedInstance
+    def edit(NewsFeed feed) {
+        respond newsService.editFeed(feed)
     }
 
     @Transactional
-    def update(NewsFeed newsFeedInstance) {
-        if (newsFeedInstance == null) {
-            notFound()
-            return
-        }
-
-        if (newsFeedInstance.hasErrors()) {
-            respond newsFeedInstance.errors, view:'edit'
-            return
-        }
-
-        newsFeedInstance.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'NewsFeed.label', default: 'NewsFeed'), newsFeedInstance.id])
-                redirect newsFeedInstance
-            }
-            '*'{ respond newsFeedInstance, [status: OK] }
-        }
+    def save(NewsFeed feed) {
+        if (saveOrUpdate(feed, 'create'))
+            respondChange('default.created.message', CREATED, feed)
     }
 
     @Transactional
-    def delete(NewsFeed newsFeedInstance) {
+    def update(NewsFeed feed) {
+        if (saveOrUpdate(feed, 'edit'))
+            respondChange('default.updated.message', OK, feed)
+    }
 
-        if (newsFeedInstance == null) {
+    @Transactional
+    def delete(NewsFeed feed) {
+        if (feed == null) {
             notFound()
             return
         }
-
-        newsFeedInstance.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'NewsFeed.label', default: 'NewsFeed'), newsFeedInstance.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
+        newsService.deleteFeed(feed)
+        respondChange('default.deleted.message', NO_CONTENT, null, feed.id)
     }
 
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'newsFeed.label', default: 'NewsFeed'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
+    // TODO maybe pull up
+    @Transactional
+    protected boolean saveOrUpdate(NewsFeed feed, String currentView) {
+        if (feed == null) {
+            notFound()
+            return false
         }
+
+        if (feed.hasErrors()) {
+            respond feed.errors, view: currentView
+            return false
+        }
+
+        newsService.saveFeed(feed)
+        return true
+    }
+
+    protected respondChange(String messageCode, HttpStatus respondStatus, NewsFeed subject, Object id = null) {
+        return super.respondChange(messageCode, 'newsFeed.label', respondStatus, subject, id)
     }
 }

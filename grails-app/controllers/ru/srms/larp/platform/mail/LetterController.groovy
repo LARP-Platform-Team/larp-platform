@@ -1,4 +1,4 @@
-package ru.srms.larp.platform
+package ru.srms.larp.platform.mail
 
 import grails.transaction.Transactional
 import ru.srms.larp.platform.game.mail.Letter
