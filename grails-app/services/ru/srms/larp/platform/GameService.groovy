@@ -9,10 +9,13 @@ import ru.srms.larp.platform.game.character.GameCharacter
 @Transactional
 class GameService {
 
-    @PreAuthorize("hasPermission(#gameInstance, admin) \
-                    or hasRole('ROLE_ADMIN')")
-    def update(Game gameInstance) {
-        gameInstance.save flush:true
+    def save(Game game) {
+        game.save flush:true
+    }
+
+    @PreAuthorize("hasPermission(#game, admin) or hasRole('ROLE_ADMIN')")
+    def update(Game game) {
+        game.save flush:true
     }
 
     @PreAuthorize("hasPermission(#id, 'ru.srms.larp.platform.game.Game', admin) \

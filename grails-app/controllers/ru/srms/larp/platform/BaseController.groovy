@@ -6,23 +6,73 @@ import static org.springframework.http.HttpStatus.NOT_FOUND
 
 abstract class BaseController {
 
+    /**
+     * Validates input data for domain object and make redirects if instance is not found or
+     * contains errors
+     * @param object domain instance object
+     * @param view view to redirect to
+     * @return {@code true} if validation is successful, {@code false} otherwise
+     */
+    protected boolean validateData(def object, String view) {
+        if (object == null) {
+            notFound()
+            return false
+        }
+
+        if (view && object.hasErrors()) {
+            respond object.getErrors(), view: view
+            return false
+        }
+
+        return true
+    }
+
+    /**
+     * Validates input data for domain object and make redirects if instance is not found
+     * @param object domain instance object
+     * @return {@code true} if validation is successful, {@code false} otherwise
+     */
+    protected boolean validateData(def object) {
+        return validateData(object, null)
+    }
+
+    /**
+     * @return i18n message code for domain class label
+     */
+    abstract protected String labelCode()
+
+    /**
+     * Make appropriate respond if instance was not found
+     */
     protected void notFound() {
         respondChange('default.not.found.message', NOT_FOUND, null, params.id)
     }
 
-    protected def respondChange(String messageCode, String labelCode, HttpStatus respondStatus, def subject,
-                                def id = null) {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: messageCode, args: [message(code: labelCode), id ?: subject?.id])
-                redirect action: 'index', params: [gameAlias: params.gameAlias], method: "GET"
-            }
-            '*' {
-                if (subject)
-                    respond subject, [status: respondStatus]
-                else
-                    render status: respondStatus
-            }
-        }
+    /**
+     * Make appropriate respond after instance was somehow changed
+     * @param messageCode code for information message relevant to performed action
+     * @param status http status code
+     * @param object domain class instance
+     * @param id domain class instance id
+     * @return The result of the "request.withFormat" closure call
+     */
+    protected def respondChange(String messageCode, HttpStatus status, def object, def id = null) {
+
+        flash.message = message(code: messageCode, args: [message(code: labelCode()), id ?: object?.id])
+        redirect action: 'index', params: [gameAlias: params.gameAlias], method: "GET"
+
+        // TODO если "удалить" делать ссылкой, то редиректа не происходит. разобраться.
+//        request.withFormat {
+//            form multipartForm {
+//                flash.message = message(code: messageCode, args: [message(code: labelCode()), id ?: object?.id])
+//                redirect action: 'index', params: [gameAlias: params.gameAlias], method: "GET"
+//            }
+//            '*' {
+//                if (object)
+//                    respond object, [status: status]
+//                else
+//                    render status: status
+//            }
+//        }
     }
 }
