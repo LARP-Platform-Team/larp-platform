@@ -3,9 +3,7 @@
     <ul class="property-list">
         <g:each in="${feeds}" var="feed">
             <li>
-                <g:link resource="${feed}" action="show"
-                        params="[gameAlias: feed.game.alias, charAlias: params.charAlias]">
-                ${feed.title}</g:link>
+                <g:gameLink resource="${feed}" action="show">${feed.title}</g:gameLink>
             </li>
         </g:each>
     </ul>

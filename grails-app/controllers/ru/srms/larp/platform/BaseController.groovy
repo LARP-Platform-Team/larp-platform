@@ -7,8 +7,28 @@ import static org.springframework.http.HttpStatus.NOT_FOUND
 abstract class BaseController {
 
     /**
+     * Computes maximum of entries per page for pagination
+     * @param max max parameter coming from request
+     * @return maximum of entries
+     */
+    protected int pageMax(Integer max) {
+        Math.min(max ?: 10, 100)
+    }
+
+    /**
+     * Composes map with pagination options based on request parameters.<br/>
+     * Also sets up params.max value.
+     * @return map with offset and max entries for pagination
+     */
+    protected Map paginator(Integer max = null) {
+        params.max = pageMax(params.max as Integer ?: max)
+        [offset: params.offset ?: 0, max: params.max]
+    }
+
+    /**
      * Validates input data for domain object and make redirects if instance is not found or
      * contains errors
+     * TODO find common base class for domain objects
      * @param object domain instance object
      * @param view view to redirect to
      * @return {@code true} if validation is successful, {@code false} otherwise

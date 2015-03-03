@@ -1,6 +1,8 @@
 package ru.srms.larp.platform.game.news
 
-class NewsItem {
+class NewsItem
+        //implements Comparable
+{
 
     String title
     String text
@@ -15,4 +17,9 @@ class NewsItem {
     static constraints = {
         text maxSize: 9999
     }
+
+//        @Override
+//    int compareTo(Object o) {
+//        created.compareTo(obj.created)
+//    }
 }

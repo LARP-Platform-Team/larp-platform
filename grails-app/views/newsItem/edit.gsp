@@ -1,4 +1,4 @@
-<%@ page import="ru.srms.larp.platform.game.news.NewsItem" %>
+<%@ page import="org.springframework.validation.FieldError; ru.srms.larp.platform.game.news.NewsItem" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -11,8 +11,8 @@
 		<div class="nav" role="navigation">
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
+                <li><g:gameLink class="list" controller="newsFeed" action="show" id="${newsItemInstance.feed.id}">
+                    ${newsItemInstance.feed.title}</g:gameLink></li>
 			</ul>
 		</div>
 		<div id="edit-newsItem" class="content scaffold-edit" role="main">
@@ -23,11 +23,11 @@
 			<g:hasErrors bean="${newsItemInstance}">
 			<ul class="errors" role="alert">
 				<g:eachError bean="${newsItemInstance}" var="error">
-				<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
+				<li <g:if test="${error in FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
 				</g:eachError>
 			</ul>
 			</g:hasErrors>
-			<g:form url="[resource:newsItemInstance, action:'update']" method="PUT" >
+			<g:gameForm url="[resource:newsItemInstance, action:'update']" method="PUT" >
 				<g:hiddenField name="version" value="${newsItemInstance?.version}" />
 				<fieldset class="form">
 					<g:render template="form"/>
@@ -35,7 +35,7 @@
 				<fieldset class="buttons">
 					<g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
 				</fieldset>
-			</g:form>
+			</g:gameForm>
 		</div>
 	</body>
 </html>

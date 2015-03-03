@@ -14,8 +14,13 @@ class NewsService {
     }
 
     @PreAuthorize("hasPermission(#game, admin)")
-    def listAdminFeeds(Game game) {
-        NewsFeed.findAllByGame(game)
+    def listAdminFeeds(Game game, Map pagination) {
+        NewsFeed.findAllByGame(game, pagination)
+    }
+
+    @PreAuthorize("hasPermission(#game, admin)")
+    def countAdminFeeds(Game game) {
+        NewsFeed.countByGame(game)
     }
 
     @PreAuthorize("hasPermission(#game, admin)")
@@ -40,4 +45,6 @@ class NewsService {
 
     // TODO check permissions
     def readFeed(NewsFeed feed) { feed }
+
+
 }

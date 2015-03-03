@@ -1,4 +1,4 @@
-<%@ page import="ru.srms.larp.platform.game.news.NewsFeed" %>
+<%@ page import="org.springframework.validation.FieldError; ru.srms.larp.platform.game.news.NewsFeed" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -23,11 +23,11 @@
 			<g:hasErrors bean="${newsFeedInstance}">
 			<ul class="errors" role="alert">
 				<g:eachError bean="${newsFeedInstance}" var="error">
-				<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
+				<li <g:if test="${error in FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
 				</g:eachError>
 			</ul>
 			</g:hasErrors>
-			<g:form url="[resource:newsFeedInstance, action:'update', params:[gameAlias: params.gameAlias]]" >
+			<g:gameForm url="[resource:newsFeedInstance, action:'update']">
 				<g:hiddenField name="version" value="${newsFeedInstance?.version}" />
 				<fieldset class="form">
 					<g:render template="form"/>
@@ -35,7 +35,7 @@
 				<fieldset class="buttons">
 					<g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
 				</fieldset>
-			</g:form>
+			</g:gameForm>
 		</div>
 	</body>
 </html>

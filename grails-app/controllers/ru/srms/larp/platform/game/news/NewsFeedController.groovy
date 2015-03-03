@@ -16,15 +16,17 @@ class NewsFeedController extends BaseController {
 
     static allowedMethods = [save: "POST", update: "POST"]
 
-    def index(Integer max) {
-        render(view: 'index', model: [feeds: newsService.listAdminFeeds(params.game)])
-        // TODO pagination
-//        params.max = Math.min(max ?: 10, 100)
-//        respond NewsFeed.list(params), model:[newsFeedInstanceCount: NewsFeed.count()]
+    def index() {
+        render(view: 'index', model: [
+                feeds: newsService.listAdminFeeds(params.game, paginator()),
+                feedsCount: newsService.countAdminFeeds(params.game)
+        ])
     }
 
     def show(NewsFeed feed) {
-        respond newsService.readFeed(feed)
+        respond newsService.readFeed(feed), model: [
+                newsItems: NewsItem.findAllByFeed(feed, paginator()),
+                newsItemsCount: NewsItem.countByFeed(feed)]
     }
 
     def create() {
@@ -54,9 +56,7 @@ class NewsFeedController extends BaseController {
     @Transactional
     def delete(NewsFeed feed) {
         if(validateData(feed)) {
-            print 'del'
             newsService.deleteFeed(feed)
-            print 'del2'
             respondChange('default.deleted.message', NO_CONTENT, null, feed.id)
         }
     }

@@ -4,6 +4,7 @@
 <head>
     <meta name="layout" content="main">
     <g:set var="entityName" value="${message(code: 'newsFeed.label', default: 'NewsFeed')}"/>
+    <g:set var="feed" value="${newsFeedInstance as NewsFeed}"/>
     <title><g:message code="default.show.label" args="[entityName]"/></title>
 </head>
 
@@ -15,40 +16,24 @@
     <ul>
         <li><a class="home" href="${createLink(uri: '/')}"><g:message
                 code="default.home.label"/></a></li>
-        <li><g:link class="list" action="index"><g:message code="default.list.label"
-                                                           args="[entityName]"/></g:link></li>
-        <li><g:link class="create" action="create"><g:message code="default.new.label"
-                                                              args="[entityName]"/></g:link></li>
+        <li><g:gameLink class="create" controller="newsItem" action="create" params="[feedId: feed.id]">
+            <g:message code="default.new.label"
+                       args="[message(code: 'newsItem.label')]"/></g:gameLink></li>
     </ul>
 </div>
 
 <div id="show-newsFeed" class="content scaffold-show" role="main">
-    <h1>${newsFeedInstance.title}</h1>
+    <h1>${feed.title}</h1>
     <g:if test="${flash.message}">
         <div class="message" role="status">${flash.message}</div>
     </g:if>
     <div class="property-list newsFeed">
-        <g:if test="${newsFeedInstance?.newsItems}">
-            <g:each in="${newsFeedInstance.newsItems}" var="n">
-                    <article style="margin-bottom: 15px">
-                        <h2>${n.title}</h2>
-                        <g:render template="/shared/date" model="[date: n.created]"/>
-                        <p>${n.text}</p>
-                    </article>
-            </g:each>
-
-        </g:if>
+        <g:render template="/newsItem/show" collection="${newsItems}" var="item"/>
     </div>
 
-    <g:form url="[resource: newsFeedInstance, action: 'delete']" method="DELETE">
-        <fieldset class="buttons">
-            <g:link class="edit" action="edit" resource="${newsFeedInstance}"><g:message
-                    code="default.button.edit.label" default="Edit"/></g:link>
-            <g:actionSubmit class="delete" action="delete"
-                            value="${message(code: 'default.button.delete.label', default: 'Delete')}"
-                            onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');"/>
-        </fieldset>
-    </g:form>
+    <div class="pagination">
+        <g:gamePaginate action="show" id="${feed.id}" total="${newsItemsCount}"/>
+    </div>
 </div>
 </body>
 </html>

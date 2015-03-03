@@ -35,15 +35,15 @@
             </g:eachError>
         </ul>
     </g:hasErrors>
-    <g:form url="[resource: newsFeedInstance, action: 'save', params: [gameAlias: params.gameAlias]]">
+    <g:gameForm url="[resource: newsFeedInstance, action: 'save']">
         <fieldset class="form">
             <g:render template="form"/>
         </fieldset>
         <fieldset class="buttons">
             <g:submitButton name="create" class="save"
-                            value="${message(code: 'default.button.create.label', default: 'Create')}"/>
+                            value="${message(code: 'default.button.create.label')}"/>
         </fieldset>
-    </g:form>
+    </g:gameForm>
 </div>
 </body>
 </html>

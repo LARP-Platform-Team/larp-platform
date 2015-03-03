@@ -19,15 +19,14 @@ class UrlMappings {
         name game: "/play/$gameAlias/" (controller: 'game', action: 'play')
 
         // game administration
-        "/play/$gameAlias/admin/$controller/$action?/$id?" {
-
+        name gameAdmin: "/play/$gameAlias/admin/$controller/$action?/$id?" {
         }
 
         // game character cabinet
         name playAs: "/play/$gameAlias/as/$charAlias"(controller: 'gameCharacter', action: 'playAs')
 
         // actions in character cabinet
-        "/play/$gameAlias/as/$charAlias/$controller/$action?/$id?"{
+        name inGame: "/play/$gameAlias/as/$charAlias/$controller/$action?/$id?"{
             constraints {}
         }
 

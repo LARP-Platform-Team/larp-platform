@@ -23,7 +23,7 @@
 			<table>
 			<thead>
 					<tr>
-						<g:sortableColumn property="title" title="${message(code: 'newsFeed.title.label', default: 'Title')}" />
+						<g:sortableColumn property="title" title="${message(code: 'property.title.label', default: 'Title')}" />
                         <th>Actions</th>
 					</tr>
 				</thead>
@@ -31,18 +31,18 @@
 				<g:each in="${feeds}" status="i" var="feed">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						<td><g:gameLink action="show" id="${feed.id}">${feed.title}</g:gameLink></td>
-					    <td>
-                            <g:gameLink action="edit" id="${feed.id}" class="edit">Edit</g:gameLink>
+					    <td class="buttons">
+                            <g:gameLink action="edit" id="${feed.id}" class="edit">${message(code: 'default.button.edit.label')}</g:gameLink>
                             <g:gameLink class="delete" action="delete" id="${feed.id}"
-                                        onclick="return confirm('Are you sure?');">Delete</g:gameLink>
+                                        onclick="return confirm('Are you sure?');">${message(code: 'default.button.delete.label')}</g:gameLink>
                         </td>
 					</tr>
 				</g:each>
 				</tbody>
 			</table>
-			%{--<div class="pagination">--}%
-				%{--<g:paginate total="${feedsCount ?: 0}" />--}%
-			%{--</div>--}%
+			<div class="pagination">
+				<g:gamePaginate total="${feedsCount}" />
+			</div>
 		</div>
 	</body>
 </html>

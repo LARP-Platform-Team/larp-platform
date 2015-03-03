@@ -9,6 +9,10 @@ class NewsFeed {
     static belongsTo = [game: Game]
     static hasMany = [newsItems: NewsItem]
 
+    static mapping = {
+        newsItems sort: 'created', order: 'desc'
+    }
+
     static constraints = {
         // TODO make it case-insensitive
         title validator: {val, obj ->

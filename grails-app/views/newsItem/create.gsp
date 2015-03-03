@@ -1,3 +1,4 @@
+<%@ page import="org.springframework.validation.FieldError" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -10,7 +11,8 @@
 		<div class="nav" role="navigation">
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
+				<li><g:gameLink class="list" controller="newsFeed" action="show" id="${newsItemInstance.feed.id}">
+                    ${newsItemInstance.feed.title}</g:gameLink></li>
 			</ul>
 		</div>
 		<div id="create-newsItem" class="content scaffold-create" role="main">
@@ -21,18 +23,18 @@
 			<g:hasErrors bean="${newsItemInstance}">
 			<ul class="errors" role="alert">
 				<g:eachError bean="${newsItemInstance}" var="error">
-				<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
+				<li <g:if test="${error in FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
 				</g:eachError>
 			</ul>
 			</g:hasErrors>
-			<g:form url="[resource:newsItemInstance, action:'save']" >
+			<g:gameForm url="[resource:newsItemInstance, action:'save']" >
 				<fieldset class="form">
 					<g:render template="form"/>
 				</fieldset>
 				<fieldset class="buttons">
 					<g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
 				</fieldset>
-			</g:form>
+			</g:gameForm>
 		</div>
 	</body>
 </html>

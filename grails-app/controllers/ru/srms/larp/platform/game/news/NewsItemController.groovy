@@ -11,14 +11,6 @@ class NewsItemController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond NewsItem.list(params), model: [newsItemInstanceCount: NewsItem.count()]
-    }
-
-    def show(NewsItem newsItemInstance) {
-        respond newsItemInstance
-    }
 
     def create() {
         respond new NewsItem(params)
