@@ -7,6 +7,7 @@ import ru.srms.larp.platform.game.character.GameCharacter
 import ru.srms.larp.platform.game.mail.Letter
 import ru.srms.larp.platform.game.news.NewsFeed
 import ru.srms.larp.platform.game.news.NewsItem
+import ru.srms.larp.platform.game.roles.GameRole
 import ru.srms.larp.platform.sec.SpringRole
 import ru.srms.larp.platform.sec.SpringUser
 import ru.srms.larp.platform.sec.SpringUserSpringRole
@@ -100,6 +101,16 @@ class BootStrap {
             new NewsItem(feed: feed, title: "Новость магии раз", text: "Все хорошо у магов").save()
             new NewsItem(feed: feed, title: "Новость магии два", text: "Все хорошо!").save()
             new NewsItem(feed: feed, title: "Новость магии три", text: "Все хорошо!!! Дада.").save()
+
+            // роли
+            def r1 = new GameRole(title: "ФСБ", game: game2).save()
+            new GameRole(title: 'Стажер ФСБ', game: game2, parent: r1).save()
+            def r2 = new GameRole(title: 'Офицер ФСБ', game: game2, parent: r1).save()
+            new GameRole(title: 'Начальник ФСБ', game: game2, parent: r2).save()
+
+            new GameRole(title: "Вампир", game: game2).save()
+            new GameRole(title: "Человек", game: game2).save()
+            new GameRole(title: "Оборотень", game: game2).save()
         }
 
     }

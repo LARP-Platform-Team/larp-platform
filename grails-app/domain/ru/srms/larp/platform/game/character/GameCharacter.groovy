@@ -2,6 +2,7 @@ package ru.srms.larp.platform.game.character
 
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.InGameStuff
+import ru.srms.larp.platform.game.roles.GameRole
 import ru.srms.larp.platform.sec.SpringUser
 
 class GameCharacter implements InGameStuff {
@@ -10,7 +11,9 @@ class GameCharacter implements InGameStuff {
     String alias
     Boolean isDead = false
 
-    static belongsTo = [player: SpringUser, game: Game]
+    static belongsTo = [game: Game]
+    static hasOne = [player: SpringUser]
+    static hasMany = [roles: GameRole]
 
     static constraints = {
         // character names and aliases must be unique in the game context

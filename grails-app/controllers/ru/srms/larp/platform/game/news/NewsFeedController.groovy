@@ -7,7 +7,7 @@ import ru.srms.larp.platform.NewsService
 
 import static org.springframework.http.HttpStatus.*
 
-@Secured(['permitAll'])
+@Secured(['IS_AUTHENTICATED_REMEMBERED'])
 // TODO надо ли делать контроллер Transactional, если у нас таков сервис?
 @Transactional(readOnly = true)
 class NewsFeedController extends BaseController {

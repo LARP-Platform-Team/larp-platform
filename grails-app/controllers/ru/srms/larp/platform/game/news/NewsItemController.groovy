@@ -7,7 +7,7 @@ import ru.srms.larp.platform.NewsService
 
 import static org.springframework.http.HttpStatus.*
 
-@Secured(['permitAll'])
+@Secured(['IS_AUTHENTICATED_REMEMBERED'])
 @Transactional(readOnly = true)
 class NewsItemController extends BaseController {
 
