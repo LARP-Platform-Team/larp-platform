@@ -16,9 +16,9 @@
     <ul>
         <li><a class="home" href="${createLink(uri: '/')}"><g:message
                 code="default.home.label"/></a></li>
-        <li><g:gameLink class="create" controller="newsItem" action="create" params="[feedId: feed.id]">
+        <li><ingame:link class="create" controller="newsItem" action="create" params="[feedId: feed.id]">
             <g:message code="default.new.label"
-                       args="[message(code: 'newsItem.label')]"/></g:gameLink></li>
+                       args="[message(code: 'newsItem.label')]"/></ingame:link></li>
     </ul>
 </div>
 
@@ -32,7 +32,7 @@
     </div>
 
     <div class="pagination">
-        <g:gamePaginate action="show" id="${feed.id}" total="${newsItemsCount}"/>
+        <ingame:paginate action="show" id="${feed.id}" total="${newsItemsCount}"/>
     </div>
 </div>
 </body>

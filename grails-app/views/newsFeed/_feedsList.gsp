@@ -3,7 +3,7 @@
     <ul class="property-list">
         <g:each in="${feeds}" var="feed">
             <li>
-                <g:gameLink resource="${feed}" action="show">${feed.title}</g:gameLink>
+                <ingame:link resource="${feed}" action="show">${feed.title}</ingame:link>
             </li>
         </g:each>
     </ul>

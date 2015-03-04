@@ -79,7 +79,7 @@ abstract class BaseController {
     protected def respondChange(String messageCode, HttpStatus status, def object, def id = null) {
 
         flash.message = message(code: messageCode, args: [message(code: labelCode()), id ?: object?.id])
-        redirect action: 'index', params: [gameAlias: params.gameAlias], method: "GET"
+        redirect redirectParams()
 
         // TODO если "удалить" делать ссылкой, то редиректа не происходит. разобраться.
 //        request.withFormat {
@@ -94,5 +94,18 @@ abstract class BaseController {
 //                    render status: status
 //            }
 //        }
+    }
+
+    /**
+     * May be overriden for custom redirect rules
+     * @return map of redirect params
+     */
+    protected Map redirectParams() {
+        def defaults = [action: 'index', params: [:], method: "GET"]
+        if(params.gameAlias)
+            defaults.params.gameAlias = params.gameAlias
+        if(params.charAlias)
+            defaults.params.charAlias = params.charAlias
+        return defaults
     }
 }

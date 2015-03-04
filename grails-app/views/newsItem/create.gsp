@@ -11,8 +11,8 @@
 		<div class="nav" role="navigation">
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:gameLink class="list" controller="newsFeed" action="show" id="${newsItemInstance.feed.id}">
-                    ${newsItemInstance.feed.title}</g:gameLink></li>
+				<li><ingame:link class="list" controller="newsFeed" action="show" id="${newsItemInstance.feed.id}">
+                    ${newsItemInstance.feed.title}</ingame:link></li>
 			</ul>
 		</div>
 		<div id="create-newsItem" class="content scaffold-create" role="main">
@@ -27,14 +27,14 @@
 				</g:eachError>
 			</ul>
 			</g:hasErrors>
-			<g:gameForm url="[resource:newsItemInstance, action:'save']" >
+			<ingame:form url="[resource:newsItemInstance, action:'save']" >
 				<fieldset class="form">
 					<g:render template="form"/>
 				</fieldset>
 				<fieldset class="buttons">
 					<g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
 				</fieldset>
-			</g:gameForm>
+			</ingame:form>
 		</div>
 	</body>
 </html>

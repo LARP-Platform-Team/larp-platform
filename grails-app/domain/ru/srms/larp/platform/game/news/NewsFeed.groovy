@@ -1,8 +1,9 @@
 package ru.srms.larp.platform.game.news
 
 import ru.srms.larp.platform.game.Game
+import ru.srms.larp.platform.game.InGameStuff
 
-class NewsFeed {
+class NewsFeed implements InGameStuff {
 
     String title
 
@@ -17,5 +18,10 @@ class NewsFeed {
         // TODO make it case-insensitive
         title validator: {val, obj ->
             NewsFeed.findByGameAndTitleIlikeAndIdNotEqual(obj.game, val, obj.id) == null}
+    }
+
+    @Override
+    Game extractGame() {
+        return game
     }
 }

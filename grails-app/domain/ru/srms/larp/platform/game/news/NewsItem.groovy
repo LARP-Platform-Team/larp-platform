@@ -1,6 +1,9 @@
 package ru.srms.larp.platform.game.news
 
-class NewsItem
+import ru.srms.larp.platform.game.Game
+import ru.srms.larp.platform.game.InGameStuff
+
+class NewsItem implements InGameStuff
         //implements Comparable
 {
 
@@ -22,4 +25,8 @@ class NewsItem
 //    int compareTo(Object o) {
 //        created.compareTo(obj.created)
 //    }
+    @Override
+    Game extractGame() {
+        return feed.game
+    }
 }

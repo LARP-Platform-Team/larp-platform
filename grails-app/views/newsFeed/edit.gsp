@@ -11,8 +11,8 @@
 		<div class="nav" role="navigation">
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:gameLink class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:gameLink></li>
-				<li><g:gameLink class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:gameLink></li>
+				<li><ingame:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></ingame:link></li>
+				<li><ingame:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></ingame:link></li>
 			</ul>
 		</div>
 		<div id="edit-newsFeed" class="content scaffold-edit" role="main">
@@ -27,7 +27,7 @@
 				</g:eachError>
 			</ul>
 			</g:hasErrors>
-			<g:gameForm url="[resource:newsFeedInstance, action:'update']">
+			<ingame:form url="[resource:newsFeedInstance, action:'update']">
 				<g:hiddenField name="version" value="${newsFeedInstance?.version}" />
 				<fieldset class="form">
 					<g:render template="form"/>
@@ -35,7 +35,7 @@
 				<fieldset class="buttons">
 					<g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
 				</fieldset>
-			</g:gameForm>
+			</ingame:form>
 		</div>
 	</body>
 </html>

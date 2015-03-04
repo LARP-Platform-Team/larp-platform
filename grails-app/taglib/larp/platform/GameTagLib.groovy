@@ -1,8 +1,9 @@
 package larp.platform
 
 class GameTagLib {
+    static namespace = "ingame"
 //    static defaultEncodeAs = [taglib: 'html']
-    //static encodeAsForTags = [tagName: [taglib:'html'], otherTagName: [taglib:'none']]
+//    static encodeAsForTags = [tagName: [taglib:'html'], otherTagName: [taglib:'none']]
 
     /**
      * Extends general linking to controllers, actions etc.<br/>
@@ -23,18 +24,8 @@ class GameTagLib {
      * @attr gameAlias by default is extracted from params
      * @attr charAlias by default is extracted from params
      */
-    def gameLink = { attrs, body ->
-        if (!attrs.params)
-            attrs.params = [:]
-
-        if (!attrs.params.gameAlias)
-            attrs.params.gameAlias = attrs.gameAlias ?: params.gameAlias
-
-        def charAlias = attrs.charAlias ?: params.charAlias
-        if (!attrs.params.charAlias && charAlias)
-            attrs.params.charAlias = charAlias
-
-        out << g.link(defineMapping(attrs), body)
+    def link = { attrs, body ->
+        out << g.link(determineMapping(composeAttrs(attrs, true)), body)
     }
 
     /**
@@ -63,8 +54,8 @@ class GameTagLib {
      * @attr mapping The named URL mapping to use to rewrite the link
      * @attr fragment The link fragment (often called anchor tag) to use
      */
-    def gamePaginate = { Map attrs ->
-        out << g.paginate(defineMapping(composeAttrs(attrs)))
+    def paginate = { Map attrs ->
+        out << g.paginate(determineMapping(composeAttrs(attrs)))
     }
 
     /**
@@ -82,13 +73,17 @@ class GameTagLib {
      * @attr useToken Set whether to send a token in the request to handle duplicate form submissions. See Handling Duplicate Form Submissions
      * @attr method the form method to use, either 'POST' or 'GET'; defaults to 'POST'
      */
-    def gameForm = { attrs, body ->
+    def form = { attrs, body ->
         attrs.url = composeAttrs(attrs.url)
         out << g.form(attrs, body)
     }
 
-    // TODO think about links
-    private Map defineMapping(Map attrs) {
+    /**
+     * Choose correct mapping for the current environment
+     * @param attrs tag attrs map
+     * @return modified attrs map
+     */
+    private Map determineMapping(Map attrs) {
         if (!attrs.mapping) {
             if (params.charAlias)
                 attrs.mapping = 'inGame'
@@ -98,14 +93,27 @@ class GameTagLib {
         return attrs
     }
 
-    private Map composeAttrs(Map attrs) {
+    /**
+     * Add in-game info to the tag attrs
+     * @param attrs tag attrs map
+     * @param checkAttrs if {@code true} - look for in-game info in tag attrs
+     * @return modified attrs map
+     */
+    private Map composeAttrs(Map attrs, boolean checkAttrs = false) {
         if (!attrs.params)
             attrs.params = [:]
 
-        if (!attrs.params.gameAlias && params.gameAlias)
+        // take game alias from defined tag attr, if needed
+        if(checkAttrs && attrs.gameAlias)
+            attrs.params.gameAlias = attrs.gameAlias
+        // else from params scope, if it defined there and not explicitly defined in params tag attr
+        else if (!attrs.params.gameAlias && params.gameAlias)
             attrs.params.gameAlias = params.gameAlias
 
-        if (!attrs.params.charAlias && params.charAlias)
+        // same for char alias
+        if(checkAttrs && attrs.charAlias)
+            attrs.params.charAlias = attrs.charAlias
+        else if (!attrs.params.charAlias && params.charAlias)
             attrs.params.charAlias = params.charAlias
 
         return attrs

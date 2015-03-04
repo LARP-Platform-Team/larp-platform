@@ -12,7 +12,7 @@
 		<div class="nav" role="navigation">
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:gameLink class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:gameLink></li>
+				<li><ingame:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></ingame:link></li>
 			</ul>
 		</div>
 		<div id="list-newsFeed" class="content scaffold-list" role="main">
@@ -30,18 +30,18 @@
 				<tbody>
 				<g:each in="${feeds}" status="i" var="feed">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-						<td><g:gameLink action="show" id="${feed.id}">${feed.title}</g:gameLink></td>
+						<td><ingame:link action="show" id="${feed.id}">${feed.title}</ingame:link></td>
 					    <td class="buttons">
-                            <g:gameLink action="edit" id="${feed.id}" class="edit">${message(code: 'default.button.edit.label')}</g:gameLink>
-                            <g:gameLink class="delete" action="delete" id="${feed.id}"
-                                        onclick="return confirm('Are you sure?');">${message(code: 'default.button.delete.label')}</g:gameLink>
+                            <ingame:link action="edit" id="${feed.id}" class="edit">${message(code: 'default.button.edit.label')}</ingame:link>
+                            <ingame:link class="delete" action="delete" id="${feed.id}"
+                                        onclick="return confirm('Are you sure?');">${message(code: 'default.button.delete.label')}</ingame:link>
                         </td>
 					</tr>
 				</g:each>
 				</tbody>
 			</table>
 			<div class="pagination">
-				<g:gamePaginate total="${feedsCount}" />
+				<ingame:paginate total="${feedsCount}" />
 			</div>
 		</div>
 	</body>

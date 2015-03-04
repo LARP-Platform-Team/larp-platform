@@ -15,7 +15,7 @@
         <g:message code="newsItem.created.label" default="Created" />
         <span class="required-indicator">*</span>
     </label>
-    <g:datePicker name="created" precision="day"  value="${newsItemInstance?.created}"  />
+    <g:datePicker name="created" precision="minute"  value="${newsItemInstance?.created}"  />
 
 </div>
 
@@ -34,8 +34,8 @@
 		<g:message code="newsFeed.label" default="Feed" />
 		<span class="required-indicator">*</span>
 	</label>
-    <span>${feed.title}</span>
-	<g:hiddenField id="feed" name="feed.id" value="${feed.id}" class="many-to-one"/>
+    <span>${newsItemInstance.feed.title}</span>
+	<g:hiddenField id="feed" name="feed.id" value="${newsItemInstance.feed.id}" class="many-to-one"/>
 
 </div>
 

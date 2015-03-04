@@ -16,8 +16,8 @@
         <li><a class="home" href="${createLink(uri: '/')}"><g:message
                 code="default.home.label"/></a></li>
         <li>
-            <g:gameLink class="list" action="index"><g:message code="default.list.label"
-                                                               args="[entityName]"/></g:gameLink>
+            <ingame:link class="list" action="index"><g:message code="default.list.label"
+                                                               args="[entityName]"/></ingame:link>
         </li>
     </ul>
 </div>
@@ -35,7 +35,7 @@
             </g:eachError>
         </ul>
     </g:hasErrors>
-    <g:gameForm url="[resource: newsFeedInstance, action: 'save']">
+    <ingame:form url="[resource: newsFeedInstance, action: 'save']">
         <fieldset class="form">
             <g:render template="form"/>
         </fieldset>
@@ -43,7 +43,7 @@
             <g:submitButton name="create" class="save"
                             value="${message(code: 'default.button.create.label')}"/>
         </fieldset>
-    </g:gameForm>
+    </ingame:form>
 </div>
 </body>
 </html>

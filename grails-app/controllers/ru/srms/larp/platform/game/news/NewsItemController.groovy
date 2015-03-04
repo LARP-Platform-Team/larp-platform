@@ -2,96 +2,66 @@ package ru.srms.larp.platform.game.news
 
 import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
+import ru.srms.larp.platform.BaseController
+import ru.srms.larp.platform.NewsService
 
 import static org.springframework.http.HttpStatus.*
 
 @Secured(['permitAll'])
 @Transactional(readOnly = true)
-class NewsItemController {
+class NewsItemController extends BaseController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
-
+    static allowedMethods = [save: "POST", update: "POST"]
+    NewsService newsService
 
     def create() {
-        respond new NewsItem(params)
+        if(!params.feedId || !NewsFeed.exists(params.feedId)) {
+            response.sendError(NOT_FOUND.value())
+            return
+        }
+        respond newsService.createNews(NewsFeed.get(params.feedId))
+    }
+
+    def edit(NewsItem newsItem) {
+        respond newsService.editNews(newsItem)
     }
 
     @Transactional
-    def save(NewsItem newsItemInstance) {
-        if (newsItemInstance == null) {
-            notFound()
-            return
-        }
-
-        if (newsItemInstance.hasErrors()) {
-            respond newsItemInstance.errors, view: 'create'
-            return
-        }
-
-        newsItemInstance.save flush: true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'newsItem.label', default: 'NewsItem'), newsItemInstance.id])
-                redirect newsItemInstance
-            }
-            '*' { respond newsItemInstance, [status: CREATED] }
-        }
-    }
-
-    def edit(NewsItem newsItemInstance) {
-        respond newsItemInstance
-    }
-
-    @Transactional
-    def update(NewsItem newsItemInstance) {
-        if (newsItemInstance == null) {
-            notFound()
-            return
-        }
-
-        if (newsItemInstance.hasErrors()) {
-            respond newsItemInstance.errors, view: 'edit'
-            return
-        }
-
-        newsItemInstance.save flush: true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'NewsItem.label', default: 'NewsItem'), newsItemInstance.id])
-                redirect newsItemInstance
-            }
-            '*' { respond newsItemInstance, [status: OK] }
+    def save(NewsItem newsItem) {
+        if (validateData(newsItem, 'create')) {
+            newsService.saveNews(newsItem)
+            respondChange('default.created.message', CREATED, newsItem)
         }
     }
 
     @Transactional
-    def delete(NewsItem newsItemInstance) {
-
-        if (newsItemInstance == null) {
-            notFound()
-            return
-        }
-
-        newsItemInstance.delete flush: true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'NewsItem.label', default: 'NewsItem'), newsItemInstance.id])
-                redirect action: "index", method: "GET"
-            }
-            '*' { render status: NO_CONTENT }
+    def update(NewsItem newsItem) {
+        if (validateData(newsItem, 'edit')) {
+            newsService.saveNews(newsItem)
+            respondChange('default.updated.message', OK, newsItem)
         }
     }
 
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'newsItem.label', default: 'NewsItem'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*' { render status: NOT_FOUND }
+    @Transactional
+    def delete(NewsItem newsItem) {
+        if(validateData(newsItem)) {
+            newsService.deleteNews(newsItem)
+            // save feed id to params for redirect
+            params.feed = [:]
+            params.feed.id = newsItem.feed.id
+            respondChange('default.deleted.message', NO_CONTENT, null, newsItem.id)
         }
     }
+
+    @Override
+    protected Map redirectParams() {
+        def attrs = super.redirectParams()
+        attrs.controller = 'NewsFeed'
+        attrs.action = 'show'
+        attrs.id = params.feed.id
+        return attrs
+    }
+
+    @Override
+    protected String labelCode() { return 'newsItem.label' }
 }
