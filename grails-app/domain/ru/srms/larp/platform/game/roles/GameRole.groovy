@@ -11,7 +11,7 @@ class GameRole  implements InGameStuff {
     static hasMany = [subRoles: GameRole]
 
     static constraints = {
-        parent nullable: true, validator: {val, obj -> val.game == obj.game}
+        parent nullable: true, validator: {val, obj -> val == null || val.game == obj.game}
     }
 
     @Override
