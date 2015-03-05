@@ -15,6 +15,10 @@ class GameCharacter implements InGameStuff {
     static hasOne = [player: SpringUser]
     static hasMany = [roles: GameRole]
 
+    static mapping = {
+        roles cascade: "save-update"
+    }
+
     static constraints = {
         // character names and aliases must be unique in the game context
         name maxSize: 64, validator: {val, obj ->

@@ -17,7 +17,6 @@ class GameRole  implements InGameStuff {
     static mapping = {
         subRoles sort: 'title', order: 'asc'
         sort title: "asc"
-        characters cascade: "save-update"
     }
 
     static constraints = {

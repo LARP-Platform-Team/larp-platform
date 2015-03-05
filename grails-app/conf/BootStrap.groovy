@@ -112,8 +112,9 @@ class BootStrap {
             new GameRole(title: "Человек", game: game2).save()
             new GameRole(title: "Оборотень", game: game2).save()
 
-            print "role: " + r1
             lancelot.addToRoles(r1).save();
+            lancelot.addToRoles(r2).save();
+            merlin.addToRoles(r1).save();
         }
 
     }
