@@ -103,7 +103,7 @@ class BootStrap {
             new NewsItem(feed: feed, title: "Новость магии три", text: "Все хорошо!!! Дада.").save()
 
             // роли
-            def r1 = new GameRole(title: "ФСБ", game: game2).save()
+            def r1 = new GameRole(title: "ФСБ", game: game2).save(flush: true)
             new GameRole(title: 'Стажер ФСБ', game: game2, parent: r1).save()
             def r2 = new GameRole(title: 'Офицер ФСБ', game: game2, parent: r1).save()
             new GameRole(title: 'Начальник ФСБ', game: game2, parent: r2).save()
@@ -111,6 +111,9 @@ class BootStrap {
             new GameRole(title: "Вампир", game: game2).save()
             new GameRole(title: "Человек", game: game2).save()
             new GameRole(title: "Оборотень", game: game2).save()
+
+            print "role: " + r1
+            lancelot.addToRoles(r1).save();
         }
 
     }

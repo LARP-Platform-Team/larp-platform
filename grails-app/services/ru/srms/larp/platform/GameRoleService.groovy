@@ -17,4 +17,9 @@ class GameRoleService {
     def count(Game game, GameRole parent) {
         GameRole.countByGameAndParent(game, parent)
     }
+
+    @PreAuthorize("hasPermission(#game, admin)")
+    def create(Game game, GameRole parent) {
+        new GameRole(game: game, parent: parent)
+    }
 }

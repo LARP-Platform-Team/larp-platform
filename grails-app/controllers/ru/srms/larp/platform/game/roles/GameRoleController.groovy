@@ -20,12 +20,13 @@ class GameRoleController extends BaseController {
                 model:[rolesCount: gameRoleService.count(params.game, null)]
     }
 
-    def show(GameRole gameRoleInstance) {
-        respond gameRoleInstance
+    def create() {
+        respond gameRoleService.create(params.game,
+                params.parent ? GameRole.get(params.parent) : null)
     }
 
-    def create() {
-        respond new GameRole(params)
+    def show(GameRole gameRoleInstance) {
+        respond gameRoleInstance
     }
 
     @Transactional
