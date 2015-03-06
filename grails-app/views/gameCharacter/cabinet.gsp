@@ -45,6 +45,18 @@
                     boolean="${character?.isDead}"/></span>
 
         </li>
+
+        <li class="fieldcontain">
+            <span id="roles-label" class="property-label"><g:message
+                    code="gameCharacter.roles.label" default="Роли"/></span>
+
+            <span class="property-value" aria-labelledby="isDead-label">
+                <g:each in="${character.roles}" var="role">
+                    <div>${role.title}</div>
+                </g:each>
+            </span>
+
+        </li>
     </ol>
 
 </div>

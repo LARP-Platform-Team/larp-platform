@@ -79,6 +79,23 @@ class GameTagLib {
     }
 
     /**
+     * A form which uses the javascript provider to serialize its parameters and submit via an asynchronous ajax call.
+     *
+     * @attr name REQUIRED The form name
+     * @attr url REQUIRED The url to submit to as either a map (containing values for the controller, action, id, and params) or a URL string
+     * @attr action The action to execute as a fallback, defaults to the url if non specified
+     * @attr update Either a map containing the elements to update for 'success' or 'failure' states, or a string with the element to update in which cause failure events would be ignored
+     * @attr before The javascript function to call before the remote function call
+     * @attr after The javascript function to call after the remote function call
+     * @attr asynchronous Whether to do the call asynchronously or not (defaults to true)
+     * @attr method The method to use the execute the call (defaults to "post")
+     */
+    def formRemote = { attrs, body ->
+        attrs.url = composeAttrs(attrs.url)
+        out << g.formRemote(attrs, body)
+    }
+
+    /**
      * Choose correct mapping for the current environment
      * @param attrs tag attrs map
      * @return modified attrs map

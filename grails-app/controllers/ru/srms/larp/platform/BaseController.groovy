@@ -21,7 +21,7 @@ abstract class BaseController {
      * @return map with offset and max entries for pagination
      */
     protected Map paginator(Integer max = null) {
-        params.max = pageMax(params.max as Integer ?: max)
+        params.max = pageMax(params.int('max') ?: max)
         [offset: params.offset ?: 0, max: params.max]
     }
 

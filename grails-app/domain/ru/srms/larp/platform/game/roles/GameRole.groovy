@@ -10,12 +10,12 @@ class GameRole  implements InGameStuff {
     Game game
     GameRole parent
 
-    // TODO think is it good to have many-to-many bidirectional mapping
     static belongsTo = [Game, GameRole, GameCharacter]
     static hasMany = [subRoles: GameRole, characters: GameCharacter]
 
+    // TODO subRoles are lazy to avoid N+1 problem. figure it out.
     static mapping = {
-        subRoles sort: 'title', order: 'asc'
+        subRoles sort: 'title', order: 'asc', lazy: false
         sort title: "asc"
     }
 

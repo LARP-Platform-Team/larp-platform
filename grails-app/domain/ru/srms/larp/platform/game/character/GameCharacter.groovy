@@ -10,14 +10,10 @@ class GameCharacter implements InGameStuff {
     String name
     String alias
     Boolean isDead = false
+    SpringUser player
 
     static belongsTo = [game: Game]
-    static hasOne = [player: SpringUser]
     static hasMany = [roles: GameRole]
-
-    static mapping = {
-        roles cascade: "save-update"
-    }
 
     static constraints = {
         // character names and aliases must be unique in the game context

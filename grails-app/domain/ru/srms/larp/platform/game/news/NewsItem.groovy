@@ -4,7 +4,6 @@ import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.InGameStuff
 
 class NewsItem implements InGameStuff
-        //implements Comparable
 {
 
     String title
@@ -21,10 +20,6 @@ class NewsItem implements InGameStuff
         text maxSize: 9999
     }
 
-//        @Override
-//    int compareTo(Object o) {
-//        created.compareTo(obj.created)
-//    }
     @Override
     Game extractGame() {
         return feed.game

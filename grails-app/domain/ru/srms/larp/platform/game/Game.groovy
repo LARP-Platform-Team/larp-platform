@@ -8,6 +8,7 @@ class Game {
     String title
     String alias
     String overview
+    // TODO is characters relation side needed here?
     static hasMany = [masters: SpringUser, characters: GameCharacter]
 
     static constraints = {

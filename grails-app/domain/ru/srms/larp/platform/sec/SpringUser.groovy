@@ -13,7 +13,7 @@ class SpringUser {
 	boolean accountLocked
 	boolean passwordExpired
 
-    static hasMany = [ characters: GameCharacter]
+    static hasMany = [characters: GameCharacter]
 
 	static transients = ['springSecurityService']
 

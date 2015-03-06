@@ -4,6 +4,7 @@ import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseController
 import ru.srms.larp.platform.GameRoleService
+import ru.srms.larp.platform.game.character.GameCharacter
 
 import static org.springframework.http.HttpStatus.*
 
@@ -11,7 +12,7 @@ import static org.springframework.http.HttpStatus.*
 @Transactional(readOnly = true)
 class GameRoleController extends BaseController {
 
-    static allowedMethods = [save: "POST", update: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", addToChar: "POST"]
 
     GameRoleService gameRoleService
 
@@ -56,6 +57,34 @@ class GameRoleController extends BaseController {
             gameRoleInstance.delete flush:true
             respondChange('default.deleted.message', NO_CONTENT, null, gameRoleInstance.id)
         }
+    }
+
+    @Transactional
+    def addToChar(GameRole gameRole) {
+
+        Long id = params.character?.id as Long
+        if(!id || !GameCharacter.exists(id)) {
+            response.status = INTERNAL_SERVER_ERROR.value()
+            render "Указан неверный персонаж!"
+            return
+        }
+
+        if(gameRole.characters.find { it -> it.id == id }) {
+            response.status = INTERNAL_SERVER_ERROR.value()
+            render "Указанный персонаж уже назначен на эту роль!"
+            return
+        }
+
+        gameRole.addToCharacters(GameCharacter.get(id))
+
+        if(gameRole.hasErrors()) {
+            response.status = INTERNAL_SERVER_ERROR.value()
+            render "Что-то пошло не так"
+            return
+        }
+
+        gameRole.save(flush: true)
+        render template: 'characters', model: [characters: gameRole.characters]
     }
 
     @Override

@@ -15,7 +15,7 @@
             <g:message code="gameRole.parent.label" default="Parent"/>
         </label>
         <span>${gameRoleInstance.parent.title}</span>
-        <g:hiddenField  id="parent" name="parent.id" value="${gameRoleInstance?.parent?.id}"/>
+        <g:hiddenField id="parent" name="parent.id" value="${gameRoleInstance?.parent?.id}"/>
     </div>
 </g:if>
 
@@ -27,6 +27,4 @@
     <span>${gameRoleInstance.game.title}</span>
     <g:hiddenField name="game.id" id="game" value="${gameRoleInstance.game.id}"/>
 </div>
-
-
 
