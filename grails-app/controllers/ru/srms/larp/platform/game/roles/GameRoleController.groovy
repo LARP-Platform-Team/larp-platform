@@ -75,15 +75,34 @@ class GameRoleController extends BaseController {
             return
         }
 
-        gameRole.addToCharacters(GameCharacter.get(id))
-
-        if(gameRole.hasErrors()) {
+        try {
+            gameRoleService.add(gameRole, GameCharacter.get(id))
+        } catch (all) {
             response.status = INTERNAL_SERVER_ERROR.value()
             render "Что-то пошло не так"
             return
         }
 
-        gameRole.save(flush: true)
+        render template: 'characters', model: [characters: gameRole.characters]
+    }
+
+    @Transactional
+    def removeFromChar(GameRole gameRole) {
+        Long id = params.characterId as Long
+        if(!id) {
+            response.status = INTERNAL_SERVER_ERROR.value()
+            render "Указан неверный персонаж!"
+            return
+        }
+
+        try {
+            gameRoleService.remove(gameRole, GameCharacter.get(id))
+        } catch (all) {
+            response.status = INTERNAL_SERVER_ERROR.value()
+            render "Что-то пошло не так"
+            return
+        }
+
         render template: 'characters', model: [characters: gameRole.characters]
     }
 
