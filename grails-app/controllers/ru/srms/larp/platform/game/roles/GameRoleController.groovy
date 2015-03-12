@@ -26,36 +26,31 @@ class GameRoleController extends BaseController {
                 params.parent ? GameRole.get(params.parent) : null)
     }
 
-    def show(GameRole gameRoleInstance) {
-        respond gameRoleInstance
+    def edit(GameRole role) {
+        respond gameRoleService.edit(role)
     }
 
     @Transactional
-    def save(GameRole gameRoleInstance) {
-       if(validateData(gameRoleInstance, 'create')) {
-            gameRoleInstance.save flush: true
-            respondChange('default.created.message', CREATED, gameRoleInstance)
-        }
-    }
-
-    def edit(GameRole gameRoleInstance) {
-        respond gameRoleInstance
-    }
-
-    @Transactional
-    def update(GameRole gameRoleInstance) {
-        if(validateData(gameRoleInstance, 'edit')) {
-            gameRoleInstance.save flush: true
-            respondChange('default.updated.message', OK, gameRoleInstance)
+    def save(GameRole role) {
+       if(validateData(role, 'create')) {
+            gameRoleService.save(role)
+            respondChange('default.created.message', CREATED, role)
         }
     }
 
     @Transactional
-    def delete(GameRole gameRoleInstance) {
+    def update(GameRole role) {
+        if(validateData(role, 'edit')) {
+            gameRoleService.save(role)
+            respondChange('default.updated.message', OK, role)
+        }
+    }
 
-        if(validateData(gameRoleInstance)) {
-            gameRoleInstance.delete flush:true
-            respondChange('default.deleted.message', NO_CONTENT, null, gameRoleInstance.id)
+    @Transactional
+    def delete(GameRole role) {
+        if(validateData(role)) {
+            gameRoleService.delete(role)
+            respondChange('default.deleted.message', NO_CONTENT, null, role.id)
         }
     }
 
@@ -79,7 +74,7 @@ class GameRoleController extends BaseController {
             gameRoleService.add(gameRole, GameCharacter.get(id))
         } catch (all) {
             response.status = INTERNAL_SERVER_ERROR.value()
-            render "Что-то пошло не так"
+            render "Что-то пошло не так: $all.message"
             return
         }
 
@@ -99,7 +94,7 @@ class GameRoleController extends BaseController {
             gameRoleService.remove(gameRole, GameCharacter.get(id))
         } catch (all) {
             response.status = INTERNAL_SERVER_ERROR.value()
-            render "Что-то пошло не так"
+            render "Что-то пошло не так: $all.message"
             return
         }
 

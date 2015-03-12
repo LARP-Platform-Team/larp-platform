@@ -7,21 +7,26 @@ import ru.srms.larp.platform.game.character.GameCharacter
 class GameRole  implements InGameStuff {
 
     String title
-    Game game
-    GameRole parent
 
-    static belongsTo = [Game, GameRole, GameCharacter]
-    static hasMany = [subRoles: GameRole, characters: GameCharacter]
+    static belongsTo = [game: Game, parent: GameRole]
+    static hasMany = [subRoles: GameRole]
 
-    // TODO subRoles are lazy to avoid N+1 problem. figure it out.
+    // TODO subRoles are not lazy to avoid N+1 problem. figure it out.
     static mapping = {
-        subRoles sort: 'title', order: 'asc', lazy: false
+        subRoles sort: 'title', order: 'asc', lazy: false, cascade: 'all-delete-orphan'
         sort title: "asc"
     }
 
     static constraints = {
         parent nullable: true, validator: {val, obj -> val == null || val.game == obj.game}
-        characters nullable: true
+    }
+
+    Set<GameCharacter> getCharacters() {
+        CharacterRole.findAllByRole(this).collect({ it.character }).toSet()
+    }
+
+    def beforeDelete() {
+        CharacterRole.removeAll(this)
     }
 
     @Override

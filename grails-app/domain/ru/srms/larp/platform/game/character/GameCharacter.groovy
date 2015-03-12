@@ -2,6 +2,7 @@ package ru.srms.larp.platform.game.character
 
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.InGameStuff
+import ru.srms.larp.platform.game.roles.CharacterRole
 import ru.srms.larp.platform.game.roles.GameRole
 import ru.srms.larp.platform.sec.SpringUser
 
@@ -13,7 +14,6 @@ class GameCharacter implements InGameStuff {
     SpringUser player
 
     static belongsTo = [game: Game]
-    static hasMany = [roles: GameRole]
 
     static constraints = {
         // character names and aliases must be unique in the game context
@@ -23,6 +23,15 @@ class GameCharacter implements InGameStuff {
             GameCharacter.findByGameAndAliasIlikeAndIdNotEqual(obj.game, val, obj.id) == null}
         player nullable: true
     }
+
+    Set<GameRole> getRoles() {
+        CharacterRole.findAllByCharacter(this).collect({ it.role }).toSet()
+    }
+
+    def beforeDelete() {
+        CharacterRole.removeAll(this)
+    }
+
 
     @Override
     String toString() {

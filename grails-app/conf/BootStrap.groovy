@@ -7,6 +7,7 @@ import ru.srms.larp.platform.game.character.GameCharacter
 import ru.srms.larp.platform.game.mail.Letter
 import ru.srms.larp.platform.game.news.NewsFeed
 import ru.srms.larp.platform.game.news.NewsItem
+import ru.srms.larp.platform.game.roles.CharacterRole
 import ru.srms.larp.platform.game.roles.GameRole
 import ru.srms.larp.platform.sec.SpringRole
 import ru.srms.larp.platform.sec.SpringUser
@@ -112,9 +113,9 @@ class BootStrap {
             new GameRole(title: "Человек", game: game2).save()
             new GameRole(title: "Оборотень", game: game2).save()
 
-            lancelot.addToRoles(r1).save();
-            lancelot.addToRoles(r2).save();
-            merlin.addToRoles(r1).save();
+            CharacterRole.create(lancelot, r1)
+            CharacterRole.create(lancelot, r2)
+            CharacterRole.create(merlin, r1)
         }
 
     }
