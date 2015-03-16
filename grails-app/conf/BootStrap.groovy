@@ -121,8 +121,10 @@ class BootStrap {
             CharacterRole.create(lancelot, r2)
             CharacterRole.create(merlin, r1)
 
+
+                    //
             aclUtilService.addPermission(mFeed, r1.authority, READ)
-            aclUtilService.addPermission(feed, werewolf.authority, READ)
+//            aclUtilService.addPermission(feed, werewolf.authority, READ)
 
 //            aclService.createAcl()
 //            aclUtilService.addPermission()
