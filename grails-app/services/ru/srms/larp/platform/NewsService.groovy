@@ -1,6 +1,7 @@
 package ru.srms.larp.platform
 
 import grails.transaction.Transactional
+import org.springframework.security.access.prepost.PostFilter
 import org.springframework.security.access.prepost.PreAuthorize
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.news.NewsFeed
@@ -9,7 +10,7 @@ import ru.srms.larp.platform.game.news.NewsItem
 @Transactional(readOnly = true)
 class NewsService {
 
-    // TODO post filter
+    @PostFilter("hasPermission(#game, admin) or hasPermission(filterObject, read)")
     def findFeedsByGame(Game game) {
         NewsFeed.findAllByGame(game)
     }
@@ -44,7 +45,7 @@ class NewsService {
     @PreAuthorize("hasPermission(#feed.game, admin)")
     def editFeed(NewsFeed feed) { feed }
 
-    // TODO check permissions
+    @PreAuthorize("hasPermission(#feed.game, admin) or hasPermission(#feed, read)")
     def readFeed(NewsFeed feed) { feed }
 
     // TODO check permissions

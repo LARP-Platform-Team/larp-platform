@@ -90,18 +90,22 @@ class BootStrap {
 
             game2.save()
 
+            // новости
             feed = new NewsFeed(game: game2, title: "Круглый стол").save()
+
 
             now = new Date().getTime()
             new NewsItem(feed: feed, title: "Новость раз", text: "Все хорошо", created: new Date(now - 2400000)).save()
             new NewsItem(feed: feed, title: "Новость два", text: "Все плохо", created: new Date(now - 3600000)).save()
             new NewsItem(feed: feed, title: "Новость три", text: "Все норм", created: new Date(now - 1200000)).save()
 
-            feed = new NewsFeed(game: game2, title: "Новости магии").save()
+            def mFeed = new NewsFeed(game: game2, title: "Новости магии").save()
 
-            new NewsItem(feed: feed, title: "Новость магии раз", text: "Все хорошо у магов").save()
-            new NewsItem(feed: feed, title: "Новость магии два", text: "Все хорошо!").save()
-            new NewsItem(feed: feed, title: "Новость магии три", text: "Все хорошо!!! Дада.").save()
+            new NewsItem(feed: mFeed, title: "Новость магии раз", text: "Все хорошо у магов").save()
+            new NewsItem(feed: mFeed, title: "Новость магии два", text: "Все хорошо!").save()
+            new NewsItem(feed: mFeed, title: "Новость магии три", text: "Все хорошо!!! Дада.").save()
+
+
 
             // роли
             def r1 = new GameRole(title: "ФСБ", game: game2).save(flush: true)
@@ -111,11 +115,17 @@ class BootStrap {
 
             new GameRole(title: "Вампир", game: game2).save()
             new GameRole(title: "Человек", game: game2).save()
-            new GameRole(title: "Оборотень", game: game2).save()
+            def werewolf = new GameRole(title: "Оборотень", game: game2).save()
 
             CharacterRole.create(lancelot, r1)
             CharacterRole.create(lancelot, r2)
             CharacterRole.create(merlin, r1)
+
+            aclUtilService.addPermission(mFeed, r1.authority, READ)
+            aclUtilService.addPermission(feed, werewolf.authority, READ)
+
+//            aclService.createAcl()
+//            aclUtilService.addPermission()
         }
 
     }

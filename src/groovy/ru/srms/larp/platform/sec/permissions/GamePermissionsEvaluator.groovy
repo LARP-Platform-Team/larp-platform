@@ -5,14 +5,8 @@ import grails.plugin.springsecurity.acl.AclService
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.springframework.security.acls.AclPermissionEvaluator
-import org.springframework.security.acls.domain.DefaultPermissionFactory
-import org.springframework.security.acls.domain.ObjectIdentityRetrievalStrategyImpl
-import org.springframework.security.acls.domain.PermissionFactory
-import org.springframework.security.acls.domain.SidRetrievalStrategyImpl
-import org.springframework.security.acls.model.ObjectIdentityGenerator
-import org.springframework.security.acls.model.ObjectIdentityRetrievalStrategy
-import org.springframework.security.acls.model.Permission
-import org.springframework.security.acls.model.SidRetrievalStrategy
+import org.springframework.security.acls.domain.*
+import org.springframework.security.acls.model.*
 import org.springframework.security.core.Authentication
 import org.springframework.web.context.request.RequestContextHolder
 import ru.srms.larp.platform.game.character.GameCharacter
@@ -45,7 +39,7 @@ class GamePermissionsEvaluator extends AclPermissionEvaluator {
     @Override
     boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
 
-        if (!springSecurityService.isLoggedIn())
+        if (!springSecurityService.isLoggedIn() || targetDomainObject == null)
             return false
 
         // for users with ROLE_ADMIN all permissions are granted
@@ -55,15 +49,53 @@ class GamePermissionsEvaluator extends AclPermissionEvaluator {
                 return true;
 
         GameCharacter character = RequestContextHolder.requestAttributes?.params?.character
-        return super.hasPermission(authentication, targetDomainObject, permission) || (
-                character && hasCharacterPermission(character, targetDomainObject, permission))
+
+        def basePermission = super.hasPermission(authentication, targetDomainObject, permission)
+        if(basePermission)
+            return true
+
+        if(!character)
+            return false
+
+        return hasCharacterPermission(character,
+                                this.objectIdentityRetrievalStrategy.getObjectIdentity(targetDomainObject),
+                                permission)
     }
 
-    private boolean hasCharacterPermission(GameCharacter character, Object targetDomainObject, Object permission) {
-        print "is char $character.name!"
-        print character.roles
+    private boolean hasCharacterPermission(GameCharacter character, ObjectIdentity oid, Object permission) {
+        print "check character $character.name permissions!"
+        print "character roles: $character.roles"
 
-        def permissions = resolvePermission(permission)
+        List<Sid> sids = character.getRoles().collect {new GrantedAuthoritySid(it)}
+        if(sids.isEmpty())
+            return false
+
+        List requiredPermission = this.resolvePermission(permission);
+        boolean debug = this.logger.isDebugEnabled();
+        if (debug) {
+            this.logger.debug("Checking permission \'" + permission + "\' for object \'" + oid + "\'");
+        }
+
+        try {
+            Acl nfe = this.aclService.readAclById(oid, sids);
+            if (nfe.isGranted(requiredPermission, sids, false)) {
+                if (debug) {
+                    this.logger.debug("Access is granted");
+                }
+
+                return true;
+            }
+
+            if (debug) {
+                this.logger.debug("Returning false - ACLs returned, but insufficient permissions for this principal");
+            }
+        } catch (NotFoundException var8) {
+            if (debug) {
+                this.logger.debug("Returning false - no ACLs apply for this principal");
+            }
+        }
+
+        return false;
     }
 
     @Override
