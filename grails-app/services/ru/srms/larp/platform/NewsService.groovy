@@ -10,6 +10,8 @@ import ru.srms.larp.platform.game.news.NewsItem
 @Transactional(readOnly = true)
 class NewsService {
 
+    GameAclService gameAclService
+
     @PostFilter("hasPermission(#game, admin) or hasPermission(filterObject, read)")
     def findFeedsByGame(Game game) {
         NewsFeed.findAllByGame(game)
@@ -33,7 +35,9 @@ class NewsService {
     @Transactional
     @PreAuthorize("hasPermission(#feed.game, admin)")
     def saveFeed(NewsFeed feed) {
-        feed.save flush:true
+        boolean insert = feed.id == null
+        feed.save()
+        if(insert) gameAclService.createAcl(feed)
     }
 
     @Transactional
@@ -48,24 +52,29 @@ class NewsService {
     @PreAuthorize("hasPermission(#feed.game, admin) or hasPermission(#feed, read)")
     def readFeed(NewsFeed feed) { feed }
 
-    // TODO check permissions
+    @PreAuthorize("hasPermission(#parent.game, admin) or hasPermission(#parent, create)")
     NewsItem createNews(NewsFeed parent) {
         new NewsItem(feed: parent)
     }
 
-    // TODO check permissions
-    def editNews(NewsItem news) {news}
-
     @Transactional
-    // TODO check permissions
+    @PreAuthorize("hasPermission(#parent.game, admin) or hasPermission(#parent, create)")
     def saveNews(NewsItem news) {
         news.save flush:true
     }
 
+    @PreAuthorize("hasPermission(#parent.game, admin) or hasPermission(#parent, write)")
+    def editNews(NewsItem news) {news}
+
     @Transactional
-    // TODO check permissions
+    @PreAuthorize("hasPermission(#parent.game, admin) or hasPermission(#parent, write)")
+    def updateNews(NewsItem news) {
+        news.save flush:true
+    }
+
+    @Transactional
+    @PreAuthorize("hasPermission(#parent.game, admin) or hasPermission(#parent, delete)")
     def deleteNews(NewsItem news) {
-        print 'do delete!'
         news.delete flush:true
     }
 }

@@ -37,7 +37,7 @@ class NewsItemController extends BaseController {
     @Transactional
     def update(NewsItem newsItem) {
         if (validateData(newsItem, 'edit')) {
-            newsService.saveNews(newsItem)
+            newsService.updateNews(newsItem)
             respondChange('default.updated.message', OK, newsItem)
         }
     }

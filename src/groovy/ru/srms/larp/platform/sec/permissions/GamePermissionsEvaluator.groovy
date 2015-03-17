@@ -11,8 +11,6 @@ import org.springframework.security.core.Authentication
 import org.springframework.web.context.request.RequestContextHolder
 import ru.srms.larp.platform.game.character.GameCharacter
 import ru.srms.larp.platform.sec.SpringRole
-import ru.srms.larp.platform.sec.SpringUser
-import ru.srms.larp.platform.sec.SpringUserSpringRole
 
 /**
  *
@@ -27,6 +25,7 @@ class GamePermissionsEvaluator extends AclPermissionEvaluator {
 
     private ObjectIdentityRetrievalStrategy objectIdentityRetrievalStrategy = new ObjectIdentityRetrievalStrategyImpl();
     private ObjectIdentityGenerator objectIdentityGenerator = new ObjectIdentityRetrievalStrategyImpl();
+    // TODO maybe create custom sid retrieval strategy
     private SidRetrievalStrategy sidRetrievalStrategy = new SidRetrievalStrategyImpl();
     private PermissionFactory permissionFactory = new DefaultPermissionFactory();
 
@@ -38,37 +37,36 @@ class GamePermissionsEvaluator extends AclPermissionEvaluator {
 
     @Override
     boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
+        if(super.hasPermission(authentication, targetDomainObject, permission)) return true
+        if (targetDomainObject == null) return false
 
-        if (!springSecurityService.isLoggedIn() || targetDomainObject == null)
-            return false
-
-        // for users with ROLE_ADMIN all permissions are granted
-        def user = springSecurityService.currentUser as SpringUser
-        if (SpringUserSpringRole.findBySpringUserAndSpringRole(
-                user, SpringRole.findByAuthority('ROLE_ADMIN')))
-                return true;
-
-        GameCharacter character = RequestContextHolder.requestAttributes?.params?.character
-
-        def basePermission = super.hasPermission(authentication, targetDomainObject, permission)
-        if(basePermission)
-            return true
-
-        if(!character)
-            return false
-
-        return hasCharacterPermission(character,
-                                this.objectIdentityRetrievalStrategy.getObjectIdentity(targetDomainObject),
-                                permission)
+        def oid = objectIdentityRetrievalStrategy.getObjectIdentity(targetDomainObject)
+        return checkPermission(authentication, oid, permission);
     }
 
-    private boolean hasCharacterPermission(GameCharacter character, ObjectIdentity oid, Object permission) {
-        print "check character $character.name permissions!"
-        print "character roles: $character.roles"
+    @Override
+    boolean hasPermission(Authentication authentication, Serializable targetId, String targetType, Object permission) {
+        if(super.hasPermission(authentication, targetId, targetType, permission)) return true
 
+        ObjectIdentity oid = objectIdentityGenerator.createObjectIdentity(targetId, targetType);
+        return checkPermission(authentication, oid, permission);
+    }
+
+    private boolean checkPermission(Authentication authentication, ObjectIdentity oid, Object permission) {
+        // everything is permitted for admin
+        if(authentication.authorities.any { SpringRole.ADMIN_ROLE.equals(it.authority) })
+            return true
+
+        // check character permissions
+        GameCharacter character = RequestContextHolder.requestAttributes?.params?.character
+        if(!character) return false
+
+        return checkCharacterPermission(character, oid, permission)
+    }
+
+    private boolean checkCharacterPermission(GameCharacter character, ObjectIdentity oid, Object permission) {
         List<Sid> sids = character.getRoles().collect {new GrantedAuthoritySid(it)}
-        if(sids.isEmpty())
-            return false
+        if(sids.isEmpty()) return false
 
         List requiredPermission = this.resolvePermission(permission);
         boolean debug = this.logger.isDebugEnabled();
@@ -89,21 +87,13 @@ class GamePermissionsEvaluator extends AclPermissionEvaluator {
             if (debug) {
                 this.logger.debug("Returning false - ACLs returned, but insufficient permissions for this principal");
             }
-        } catch (NotFoundException var8) {
+        } catch (NotFoundException e) {
             if (debug) {
                 this.logger.debug("Returning false - no ACLs apply for this principal");
             }
         }
 
         return false;
-    }
-
-    @Override
-    boolean hasPermission(Authentication authentication, Serializable targetId, String targetType, Object permission) {
-        //        ObjectIdentity objectIdentity = this.objectIdentityGenerator.createObjectIdentity(targetId, targetType);
-//        return checkPermission(authentication, objectIdentity, permission);
-        print "my eva 2!"
-        return super.hasPermission(authentication, targetId, targetType, permission)
     }
 
     List<Permission> resolvePermission(Object permission) {
@@ -133,18 +123,22 @@ class GamePermissionsEvaluator extends AclPermissionEvaluator {
     }
 
     public void setObjectIdentityRetrievalStrategy(ObjectIdentityRetrievalStrategy objectIdentityRetrievalStrategy) {
+        super.setObjectIdentityRetrievalStrategy(objectIdentityRetrievalStrategy)
         this.objectIdentityRetrievalStrategy = objectIdentityRetrievalStrategy;
     }
 
     public void setObjectIdentityGenerator(ObjectIdentityGenerator objectIdentityGenerator) {
+        super.setObjectIdentityGenerator(objectIdentityGenerator)
         this.objectIdentityGenerator = objectIdentityGenerator;
     }
 
     public void setSidRetrievalStrategy(SidRetrievalStrategy sidRetrievalStrategy) {
+        super.setSidRetrievalStrategy(sidRetrievalStrategy)
         this.sidRetrievalStrategy = sidRetrievalStrategy;
     }
 
     public void setPermissionFactory(PermissionFactory permissionFactory) {
+        super.setPermissionFactory(permissionFactory)
         this.permissionFactory = permissionFactory;
     }
 }

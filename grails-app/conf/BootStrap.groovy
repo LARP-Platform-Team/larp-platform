@@ -2,6 +2,7 @@ import org.springframework.security.acls.domain.ObjectIdentityImpl
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.AuthorityUtils
 import org.springframework.security.core.context.SecurityContextHolder as SCH
+import ru.srms.larp.platform.GameAclService
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.character.GameCharacter
 import ru.srms.larp.platform.game.mail.Letter
@@ -19,6 +20,7 @@ class BootStrap {
 
     def aclService
     def aclUtilService
+    GameAclService gameAclService
 
     def init = { servletContext ->
         if(Letter.count == 0)
@@ -64,6 +66,7 @@ class BootStrap {
 
 
             def feed = new NewsFeed(game: game1, title: "Новости леса").save()
+            gameAclService.createAcl(feed)
 
             def now = new Date().getTime()
             new NewsItem(feed: feed, title: "Новость раз", text: "Все умерли", created: new Date(now - 2400000)).save()
@@ -92,6 +95,7 @@ class BootStrap {
 
             // новости
             feed = new NewsFeed(game: game2, title: "Круглый стол").save()
+            gameAclService.createAcl(feed)
 
 
             now = new Date().getTime()
@@ -100,12 +104,11 @@ class BootStrap {
             new NewsItem(feed: feed, title: "Новость три", text: "Все норм", created: new Date(now - 1200000)).save()
 
             def mFeed = new NewsFeed(game: game2, title: "Новости магии").save()
+            gameAclService.createAcl(mFeed)
 
             new NewsItem(feed: mFeed, title: "Новость магии раз", text: "Все хорошо у магов").save()
             new NewsItem(feed: mFeed, title: "Новость магии два", text: "Все хорошо!").save()
             new NewsItem(feed: mFeed, title: "Новость магии три", text: "Все хорошо!!! Дада.").save()
-
-
 
             // роли
             def r1 = new GameRole(title: "ФСБ", game: game2).save(flush: true)
@@ -121,13 +124,7 @@ class BootStrap {
             CharacterRole.create(lancelot, r2)
             CharacterRole.create(merlin, r1)
 
-
-                    //
             aclUtilService.addPermission(mFeed, r1.authority, READ)
-//            aclUtilService.addPermission(feed, werewolf.authority, READ)
-
-//            aclService.createAcl()
-//            aclUtilService.addPermission()
         }
 
     }
