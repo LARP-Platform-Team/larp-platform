@@ -4,6 +4,7 @@ import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseController
 import ru.srms.larp.platform.GameRoleService
+import ru.srms.larp.platform.NewsService
 import ru.srms.larp.platform.game.character.GameCharacter
 
 import static org.springframework.http.HttpStatus.*
@@ -15,6 +16,8 @@ class GameRoleController extends BaseController {
     static allowedMethods = [save: "POST", update: "POST", addToChar: "POST"]
 
     GameRoleService gameRoleService
+    NewsService newsService
+    def gameAclService
 
     def index() {
         respond gameRoleService.list(params.game, null, paginator()) ,
@@ -52,6 +55,14 @@ class GameRoleController extends BaseController {
             gameRoleService.delete(role)
             respondChange('default.deleted.message', NO_CONTENT, null, role.id)
         }
+    }
+
+    def config(GameRole role) {
+        // надо вывести все записи, участвующие в ACL
+        def feeds = newsService.listAdminFeeds(params.game)
+        render(view: "config", model: [
+                acls: gameAclService.getAclMatrix(role, feeds)
+        ])
     }
 
     @Transactional

@@ -18,7 +18,7 @@ class NewsService {
     }
 
     @PreAuthorize("hasPermission(#game, admin)")
-    def listAdminFeeds(Game game, Map pagination) {
+    def listAdminFeeds(Game game, Map pagination = null) {
         NewsFeed.findAllByGame(game, pagination)
     }
 
