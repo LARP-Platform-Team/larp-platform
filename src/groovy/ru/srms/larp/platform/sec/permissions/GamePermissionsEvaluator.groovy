@@ -12,11 +12,6 @@ import org.springframework.web.context.request.RequestContextHolder
 import ru.srms.larp.platform.game.character.GameCharacter
 import ru.srms.larp.platform.sec.SpringRole
 
-/**
- *
- * <p>Created 12.03.15</p>
- * @author kblokhin
- */
 class GamePermissionsEvaluator extends AclPermissionEvaluator {
 
     private final Log logger = LogFactory.getLog(this.getClass());

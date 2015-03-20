@@ -19,7 +19,7 @@ class Letter implements InGameStuff {
     }
 
     @Override
-    Game extractGame() {
+    Game getGame() {
         return sender.game
     }
 }

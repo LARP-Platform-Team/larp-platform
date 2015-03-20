@@ -2,9 +2,9 @@ package ru.srms.larp.platform.game.news
 
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.InGameStuff
+import ru.srms.larp.platform.game.TitledIdentifiable
 
-
-class NewsFeed implements InGameStuff {
+class NewsFeed implements InGameStuff, TitledIdentifiable {
 
     String title
     static belongsTo = [game: Game]
@@ -19,9 +19,5 @@ class NewsFeed implements InGameStuff {
         title validator: {val, obj ->
             NewsFeed.findByGameAndTitleIlikeAndIdNotEqual(obj.game, val, obj.id) == null}
     }
-
-    @Override
-    Game extractGame() {
-        return game
-    }
+   
 }

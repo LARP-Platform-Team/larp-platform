@@ -1,4 +1,4 @@
-<%@ page import="ru.srms.larp.platform.sec.permissions.AclConfigModel; ru.srms.larp.platform.game.character.GameCharacter; org.springframework.validation.FieldError; ru.srms.larp.platform.game.roles.GameRole" %>
+<%@ page import="ru.srms.larp.platform.sec.permissions.GamePermission" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,7 +31,7 @@
     <g:each in="${acls}" var="aclE">
         <div>
             ${aclE.id} -- ${aclE.title} ::
-                <g:each in="${AclConfigModel.GamePermission.values()}" var="perm">
+                <g:each in="${GamePermission.values()}" var="perm">
                 ${perm.toString()}=${aclE.permissions.contains(perm)}
             </g:each>
         </div>

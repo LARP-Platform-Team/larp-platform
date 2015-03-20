@@ -1,5 +1,5 @@
 package ru.srms.larp.platform.game
 
-interface InGameStuff {
-    Game extractGame()
+trait InGameStuff {
+    public abstract Game getGame()
 }
