@@ -2,12 +2,12 @@ package ru.srms.larp.platform.game.character
 
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.InGameStuff
-import ru.srms.larp.platform.game.TitledIdentifiable
+import ru.srms.larp.platform.game.Titled
 import ru.srms.larp.platform.game.roles.CharacterRole
 import ru.srms.larp.platform.game.roles.GameRole
 import ru.srms.larp.platform.sec.SpringUser
 
-class GameCharacter implements InGameStuff, TitledIdentifiable {
+class GameCharacter implements InGameStuff, Titled {
 
     String name
     String alias
@@ -39,7 +39,12 @@ class GameCharacter implements InGameStuff, TitledIdentifiable {
     }
 
     @Override
-    String getTitle() {
+    Game extractGame() {
+        return game
+    }
+
+    @Override
+    String extractTitle() {
         return name
     }
 }

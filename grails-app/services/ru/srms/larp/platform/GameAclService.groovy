@@ -1,8 +1,10 @@
 package ru.srms.larp.platform
 
 import grails.transaction.Transactional
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.acls.domain.GrantedAuthoritySid
-import ru.srms.larp.platform.game.TitledIdentifiable
+import ru.srms.larp.platform.game.Titled
+import ru.srms.larp.platform.game.news.NewsFeed
 import ru.srms.larp.platform.game.roles.GameRole
 import ru.srms.larp.platform.sec.permissions.AclConfigModel
 import ru.srms.larp.platform.sec.permissions.GamePermission
@@ -17,44 +19,31 @@ class GameAclService {
     def aclService
     def aclUtilService
 
-    def createAcl(def object)
-    {
+    def createAcl(def object) {
         aclService.createAcl(
                 aclUtilService.objectIdentityRetrievalStrategy.getObjectIdentity(object))
     }
 
-    List<AclConfigModel> getAclMatrix(GameRole role, List<TitledIdentifiable> objects) {
+    @PreAuthorize("hasPermission(#role.game, admin)")
+    def setPermission(GameRole role, Long itemId, GamePermission permission, Boolean value) {
+        if(value)
+            aclUtilService.addPermission(NewsFeed.get(itemId), role.authority, permission.aclPermission)
+        else
+            aclUtilService.deletePermission(NewsFeed.get(itemId), role.authority, permission.aclPermission)
+    }
+
+    @Transactional(readOnly = true)
+    List<AclConfigModel> getAclMatrix(GameRole role, List<Titled> objects) {
         objects.collect {
-            AclConfigModel res = new AclConfigModel(id: it.id, title: it.title)
+            AclConfigModel result = new AclConfigModel(id: it.id, title: it.extractTitle())
 
-            aclUtilService.readAcl(it).entries
-                    .findAll {
-                def sid = it.sid.equals(new GrantedAuthoritySid(role))
-
-                def exists = GamePermission.existsFor(it.permission)
-                sid && exists
+            aclUtilService.readAcl(it).entries.findAll {
+                it.sid.equals(new GrantedAuthoritySid(role)) && GamePermission.existsFor(it.permission)
+            }.each {
+                result.permissions.add(GamePermission.valueFor(it.permission))
+                print result.permissions
             }
-                    .each {
-                res.permissions.add(GamePermission.valueFor(it.permission))
-                print res.permissions
-            }
-                    
-
-//            List<AccessControlEntry> acl = aclUtilService.readAcl(it).entries
-//            List<AccessControlEntry> acl2 = acl.findAll {it.sid.equals(new GrantedAuthoritySid(role)) && GamePermission.existsFor(it.permission)}
-//            def acl3 = acl2.each {
-//                if(GamePermission.existsFor(it))
-//                    res.permissions += GamePermission.valueFor(it)
-//                if(it.permission.equals(BasePermission.READ))
-//                    res.permissions += AclConfigModel.GamePermission.READ
-//                if(it.permission.equals(BasePermission.WRITE))
-//                    res.permissions += AclConfigModel.GamePermission.WRITE
-//                if(it.permission.equals(BasePermission.CREATE))
-//                    res.permissions += AclConfigModel.GamePermission.CREATE
-//                if(it.permission.equals(BasePermission.DELETE))
-//                    res.permissions += AclConfigModel.GamePermission.DELETE
-//            }
-            return res
+            return result
         }
     }
 }

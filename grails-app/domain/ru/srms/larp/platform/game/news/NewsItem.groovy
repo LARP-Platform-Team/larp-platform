@@ -2,9 +2,9 @@ package ru.srms.larp.platform.game.news
 
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.InGameStuff
-import ru.srms.larp.platform.game.TitledIdentifiable
+import ru.srms.larp.platform.game.Titled
 
-class NewsItem implements InGameStuff, TitledIdentifiable
+class NewsItem implements InGameStuff, Titled
 {
 
     String title
@@ -22,7 +22,12 @@ class NewsItem implements InGameStuff, TitledIdentifiable
     }
 
     @Override
-    Game getGame() {
+    Game extractGame() {
         return feed.game
+    }
+
+    @Override
+    String extractTitle() {
+        return title
     }
 }

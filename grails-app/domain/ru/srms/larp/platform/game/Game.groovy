@@ -3,7 +3,7 @@ package ru.srms.larp.platform.game
 import ru.srms.larp.platform.game.character.GameCharacter
 import ru.srms.larp.platform.sec.SpringUser
 
-class Game implements TitledIdentifiable {
+class Game implements Titled {
 
     String title
     String alias
@@ -23,6 +23,11 @@ class Game implements TitledIdentifiable {
 
     @Override
     String toString() {
+        return title
+    }
+
+    @Override
+    String extractTitle() {
         return title
     }
 }

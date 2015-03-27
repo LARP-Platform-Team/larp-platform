@@ -3,10 +3,10 @@ package ru.srms.larp.platform.game.roles
 import org.springframework.security.core.GrantedAuthority
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.InGameStuff
-import ru.srms.larp.platform.game.TitledIdentifiable
+import ru.srms.larp.platform.game.Titled
 import ru.srms.larp.platform.game.character.GameCharacter
 
-class GameRole  implements InGameStuff, TitledIdentifiable, GrantedAuthority {
+class GameRole  implements InGameStuff, Titled, GrantedAuthority {
 
     String title
 
@@ -39,5 +39,15 @@ class GameRole  implements InGameStuff, TitledIdentifiable, GrantedAuthority {
     @Override
     String getAuthority() {
         return "ROLE_" + id + "_in_" + game.alias
+    }
+
+    @Override
+    Game extractGame() {
+        return game
+    }
+
+    @Override
+    String extractTitle() {
+        return title
     }
 }

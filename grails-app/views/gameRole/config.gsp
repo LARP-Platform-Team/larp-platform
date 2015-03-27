@@ -28,15 +28,38 @@
         <div class="message" role="status">${flash.message}</div>
     </g:if>
 
-    <g:each in="${acls}" var="aclE">
-        <div>
-            ${aclE.id} -- ${aclE.title} ::
-                <g:each in="${GamePermission.values()}" var="perm">
-                ${perm.toString()}=${aclE.permissions.contains(perm)}
+    <table>
+        <thead>
+        <tr>
+            <th>Элемент</th>
+            <g:each in="${GamePermission.values()}" var="perm">
+                <th>${perm.toString()}</th>
             </g:each>
-        </div>
-    </g:each>
-
+        </tr>
+        </thead>
+        <tbody>
+        <g:each in="${acls}" var="aclItem">
+            <tr>
+                <td>${aclItem.id} -- ${aclItem.title}</td>
+                <g:each in="${GamePermission.values()}" var="perm">
+                    <td>
+                        <ingame:remoteLink
+                                elementId="permisson-cell-${aclItem.id}-${perm.toString()}"
+                                url="[action: 'setPermission', id: params.id, params: [
+                                        itemId: aclItem.id,
+                                        permission: perm.toString(),
+                                        value: !aclItem.permissions.contains(perm)
+                                ]]"
+                                update="[success: 'permisson-cell-'+aclItem.id+'-'+perm.toString(), failure: 'setPermissionError']">
+                        ${aclItem.permissions.contains(perm)}
+                        </ingame:remoteLink>
+                    </td>
+                </g:each>
+            </tr>
+        </g:each>
+        </tbody>
+    </table>
+    <div class="errors" id="setPermissionError"></div>
 
 </div>
 </body>
