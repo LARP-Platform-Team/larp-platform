@@ -4,7 +4,6 @@ import grails.transaction.Transactional
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.acls.domain.GrantedAuthoritySid
 import ru.srms.larp.platform.game.Titled
-import ru.srms.larp.platform.game.news.NewsFeed
 import ru.srms.larp.platform.game.roles.GameRole
 import ru.srms.larp.platform.sec.permissions.AclConfigModel
 import ru.srms.larp.platform.sec.permissions.GamePermission
@@ -25,11 +24,18 @@ class GameAclService {
     }
 
     @PreAuthorize("hasPermission(#role.game, admin)")
-    def setPermission(GameRole role, Long itemId, GamePermission permission, Boolean value) {
-        if(value)
-            aclUtilService.addPermission(NewsFeed.get(itemId), role.authority, permission.aclPermission)
+    boolean setPermission(GameRole role, Class<?> clazz, Long itemId, GamePermission permission) {
+        def find = aclUtilService.readAcl(clazz, itemId).entries.find {
+            it.sid.equals(new GrantedAuthoritySid(role)) && it.permission.equals(permission.aclPermission)
+        }
+        boolean exists = find?.granting ?: false
+
+        if(!exists)
+            aclUtilService.addPermission(clazz, itemId, role.authority, permission.aclPermission);
         else
-            aclUtilService.deletePermission(NewsFeed.get(itemId), role.authority, permission.aclPermission)
+            aclUtilService.deletePermission(clazz, itemId, role.authority, permission.aclPermission);
+
+        return !exists
     }
 
     @Transactional(readOnly = true)
@@ -41,7 +47,6 @@ class GameAclService {
                 it.sid.equals(new GrantedAuthoritySid(role)) && GamePermission.existsFor(it.permission)
             }.each {
                 result.permissions.add(GamePermission.valueFor(it.permission))
-                print result.permissions
             }
             return result
         }

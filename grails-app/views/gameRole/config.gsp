@@ -47,8 +47,7 @@
                                 elementId="permisson-cell-${aclItem.id}-${perm.toString()}"
                                 url="[action: 'setPermission', id: params.id, params: [
                                         itemId: aclItem.id,
-                                        permission: perm.toString(),
-                                        value: !aclItem.permissions.contains(perm)
+                                        permission: perm.toString()
                                 ]]"
                                 update="[success: 'permisson-cell-'+aclItem.id+'-'+perm.toString(), failure: 'setPermissionError']">
                         ${aclItem.permissions.contains(perm)}

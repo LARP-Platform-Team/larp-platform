@@ -30,13 +30,18 @@ class BootStrap {
 
             def roleAdmin = new SpringRole(authority: 'ROLE_ADMIN').save()
             def roleGm = new SpringRole(authority: 'ROLE_GM').save()
+            def roleAclChanger = new SpringRole(authority: 'ROLE_ACL_CHANGE_DETAILS').save()
 
             def admin = new SpringUser(username: 'admin', password: 'a').save()
             SpringUserSpringRole.create(admin, roleAdmin)
+            SpringUserSpringRole.create(admin, roleAclChanger)
 
             def gm1 = new SpringUser(username: "gm1", password: "a").save()
             SpringUserSpringRole.create(gm1, roleGm)
+            SpringUserSpringRole.create(gm1, roleAclChanger)
             def gm2 = new SpringUser(username: "gm2", password: "a").save()
+            SpringUserSpringRole.create(gm2, roleGm)
+            SpringUserSpringRole.create(gm2, roleAclChanger)
 
             def usr1 = new SpringUser(username: "usr1", password: "a").save()
             def usr2 = new SpringUser(username: "usr2", password: "a").save()

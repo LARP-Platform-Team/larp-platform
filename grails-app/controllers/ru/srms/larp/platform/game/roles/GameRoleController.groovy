@@ -6,6 +6,7 @@ import ru.srms.larp.platform.BaseController
 import ru.srms.larp.platform.GameRoleService
 import ru.srms.larp.platform.NewsService
 import ru.srms.larp.platform.game.character.GameCharacter
+import ru.srms.larp.platform.game.news.NewsFeed
 import ru.srms.larp.platform.sec.permissions.GamePermission
 
 import static org.springframework.http.HttpStatus.*
@@ -72,8 +73,9 @@ class GameRoleController extends BaseController {
             def role = GameRole.get(params.id)
             if (!role) throw new Exception("Неверная роль")
             def permission = GamePermission.valueOf(params.permission)
-            gameAclService.setPermission(role, params.long("itemId"), permission, params.boolean("value"))
-            render params.value as Boolean
+            boolean value = gameAclService.setPermission(role, NewsFeed.class, params.long("itemId"), permission)
+
+            render value
         } catch (Exception e) {
             response.status = INTERNAL_SERVER_ERROR.value()
             render e.getMessage()
