@@ -2,6 +2,7 @@ package ru.srms.larp.platform
 
 import org.springframework.http.HttpStatus
 
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 import static org.springframework.http.HttpStatus.NOT_FOUND
 
 abstract class BaseController {
@@ -107,5 +108,34 @@ abstract class BaseController {
         if(params.charAlias)
             defaults.params.charAlias = params.charAlias
         return defaults
+    }
+
+    /**
+     * Wrapper for ajax actions (renders errors in appropriate format)
+     * @param action action to perform
+     */
+    protected def doAjax(Closure action) {
+        try {
+            action()
+        } catch (Exception any) {
+            renderAjaxError(any)
+        }
+    }
+
+    /**
+     * Renders an error for ajax action from exception
+     * @param e
+     */
+    protected def renderAjaxError(Exception e) {
+        renderAjaxError("Что-то пошло не так: ${e.class.simpleName} (${e.message})")
+    }
+
+    /**
+     * Renders an error message for ajax action from exception
+     * @param message message it is
+     */
+    protected def renderAjaxError(String message) {
+        response.status = INTERNAL_SERVER_ERROR.value()
+        render message
     }
 }

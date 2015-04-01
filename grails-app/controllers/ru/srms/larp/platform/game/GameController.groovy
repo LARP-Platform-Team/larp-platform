@@ -4,6 +4,7 @@ import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseController
 import ru.srms.larp.platform.GameService
+import ru.srms.larp.platform.sec.SpringUser
 
 import static org.springframework.http.HttpStatus.*
 
@@ -56,6 +57,32 @@ class GameController extends BaseController {
         if(validateData(game)) {
             game.delete flush: true
             respondChange('default.deleted.message', NO_CONTENT, null, game.id)
+        }
+    }
+
+    @Transactional
+    def addMaster(Game game) {
+        doAjax {
+            def masterId = params.long("masterId")
+            if(!masterId) throw new Exception("No master id")
+            def master = SpringUser.get(masterId)
+            if(!master) throw new Exception("Wrong master id")
+            gameService.addMaster(game, master)
+
+            render template: 'masters', model: [masters: game.masters]
+        }
+    }
+
+    @Transactional
+    def removeMaster(Game game) {
+        doAjax {
+            def masterId = params.long("masterId")
+            if(!masterId) throw new Exception("No master id")
+            def master = SpringUser.get(masterId)
+            if(!master) throw new Exception("Wrong master id")
+            gameService.removeMaster(game, master)
+
+            render template: 'masters', model: [masters: game.masters]
         }
     }
 
