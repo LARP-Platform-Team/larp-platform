@@ -128,14 +128,14 @@ environments {
 
 ### How to run application? ###
 
-You can run application on internal tomcat:
+You can run application on internal tomcat (development mode by default):
 
 ```
-grails [-Dgrails.server.port.http=8090] run-app
+grails [-Dgrails.server.port.http=8090] [dev|test|prod] run-app
 ```
 
-Also you can deploy war-file on tomcat manualy. To build war-file execute:
+Also you can deploy war-file on tomcat manualy. To build war-file execute (production mode by default):
 
 ```
-grails war
+grails [dev|test|prod] war
 ```
