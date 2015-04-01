@@ -1,4 +1,4 @@
-<%@ page import="org.springframework.validation.FieldError; ru.srms.larp.platform.game.Game" %>
+<%@ page import="ru.srms.larp.platform.sec.SpringUser; org.springframework.validation.FieldError; ru.srms.larp.platform.game.Game" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,7 +26,7 @@
 </div>
 
 <div id="edit-game" class="content scaffold-edit" role="main">
-    <h1><g:message code="default.edit.label" args="[entityName]"/></h1>
+    <h1>Редактирование игры "${gameInstance.title}"</h1>
     <g:if test="${flash.message}">
         <div class="message" role="status">${flash.message}</div>
     </g:if>
@@ -48,6 +48,24 @@
                             value="${message(code: 'default.button.update.label', default: 'Update')}"/>
         </fieldset>
     </g:form>
+
+    <ingame:formRemote name="masters"
+                       url="[resource: gameInstance, action: 'addMaster']"
+                       update="[success: 'gameMasters', failure: 'gameMastersError']" method="POST">
+        <fieldset class="form">
+            <div class="fieldcontain">
+                <label>Мастера</label>
+                <g:render template="masters" model="[masters: gameInstance.masters]"/>
+            </div>
+            <div class="fieldcontain">
+                <label for="masterId">Выбрать мастера</label>
+                <g:select name="masterId" from="${SpringUser.list()}" optionKey="id"/>
+            </div>
+        </fieldset>
+        <fieldset class="buttons">
+            <g:submitButton name="addMaster" value="Добавить"/>
+        </fieldset>
+    </ingame:formRemote>
 </div>
 </body>
 </html>

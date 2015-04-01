@@ -3,6 +3,8 @@ package ru.srms.larp.platform.sec
 class SpringRole {
 
     public static final String ADMIN_ROLE = 'ROLE_ADMIN'
+    public static final String GAME_MASTER_ROLE = 'ROLE_GM'
+    public static final String ACL_EDITOR_ROLE = 'ROLE_ACL_CHANGE_DETAILS'
 
 	String authority
 

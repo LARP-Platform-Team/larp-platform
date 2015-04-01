@@ -110,6 +110,7 @@ class GameRoleController extends BaseController {
         render template: 'characters', model: [characters: gameRole.characters]
     }
 
+    // TODO update with doAjax from BaseController
     @Transactional
     def removeFromChar(GameRole gameRole) {
         Long id = params.characterId as Long
