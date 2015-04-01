@@ -39,6 +39,7 @@ class GameAclService {
     }
 
     @Transactional(readOnly = true)
+    @PreAuthorize("hasPermission(#role.game, admin)")
     List<AclConfigModel> getAclMatrix(GameRole role, List<Titled> objects) {
         objects.collect {
             AclConfigModel result = new AclConfigModel(id: it.id, title: it.extractTitle())
