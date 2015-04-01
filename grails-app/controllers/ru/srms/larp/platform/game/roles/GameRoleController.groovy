@@ -3,8 +3,11 @@ package ru.srms.larp.platform.game.roles
 import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseController
+import ru.srms.larp.platform.GameAclService
 import ru.srms.larp.platform.GameRoleService
+import ru.srms.larp.platform.NewsService
 import ru.srms.larp.platform.game.character.GameCharacter
+import ru.srms.larp.platform.sec.permissions.GamePermission
 
 import static org.springframework.http.HttpStatus.*
 
@@ -15,6 +18,8 @@ class GameRoleController extends BaseController {
     static allowedMethods = [save: "POST", update: "POST", addToChar: "POST"]
 
     GameRoleService gameRoleService
+    NewsService newsService
+    GameAclService gameAclService
 
     def index() {
         respond gameRoleService.list(params.game, null, paginator()) ,
@@ -51,6 +56,30 @@ class GameRoleController extends BaseController {
         if(validateData(role)) {
             gameRoleService.delete(role)
             respondChange('default.deleted.message', NO_CONTENT, null, role.id)
+        }
+    }
+
+    def config(GameRole role) {
+        // TODO надо вывести все записи, участвующие в ACL
+        def feeds = newsService.listAdminFeeds(params.game)
+        render(view: "config", model: [
+                acls: gameAclService.getAclMatrix(role)
+        ])
+    }
+
+    @Transactional
+    def setPermission() {
+        try {
+            def role = GameRole.get(params.id)
+            if (!role) throw new Exception("Неверная роль")
+            def permission = GamePermission.valueOf(params.permission)
+            def clazz = this.class.classLoader.loadClass(params.clazz)
+            boolean value = gameAclService.setPermission(role, clazz, params.long("itemId"), permission)
+
+            render value
+        } catch (Exception e) {
+            response.status = INTERNAL_SERVER_ERROR.value()
+            render e.class.simpleName + ": " + e.message
         }
     }
 

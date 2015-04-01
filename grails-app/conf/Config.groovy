@@ -146,3 +146,4 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/**/favicon.ico':                ['permitAll']
 ]
 
+grails.plugin.springsecurity.acl.authority.changeAclDetails = 'ROLE_ACL_CHANGE_DETAILS'

@@ -3,9 +3,10 @@
     <div class="title">
         ${role.title} (${role.characters.size()} персонажей)
         <sec:permitted object="${params.game}" permission="administration">
-            &nbsp;<ingame:link action="create" params="[parent: role.id]">[+]</ingame:link>
-            &nbsp;<ingame:link action="edit" id="${role.id}">[e]</ingame:link>
-            &nbsp;<ingame:link action="delete" id="${role.id}">[x]</ingame:link>
+            &nbsp;<ingame:link action="create" title="Создать дочернюю роль" params="[parent: role.id]">[+]</ingame:link>
+            &nbsp;<ingame:link action="edit" title="Редактировать и назначить" id="${role.id}">[e]</ingame:link>
+            &nbsp;<ingame:link action="config" title="Задать права" id="${role.id}">[p]</ingame:link>
+            &nbsp;<ingame:link action="delete" title="Удалить" id="${role.id}">[x]</ingame:link>
         </sec:permitted>
     </div>
     <g:if test="${role.subRoles}">

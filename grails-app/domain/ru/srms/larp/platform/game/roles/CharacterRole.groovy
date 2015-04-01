@@ -64,10 +64,6 @@ class CharacterRole implements InGameStuff, Serializable {
         builder.toHashCode()
     }
 
-    Game getGame() {
-        return role ? role.game : character?.game;
-    }
-
     @Override
     Game extractGame() {
         return role ? role.game : character?.game;

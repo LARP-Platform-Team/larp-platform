@@ -2,6 +2,7 @@ import org.springframework.security.acls.domain.ObjectIdentityImpl
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.AuthorityUtils
 import org.springframework.security.core.context.SecurityContextHolder as SCH
+import ru.srms.larp.platform.GameAclService
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.character.GameCharacter
 import ru.srms.larp.platform.game.mail.Letter
@@ -19,6 +20,7 @@ class BootStrap {
 
     def aclService
     def aclUtilService
+    GameAclService gameAclService
 
     def init = { servletContext ->
         if(Letter.count == 0)
@@ -28,13 +30,18 @@ class BootStrap {
 
             def roleAdmin = new SpringRole(authority: 'ROLE_ADMIN').save()
             def roleGm = new SpringRole(authority: 'ROLE_GM').save()
+            def roleAclChanger = new SpringRole(authority: 'ROLE_ACL_CHANGE_DETAILS').save()
 
             def admin = new SpringUser(username: 'admin', password: 'a').save()
             SpringUserSpringRole.create(admin, roleAdmin)
+            SpringUserSpringRole.create(admin, roleAclChanger)
 
             def gm1 = new SpringUser(username: "gm1", password: "a").save()
             SpringUserSpringRole.create(gm1, roleGm)
+            SpringUserSpringRole.create(gm1, roleAclChanger)
             def gm2 = new SpringUser(username: "gm2", password: "a").save()
+            SpringUserSpringRole.create(gm2, roleGm)
+            SpringUserSpringRole.create(gm2, roleAclChanger)
 
             def usr1 = new SpringUser(username: "usr1", password: "a").save()
             def usr2 = new SpringUser(username: "usr2", password: "a").save()
@@ -64,6 +71,7 @@ class BootStrap {
 
 
             def feed = new NewsFeed(game: game1, title: "Новости леса").save()
+            gameAclService.createAcl(feed)
 
             def now = new Date().getTime()
             new NewsItem(feed: feed, title: "Новость раз", text: "Все умерли", created: new Date(now - 2400000)).save()
@@ -90,18 +98,22 @@ class BootStrap {
 
             game2.save()
 
+            // новости
             feed = new NewsFeed(game: game2, title: "Круглый стол").save()
+            gameAclService.createAcl(feed)
+
 
             now = new Date().getTime()
             new NewsItem(feed: feed, title: "Новость раз", text: "Все хорошо", created: new Date(now - 2400000)).save()
             new NewsItem(feed: feed, title: "Новость два", text: "Все плохо", created: new Date(now - 3600000)).save()
             new NewsItem(feed: feed, title: "Новость три", text: "Все норм", created: new Date(now - 1200000)).save()
 
-            feed = new NewsFeed(game: game2, title: "Новости магии").save()
+            def mFeed = new NewsFeed(game: game2, title: "Новости магии").save()
+            gameAclService.createAcl(mFeed)
 
-            new NewsItem(feed: feed, title: "Новость магии раз", text: "Все хорошо у магов").save()
-            new NewsItem(feed: feed, title: "Новость магии два", text: "Все хорошо!").save()
-            new NewsItem(feed: feed, title: "Новость магии три", text: "Все хорошо!!! Дада.").save()
+            new NewsItem(feed: mFeed, title: "Новость магии раз", text: "Все хорошо у магов").save()
+            new NewsItem(feed: mFeed, title: "Новость магии два", text: "Все хорошо!").save()
+            new NewsItem(feed: mFeed, title: "Новость магии три", text: "Все хорошо!!! Дада.").save()
 
             // роли
             def r1 = new GameRole(title: "ФСБ", game: game2).save(flush: true)
@@ -111,11 +123,13 @@ class BootStrap {
 
             new GameRole(title: "Вампир", game: game2).save()
             new GameRole(title: "Человек", game: game2).save()
-            new GameRole(title: "Оборотень", game: game2).save()
+            def werewolf = new GameRole(title: "Оборотень", game: game2).save()
 
             CharacterRole.create(lancelot, r1)
             CharacterRole.create(lancelot, r2)
             CharacterRole.create(merlin, r1)
+
+            aclUtilService.addPermission(mFeed, r1.authority, READ)
         }
 
     }
