@@ -38,7 +38,13 @@
         </tr>
         </thead>
         <tbody>
-        <g:each in="${acls}" var="aclItem">
+        <g:each in="${acls}" var="aclGroup">
+            <tr>
+                <td style="text-align: center; font-weight: bold" colspan="${GamePermission.values().size() + 1}">
+                    ${aclGroup.title}
+                </td>
+            </tr>
+        <g:each in="${aclGroup.models}" var="aclItem">
             <tr>
                 <td>${aclItem.id} -- ${aclItem.title}</td>
                 <g:each in="${GamePermission.values()}" var="perm">
@@ -47,6 +53,7 @@
                                 elementId="permisson-cell-${aclItem.id}-${perm.toString()}"
                                 url="[action: 'setPermission', id: params.id, params: [
                                         itemId: aclItem.id,
+                                        clazz: aclGroup.clazz.name,
                                         permission: perm.toString()
                                 ]]"
                                 update="[success: 'permisson-cell-'+aclItem.id+'-'+perm.toString(), failure: 'setPermissionError']">
@@ -55,6 +62,7 @@
                     </td>
                 </g:each>
             </tr>
+        </g:each>
         </g:each>
         </tbody>
     </table>

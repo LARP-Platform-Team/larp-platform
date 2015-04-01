@@ -3,10 +3,10 @@ package ru.srms.larp.platform.game.roles
 import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseController
+import ru.srms.larp.platform.GameAclService
 import ru.srms.larp.platform.GameRoleService
 import ru.srms.larp.platform.NewsService
 import ru.srms.larp.platform.game.character.GameCharacter
-import ru.srms.larp.platform.game.news.NewsFeed
 import ru.srms.larp.platform.sec.permissions.GamePermission
 
 import static org.springframework.http.HttpStatus.*
@@ -19,7 +19,7 @@ class GameRoleController extends BaseController {
 
     GameRoleService gameRoleService
     NewsService newsService
-    def gameAclService
+    GameAclService gameAclService
 
     def index() {
         respond gameRoleService.list(params.game, null, paginator()) ,
@@ -63,7 +63,7 @@ class GameRoleController extends BaseController {
         // TODO надо вывести все записи, участвующие в ACL
         def feeds = newsService.listAdminFeeds(params.game)
         render(view: "config", model: [
-                acls: gameAclService.getAclMatrix(role, feeds)
+                acls: gameAclService.getAclMatrix(role)
         ])
     }
 
@@ -73,12 +73,13 @@ class GameRoleController extends BaseController {
             def role = GameRole.get(params.id)
             if (!role) throw new Exception("Неверная роль")
             def permission = GamePermission.valueOf(params.permission)
-            boolean value = gameAclService.setPermission(role, NewsFeed.class, params.long("itemId"), permission)
+            def clazz = this.class.classLoader.loadClass(params.clazz)
+            boolean value = gameAclService.setPermission(role, clazz, params.long("itemId"), permission)
 
             render value
         } catch (Exception e) {
             response.status = INTERNAL_SERVER_ERROR.value()
-            render e.getMessage()
+            render e.class.simpleName + ": " + e.message
         }
     }
 
