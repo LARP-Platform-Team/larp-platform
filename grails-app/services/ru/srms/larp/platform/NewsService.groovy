@@ -43,6 +43,7 @@ class NewsService {
     @Transactional
     @PreAuthorize("hasPermission(#feed.game, admin)")
     def deleteFeed(NewsFeed feed) {
+        aclUtilService.deleteAcl(feed)
         feed.delete flush:true
     }
 
