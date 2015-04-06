@@ -3,22 +3,21 @@
 <html>
 <head>
     <meta name="layout" content="main">
-    <g:set var="entityName" value="${message(code: 'newsFeed.label', default: 'NewsFeed')}"/>
     <g:set var="feed" value="${newsFeedInstance as NewsFeed}"/>
-    <title><g:message code="default.show.label" args="[entityName]"/></title>
+    <title>${feed.title}</title>
 </head>
 
 <body>
-<a href="#show-newsFeed" class="skip" tabindex="-1"><g:message code="default.link.skip.label"
-                                                               default="Skip to content&hellip;"/></a>
-
 <div class="nav" role="navigation">
     <ul>
         <li><a class="home" href="${createLink(uri: '/')}"><g:message
                 code="default.home.label"/></a></li>
+
+        <sec:permitted object="${feed}" permission="create">
         <li><ingame:link class="create" controller="newsItem" action="create" params="[feedId: feed.id]">
-            <g:message code="default.new.label"
-                       args="[message(code: 'newsItem.label')]"/></ingame:link></li>
+            Добавить новость
+        </ingame:link></li>
+        </sec:permitted>
     </ul>
 </div>
 
