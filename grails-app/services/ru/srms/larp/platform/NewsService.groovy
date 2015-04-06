@@ -1,5 +1,6 @@
 package ru.srms.larp.platform
 
+import grails.plugin.springsecurity.acl.AclUtilService
 import grails.transaction.Transactional
 import org.springframework.security.access.prepost.PostFilter
 import org.springframework.security.access.prepost.PreAuthorize
@@ -11,6 +12,7 @@ import ru.srms.larp.platform.game.news.NewsItem
 class NewsService {
 
     GameAclService gameAclService
+    AclUtilService aclUtilService
 
     @PostFilter("hasPermission(#game, admin) or hasPermission(filterObject, read)")
     def findFeedsByGame(Game game) {
@@ -59,22 +61,22 @@ class NewsService {
     }
 
     @Transactional
-    @PreAuthorize("hasPermission(#parent.game, admin) or hasPermission(#parent, create)")
+    @PreAuthorize("hasPermission(#news.feed.game, admin) or hasPermission(#news.feed, create)")
     def saveNews(NewsItem news) {
         news.save flush:true
     }
 
-    @PreAuthorize("hasPermission(#parent.game, admin) or hasPermission(#parent, write)")
+    @PreAuthorize("hasPermission(#news.feed.game, admin) or hasPermission(#news.feed, write)")
     def editNews(NewsItem news) {news}
 
     @Transactional
-    @PreAuthorize("hasPermission(#parent.game, admin) or hasPermission(#parent, write)")
+    @PreAuthorize("hasPermission(#news.feed.game, admin) or hasPermission(#news.feed, write)")
     def updateNews(NewsItem news) {
         news.save flush:true
     }
 
     @Transactional
-    @PreAuthorize("hasPermission(#parent.game, admin) or hasPermission(#parent, delete)")
+    @PreAuthorize("hasPermission(#news.feed.game, admin) or hasPermission(#news.feed, delete)")
     def deleteNews(NewsItem news) {
         news.delete flush:true
     }
