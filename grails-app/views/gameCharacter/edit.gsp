@@ -1,4 +1,4 @@
-<%@ page import="org.springframework.validation.FieldError; ru.srms.larp.platform.game.news.NewsFeed" %>
+<%@ page import="ru.srms.larp.platform.game.roles.GameRole; org.springframework.validation.FieldError; ru.srms.larp.platform.game.news.NewsFeed" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,10 +12,8 @@
     <ul>
         <li><a class="home" href="${createLink(uri: '/')}"><g:message
                 code="default.home.label"/></a></li>
-        <li><ingame:link class="list" action="index"><g:message code="default.list.label"
-                                                                args="[entityName]"/></ingame:link></li>
-        <li><ingame:link class="create" action="create"><g:message code="default.new.label"
-                                                                   args="[entityName]"/></ingame:link></li>
+        <li><ingame:link class="list" action="index">Все персонажи</ingame:link></li>
+        <li><ingame:link class="create" action="create">Создать персонажа</ingame:link></li>
     </ul>
 </div>
 
@@ -42,6 +40,29 @@
                             value="${message(code: 'default.button.update.label', default: 'Update')}"/>
         </fieldset>
     </ingame:form>
+
+    %{-- TODO может, в шаблон вынести всю эту конструкцию (в gameRole/edit так же) --}%
+    <ingame:formRemote name="roles"
+                       url="[resource: gameCharacterInstance, action: 'addRole']"
+                       update="[success: 'characterRoles', failure: 'addRoleError']" method="POST">
+
+        <fieldset class="form">
+            <div class="fieldcontain">
+                <label>Роли</label>
+                <g:render template="roles" model="[roles: gameCharacterInstance.roles]"/>
+            </div>
+
+            <div class="fieldcontain">
+                <label for="role.id">Выбрать Роль</label>
+                <g:select id="role.id" name="role.id" from="${GameRole.findAllByGame(params.game)}"
+                          optionKey="id" />
+            </div>
+
+        </fieldset>
+        <fieldset class="buttons">
+            <g:submitButton name="addRole" value="Назначить"/>
+        </fieldset>
+    </ingame:formRemote>
 </div>
 </body>
 </html>

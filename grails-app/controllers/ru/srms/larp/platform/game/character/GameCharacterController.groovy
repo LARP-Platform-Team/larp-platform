@@ -4,6 +4,8 @@ import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseController
 import ru.srms.larp.platform.CharacterService
+import ru.srms.larp.platform.GameRoleService
+import ru.srms.larp.platform.game.roles.GameRole
 
 import static org.springframework.http.HttpStatus.*
 
@@ -13,6 +15,7 @@ class GameCharacterController extends BaseController {
 
     static allowedMethods = []
     CharacterService characterService
+    GameRoleService gameRoleService
 
     def playAs(String charAlias) {
         def character = characterService.find(charAlias)
@@ -63,6 +66,33 @@ class GameCharacterController extends BaseController {
         if(validateData(character)) {
             characterService.delete(character)
             respondChange('default.deleted.message', NO_CONTENT, null, character.id)
+        }
+    }
+
+    @Transactional
+    def addRole(GameCharacter character) {
+        doAjax {
+            Long id = params.role?.id as Long
+            if (!id || !GameRole.exists(id))
+                throw new Exception("Указана неверная роль!")
+
+            if(character.roles.find({it.id == id}))
+                throw new Exception("У персонажа уже есть указанная роль!")
+
+            gameRoleService.add(GameRole.get(id), character)
+            render template: 'roles', model: [roles: character.roles]
+        }
+    }
+
+    @Transactional
+    def removeRole(GameCharacter character) {
+        doAjax {
+            Long id = params.roleId as Long
+            if (!id || !GameRole.exists(id))
+                throw new Exception("Указана неверная роль!")
+
+            gameRoleService.remove(GameRole.get(id), character)
+            render template: 'roles', model: [roles: character.roles]
         }
     }
 
