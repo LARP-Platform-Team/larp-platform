@@ -79,11 +79,8 @@
 
 
             <sec:ifAllGranted roles="ROLE_ADMIN">
-                <tmpl:gmControls game="${gameInstance}"/>
                 <g:link class="delete" action="delete" resource="${gameInstance}"
-                        onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
-                    ${message(code: 'default.button.delete.label', default: 'Delete')}
-                </g:link>
+                        onclick="return confirm('Вы уверены?');">Удалить</g:link>
             </sec:ifAllGranted>
         </fieldset>
 </div>

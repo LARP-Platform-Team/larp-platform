@@ -51,6 +51,14 @@ body {
 	background-color: #abbf78;
 }
 
+#grailsLogo a {
+	color: #464;
+	text-decoration: none;
+	font-size: 1.5em;
+	font-weight: bold;
+	font-family: Verdana, sans-serif;
+}
+
 /* replace with .no-boxshadow body if you have modernizr available */
 .ie6 body,
 .ie7 body,

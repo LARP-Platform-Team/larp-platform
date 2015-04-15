@@ -19,7 +19,7 @@
 		<g:layoutHead/>
 	</head>
 	<body>
-		<div id="grailsLogo" role="banner"><a href="http://grails.org"><asset:image src="grails_logo.png" alt="Grails"/></a></div>
+	<div id="grailsLogo" role="banner"><a target="_blank" href="https://bitbucket.org/TrebleSnake/larp-platform/wiki/Home">Платформа городских ролевочек</a></div>
 		<g:layoutBody/>
         <aside class="content">
             <h1>Прочее</h1>
