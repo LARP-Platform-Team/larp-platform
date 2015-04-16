@@ -2,12 +2,12 @@ package ru.srms.larp.platform
 
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
-import ru.srms.larp.platform.game.mail.Letter
+import ru.srms.larp.platform.game.mail.LetterContent
 import ru.srms.larp.platform.mail.LetterController
 import spock.lang.Specification
 
 @TestFor(LetterController)
-@Mock(Letter)
+@Mock(LetterContent)
 class LetterControllerSpec extends Specification {
 
     def populateValidParams(params) {
@@ -39,7 +39,7 @@ class LetterControllerSpec extends Specification {
         when:"The save action is executed with an invalid instance"
             request.contentType = FORM_CONTENT_TYPE
             request.method = 'POST'
-            def letter = new Letter()
+            def letter = new LetterContent()
             letter.validate()
             controller.save(letter)
 
@@ -50,14 +50,14 @@ class LetterControllerSpec extends Specification {
         when:"The save action is executed with a valid instance"
             response.reset()
             populateValidParams(params)
-            letter = new Letter(params)
+            letter = new LetterContent(params)
 
             controller.save(letter)
 
         then:"A redirect is issued to the show action"
             response.redirectedUrl == '/letter/show/1'
             controller.flash.message != null
-            Letter.count() == 1
+            LetterContent.count() == 1
     }
 
     void "Test that the show action returns the correct model"() {
@@ -69,7 +69,7 @@ class LetterControllerSpec extends Specification {
 
         when:"A domain instance is passed to the show action"
             populateValidParams(params)
-            def letter = new Letter(params)
+            def letter = new LetterContent(params)
             controller.show(letter)
 
         then:"A model is populated containing the domain instance"
@@ -85,7 +85,7 @@ class LetterControllerSpec extends Specification {
 
         when:"A domain instance is passed to the edit action"
             populateValidParams(params)
-            def letter = new Letter(params)
+            def letter = new LetterContent(params)
             controller.edit(letter)
 
         then:"A model is populated containing the domain instance"
@@ -105,7 +105,7 @@ class LetterControllerSpec extends Specification {
 
         when:"An invalid domain instance is passed to the update action"
             response.reset()
-            def letter = new Letter()
+            def letter = new LetterContent()
             letter.validate()
             controller.update(letter)
 
@@ -116,7 +116,7 @@ class LetterControllerSpec extends Specification {
         when:"A valid domain instance is passed to the update action"
             response.reset()
             populateValidParams(params)
-            letter = new Letter(params).save(flush: true)
+            letter = new LetterContent(params).save(flush: true)
             controller.update(letter)
 
         then:"A redirect is issues to the show action"
@@ -137,16 +137,16 @@ class LetterControllerSpec extends Specification {
         when:"A domain instance is created"
             response.reset()
             populateValidParams(params)
-            def letter = new Letter(params).save(flush: true)
+            def letter = new LetterContent(params).save(flush: true)
 
         then:"It exists"
-            Letter.count() == 1
+            LetterContent.count() == 1
 
         when:"The domain instance is passed to the delete action"
             controller.delete(letter)
 
         then:"The instance is deleted"
-            Letter.count() == 0
+            LetterContent.count() == 0
             response.redirectedUrl == '/letter/index'
             flash.message != null
     }

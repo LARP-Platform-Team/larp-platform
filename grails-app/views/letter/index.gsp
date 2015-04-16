@@ -1,5 +1,5 @@
 
-<%@ page import="ru.srms.larp.platform.game.mail.Letter" %>
+<%@ page import="ru.srms.larp.platform.game.mail.LetterContent" %>
 <!DOCTYPE html>
 <html>
 	<head>

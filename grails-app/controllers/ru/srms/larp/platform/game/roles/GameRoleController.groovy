@@ -61,7 +61,6 @@ class GameRoleController extends BaseController {
 
     def config(GameRole role) {
         // TODO надо вывести все записи, участвующие в ACL
-        def feeds = newsService.listAdminFeeds(params.game)
         render(view: "config", model: [
                 acls: gameAclService.getAclMatrix(role)
         ])

@@ -61,7 +61,7 @@ class GamePermissionsEvaluator extends AclPermissionEvaluator {
 
     private boolean checkCharacterPermission(GameCharacter character, ObjectIdentity oid, Object permission) {
         List<Sid> sids = character.getRoles().collect {new GrantedAuthoritySid(it)}
-        if(sids.isEmpty()) return false
+        sids.add(new GrantedAuthoritySid(character))
 
         List requiredPermission = this.resolvePermission(permission);
         boolean debug = this.logger.isDebugEnabled();

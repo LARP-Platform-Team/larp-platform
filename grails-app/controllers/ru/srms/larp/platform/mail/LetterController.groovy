@@ -1,7 +1,7 @@
 package ru.srms.larp.platform.mail
 
 import grails.transaction.Transactional
-import ru.srms.larp.platform.game.mail.Letter
+import ru.srms.larp.platform.game.mail.LetterContent
 
 import static org.springframework.http.HttpStatus.*
 
@@ -12,19 +12,19 @@ class LetterController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Letter.list(params), model:[letterInstanceCount: Letter.count()]
+        respond LetterContent.list(params), model:[letterInstanceCount: LetterContent.count()]
     }
 
-    def show(Letter letterInstance) {
+    def show(LetterContent letterInstance) {
         respond letterInstance
     }
 
     def create() {
-        respond new Letter(params)
+        respond new LetterContent(params)
     }
 
     @Transactional
-    def save(Letter letterInstance) {
+    def save(LetterContent letterInstance) {
         if (letterInstance == null) {
             notFound()
             return
@@ -46,12 +46,12 @@ class LetterController {
         }
     }
 
-    def edit(Letter letterInstance) {
+    def edit(LetterContent letterInstance) {
         respond letterInstance
     }
 
     @Transactional
-    def update(Letter letterInstance) {
+    def update(LetterContent letterInstance) {
         if (letterInstance == null) {
             notFound()
             return
@@ -74,7 +74,7 @@ class LetterController {
     }
 
     @Transactional
-    def delete(Letter letterInstance) {
+    def delete(LetterContent letterInstance) {
 
         if (letterInstance == null) {
             notFound()
