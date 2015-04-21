@@ -2,6 +2,7 @@ package larp.platform
 
 import ru.srms.larp.platform.NewsService
 
+// TODO add to snippets tag lib
 class NewsTagLib {
     //static defaultEncodeAs = [taglib:'html']
     //static encodeAsForTags = [tagName: [taglib:'html'], otherTagName: [taglib:'none']]

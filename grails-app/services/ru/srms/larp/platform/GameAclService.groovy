@@ -5,6 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.acls.domain.GrantedAuthoritySid
 import org.springframework.security.acls.model.Sid
 import ru.srms.larp.platform.game.Titled
+import ru.srms.larp.platform.game.mail.MailBox
 import ru.srms.larp.platform.game.news.NewsFeed
 import ru.srms.larp.platform.game.roles.GameRole
 import ru.srms.larp.platform.sec.permissions.AclConfigGroup
@@ -47,8 +48,11 @@ class GameAclService {
         List<AclConfigGroup> result = []
 
         // TODO надо вывести все записи, участвующие в ACL
-        result += new AclConfigGroup(title: "Новости", clazz: NewsFeed.class,
-                models: getAclModels(new GrantedAuthoritySid(role), NewsFeed.findAllByGame(role.game)))
+      def roleSid = new GrantedAuthoritySid(role)
+      result += new AclConfigGroup(title: "Новости", clazz: NewsFeed.class,
+          models: getAclModels(roleSid, NewsFeed.findAllByGame(role.game)))
+      result += new AclConfigGroup(title: "Почтовые ящики", clazz: MailBox.class,
+          models: getAclModels(roleSid, MailBox.findAllByGame(role.game)))
 
         return result
     }

@@ -24,6 +24,7 @@
         <aside class="content">
             <h1>Прочее</h1>
             <g:newsFeeds/>
+						<g:availableMailboxes/>
         </aside>
     <div class="footer" role="contentinfo">
         <sec:ifLoggedIn>

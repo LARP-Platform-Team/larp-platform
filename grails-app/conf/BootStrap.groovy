@@ -5,7 +5,10 @@ import org.springframework.security.core.context.SecurityContextHolder as SCH
 import ru.srms.larp.platform.GameAclService
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.character.GameCharacter
-import ru.srms.larp.platform.game.mail.Letter
+import ru.srms.larp.platform.game.mail.LetterContent
+import ru.srms.larp.platform.game.mail.LetterRef
+import ru.srms.larp.platform.game.mail.LetterType
+import ru.srms.larp.platform.game.mail.MailBox
 import ru.srms.larp.platform.game.news.NewsFeed
 import ru.srms.larp.platform.game.news.NewsItem
 import ru.srms.larp.platform.game.roles.CharacterRole
@@ -23,10 +26,10 @@ class BootStrap {
     GameAclService gameAclService
 
     def init = { servletContext ->
-        if(Letter.count == 0)
-        {
-            new Letter(subject: "hi", text: "howdy?").save()
-            new Letter(subject: "привет", text: "какчо?").save()
+//        if(LetterContent.count == 0) {
+//            new LetterContent(subject: "hi", text: "howdy?").save()
+//            new LetterContent(subject: "привет", text: "какчо?").save()
+//        }
 
             def roleAdmin = new SpringRole(authority: 'ROLE_ADMIN').save()
             def roleGm = new SpringRole(authority: 'ROLE_GM').save()
@@ -115,6 +118,30 @@ class BootStrap {
             new NewsItem(feed: mFeed, title: "Новость магии два", text: "Все хорошо!").save()
             new NewsItem(feed: mFeed, title: "Новость магии три", text: "Все хорошо!!! Дада.").save()
 
+            // почта
+            def mailbox = new MailBox(game: game2, address: "test@camelot.com").save()
+            gameAclService.createAcl(mailbox)
+            def mailbox2 = new MailBox(game: game2, address: "test2@camelot.com").save()
+            gameAclService.createAcl(mailbox2)
+            def mailbox3 = new MailBox(game: game2, address: "test3@camelot.com").save()
+            gameAclService.createAcl(mailbox3)
+
+            def m1 = new LetterContent(subject: "Хай", text: "Как оно?", sender: mailbox, recipients: [mailbox2], time: new Date()).save()
+            new LetterRef(mailbox: mailbox, content: m1, type: LetterType.OUTGOING).save()
+            new LetterRef(mailbox: mailbox2, content: m1, type: LetterType.INBOX).save()
+
+            def m2 = new LetterContent(subject: "Хай трэш", text: "Как оно?!", sender: mailbox, recipients: [mailbox3], time: new Date()).save()
+            new LetterRef(mailbox: mailbox, content: m2, type: LetterType.TRASH).save()
+            new LetterRef(mailbox: mailbox2, content: m2, type: LetterType.INBOX).save()
+
+            def m3 = new LetterContent(subject: "Сам Хай", text: "Каконо(", sender: mailbox2, recipients: [mailbox], time: new Date()).save()
+            new LetterRef(mailbox: mailbox2, content: m3, type: LetterType.OUTGOING).save()
+            new LetterRef(mailbox: mailbox, content: m3, type: LetterType.INBOX).save()
+
+            def m4 = new LetterContent(subject: "Хай драфт", text: "Как оно а?!", sender: mailbox, recipients: [mailbox2, mailbox3], time: new Date()).save()
+            new LetterRef(mailbox: mailbox, content: m4, type: LetterType.DRAFT).save()
+
+
             // роли
             def r1 = new GameRole(title: "ФСБ", game: game2).save(flush: true)
             new GameRole(title: 'Стажер ФСБ', game: game2, parent: r1).save()
@@ -130,7 +157,8 @@ class BootStrap {
             CharacterRole.create(merlin, r1)
 
             aclUtilService.addPermission(mFeed, r1.authority, READ)
-        }
+
+
 
     }
     def destroy = {

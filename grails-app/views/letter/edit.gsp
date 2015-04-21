@@ -1,41 +1,43 @@
-<%@ page import="ru.srms.larp.platform.game.mail.Letter" %>
+<%@ page import="org.springframework.validation.FieldError" %>
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta name="layout" content="main">
-		<g:set var="entityName" value="${message(code: 'letter.label', default: 'Letter')}" />
-		<title><g:message code="default.edit.label" args="[entityName]" /></title>
-	</head>
-	<body>
-		<a href="#edit-letter" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-		<div class="nav" role="navigation">
-			<ul>
-				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
-			</ul>
-		</div>
-		<div id="edit-letter" class="content scaffold-edit" role="main">
-			<h1><g:message code="default.edit.label" args="[entityName]" /></h1>
-			<g:if test="${flash.message}">
-			<div class="message" role="status">${flash.message}</div>
-			</g:if>
-			<g:hasErrors bean="${letterInstance}">
-			<ul class="errors" role="alert">
-				<g:eachError bean="${letterInstance}" var="error">
-				<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
-				</g:eachError>
-			</ul>
-			</g:hasErrors>
-			<g:form url="[resource:letterInstance, action:'update']" method="PUT" >
-				<g:hiddenField name="version" value="${letterInstance?.version}" />
-				<fieldset class="form">
-					<g:render template="form"/>
-				</fieldset>
-				<fieldset class="buttons">
-					<g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
-				</fieldset>
-			</g:form>
-		</div>
-	</body>
+<head>
+	<meta name="layout" content="main">
+	<g:set var="title" value="Написать письмо"/>
+	<title>${title}</title>
+</head>
+
+<body>
+<div class="nav" role="navigation">
+	<ul>
+		<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
+		</li>
+	</ul>
+</div>
+
+<div id="create-letter" class="content scaffold-create" role="main">
+	<h1>${title}</h1>
+	<g:if test="${flash.message}">
+		<div class="message" role="status">${flash.message}</div>
+	</g:if>
+	<g:hasErrors bean="${letterRefInstance}">
+		<ul class="errors" role="alert">
+			<g:eachError bean="${letterRefInstance}" var="error">
+				<li <g:if test="${error in FieldError}">data-field-id="${error.field}"</g:if>>
+					<g:message error="${error}"/></li>
+			</g:eachError>
+		</ul>
+	</g:hasErrors>
+	<ingame:form url="[controller: 'letter', action: 'update', id: letterRefInstance?.id]">
+		<g:hiddenField name="version" value="${letterRefInstance?.version}"/>
+		<fieldset class="form">
+			<g:render template="form"/>
+		</fieldset>
+		<fieldset class="buttons">
+			<g:submitButton name="draft" class="save" value="Сохранить в черновики"/>
+			<g:submitButton name="send" class="save" value="Отправить"/>
+		</fieldset>
+	</ingame:form>
+</div>
+</body>
 </html>

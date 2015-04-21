@@ -1,5 +1,6 @@
 package ru.srms.larp.platform.game.character
 
+import org.springframework.security.core.GrantedAuthority
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.InGameStuff
 import ru.srms.larp.platform.game.Titled
@@ -7,7 +8,7 @@ import ru.srms.larp.platform.game.roles.CharacterRole
 import ru.srms.larp.platform.game.roles.GameRole
 import ru.srms.larp.platform.sec.SpringUser
 
-class GameCharacter implements InGameStuff, Titled {
+class GameCharacter implements InGameStuff, Titled, GrantedAuthority {
 
     String name
     String alias
@@ -46,5 +47,10 @@ class GameCharacter implements InGameStuff, Titled {
     @Override
     String extractTitle() {
         return name
+    }
+
+    @Override
+    String getAuthority() {
+        return "ROLE_CHARACTER_" + id + "_in_" + game.alias
     }
 }
