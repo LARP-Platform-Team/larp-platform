@@ -1,4 +1,4 @@
-<%@ page import="ru.srms.larp.platform.game.mail.MailBox" %>
+<%@ page import="ru.srms.larp.platform.game.mail.LetterType; ru.srms.larp.platform.game.mail.MailBox" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +14,7 @@
     <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
     </li>
     <sec:permitted object="${mailbox}" permission="create">
-      <li><ingame:link class="create" controller="letter" action="create"
+      <li><ingame:link class="create" controller="letter" action="compose"
                        params="[mailboxId: mailbox.id]">
         Написать письмо
       </ingame:link></li>
@@ -29,10 +29,26 @@
   </g:if>
   <ol class="property-list mailBox">
     <g:each in="${letters}" var="item">
-      <br/>${item.key} (${item.value.size()}):
-      <g:each in="${item.value}" var="letter">
-        <br/> - <ingame:link controller="letter" action="show" resource="${letter}">${letter.subject}</ingame:link>
-      </g:each>
+      <g:set var="letterType" value="${item.key as LetterType}"/>
+      <br/>${letterType} (${item.value.size()}):
+      <table><tr>
+        <th></th>
+        <th>Адрес</th>
+        <th>Тема</th>
+        <th>Действия</th>
+      </tr>
+        <g:each in="${item.value}" var="letter">
+          <tr>
+            <td><g:checkBox name="tt"/></td>
+            <td>${letterType.getAddress(letter.content)}</td>
+            <td>
+              <ingame:link controller="letter" class="${letter.deleted ? 'deleted' : ''}" action="show"
+              id="${letter.id}">${letter.content.subject}</ingame:link>
+            </td>
+            <td></td>
+          </tr>
+        </g:each>
+      </table>
     </g:each>
   </ol>
 

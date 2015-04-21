@@ -5,6 +5,7 @@ import ru.srms.larp.platform.game.InGameStuff
 
 class LetterRef implements InGameStuff {
   LetterType type
+  Boolean deleted = false
   static belongsTo = [mailbox: MailBox, content: LetterContent]
 
   @Override

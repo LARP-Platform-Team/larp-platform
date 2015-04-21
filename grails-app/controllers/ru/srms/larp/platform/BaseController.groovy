@@ -122,11 +122,13 @@ abstract class BaseController {
         }
     }
 
+    // TODO разобраться, почему он все время пытается вызвать эти методы при возникновении ошибок (из-за чего их пришлось сделать public)
+
     /**
      * Renders an error for ajax action from exception
      * @param e
      */
-    protected def renderAjaxError(Exception e) {
+    public def renderAjaxError(Exception e) {
         renderAjaxError("Что-то пошло не так: ${e.class.simpleName} (${e.message})")
     }
 
@@ -134,7 +136,7 @@ abstract class BaseController {
      * Renders an error message for ajax action from exception
      * @param message message it is
      */
-    protected def renderAjaxError(String message) {
+    public def renderAjaxError(String message) {
         response.status = INTERNAL_SERVER_ERROR.value()
         render message
     }

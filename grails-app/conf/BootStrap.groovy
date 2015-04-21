@@ -126,14 +126,20 @@ class BootStrap {
             def mailbox3 = new MailBox(game: game2, address: "test3@camelot.com").save()
             gameAclService.createAcl(mailbox3)
 
-            def m1 = new LetterContent(subject: "Хай", text: "Как оно?", sender: mailbox, recipients: [mailbox2], time: new Date())
-            if(!m1.validate()) {
-                    def errors = m1.getErrors()
-                    println errors
-            }
-            m1.save()
+            def m1 = new LetterContent(subject: "Хай", text: "Как оно?", sender: mailbox, recipients: [mailbox2], time: new Date()).save()
             new LetterRef(mailbox: mailbox, content: m1, type: LetterType.OUTGOING).save()
             new LetterRef(mailbox: mailbox2, content: m1, type: LetterType.INBOX).save()
+
+            def m2 = new LetterContent(subject: "Хай трэш", text: "Как оно?!", sender: mailbox, recipients: [mailbox3], time: new Date()).save()
+            new LetterRef(mailbox: mailbox, content: m2, type: LetterType.TRASH).save()
+            new LetterRef(mailbox: mailbox2, content: m2, type: LetterType.INBOX).save()
+
+            def m3 = new LetterContent(subject: "Сам Хай", text: "Каконо(", sender: mailbox2, recipients: [mailbox], time: new Date()).save()
+            new LetterRef(mailbox: mailbox2, content: m3, type: LetterType.OUTGOING).save()
+            new LetterRef(mailbox: mailbox, content: m3, type: LetterType.INBOX).save()
+
+            def m4 = new LetterContent(subject: "Хай драфт", text: "Как оно а?!", sender: mailbox, recipients: [mailbox2, mailbox3], time: new Date()).save()
+            new LetterRef(mailbox: mailbox, content: m4, type: LetterType.DRAFT).save()
 
 
             // роли

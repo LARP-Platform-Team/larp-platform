@@ -3,7 +3,7 @@ package ru.srms.larp.platform
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import ru.srms.larp.platform.game.mail.LetterContent
-import ru.srms.larp.platform.mail.LetterController
+import ru.srms.larp.platform.game.mail.LetterController
 import spock.lang.Specification
 
 @TestFor(LetterController)
@@ -28,7 +28,7 @@ class LetterControllerSpec extends Specification {
 
     void "Test the create action returns the correct model"() {
         when:"The create action is executed"
-            controller.create()
+            controller.compose()
 
         then:"The model is correctly created"
             model.letterInstance!= null

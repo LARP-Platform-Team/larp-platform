@@ -60,7 +60,6 @@ class GameRoleController extends BaseController {
     }
 
     def config(GameRole role) {
-        // TODO надо вывести все записи, участвующие в ACL
         render(view: "config", model: [
                 acls: gameAclService.getAclMatrix(role)
         ])

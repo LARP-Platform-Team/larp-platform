@@ -17,3 +17,8 @@
     margin-bottom: 10px;
     background-color: #fbfbfb;
 }
+
+a.deleted {
+    text-decoration: line-through;
+    color: #666666;
+}
