@@ -53,14 +53,14 @@
     </li>
 
   </ol>
-  <fieldset class="buttons">
-    %{--<g:if test="${letter.type.equals(LetterType.DRAFT)}">--}%
+  <fieldset class="buttons".>
+    <g:if test="${letter.type.equals(LetterType.DRAFT)}">
       <sec:permitted object="${letter.mailbox}" permission="create">
         <ingame:link controller="letter" class="edit" action="edit" id="${letter.id}">Редактировать</ingame:link>
         <ingame:link controller="letter" class="save" action="send" id="${letter.id}"
                      onclick="return confirm('Вы уверены?');">Отправить</ingame:link>
       </sec:permitted>
-    %{--</g:if>--}%
+    </g:if>
 
     <sec:permitted object="${letter.mailbox}" permission="delete">
       <ingame:link controller="letter" class="delete" action="delete" id="${letter.id}"
