@@ -11,6 +11,7 @@ import ru.srms.larp.platform.game.mail.LetterType
 import ru.srms.larp.platform.game.mail.MailBox
 import ru.srms.larp.platform.game.news.NewsFeed
 import ru.srms.larp.platform.game.news.NewsItem
+import ru.srms.larp.platform.game.resources.GameResource
 import ru.srms.larp.platform.game.roles.CharacterRole
 import ru.srms.larp.platform.game.roles.GameRole
 import ru.srms.larp.platform.sec.SpringRole
@@ -141,6 +142,7 @@ class BootStrap {
             def m4 = new LetterContent(subject: "Хай драфт", text: "Как оно а?!", sender: mailbox, recipients: [mailbox2, mailbox3], time: new Date()).save()
             new LetterRef(mailbox: mailbox, content: m4, type: LetterType.DRAFT).save()
 
+            new GameResource(game: game2, title: "Мана", measure: "ед").save()
 
             // роли
             def r1 = new GameRole(title: "ФСБ", game: game2).save(flush: true)
