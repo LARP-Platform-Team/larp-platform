@@ -1,103 +1,91 @@
 package ru.srms.larp.platform.game.resources
 
+import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
+import ru.srms.larp.platform.BaseController
+import ru.srms.larp.platform.ResourceService
+import ru.srms.larp.platform.exceptions.AjaxException
 
 import static org.springframework.http.HttpStatus.*
 
+// TODO make generic Controllers with mainService property (class of CRUDSerivce e.g.)
+@Secured(['IS_AUTHENTICATED_REMEMBERED'])
 @Transactional(readOnly = true)
-class GameResourceController {
+class GameResourceController extends BaseController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    ResourceService resourceService
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond GameResource.list(params), model:[gameResourceInstanceCount: GameResource.count()]
+    static allowedMethods = [save: "POST", update: "POST"]
+
+    def index() {
+        respond resourceService.listResources(params.game, paginator()),
+            model:[itemsCount: resourceService.countResources(params.game)]
     }
 
-    def show(GameResource gameResourceInstance) {
-        respond gameResourceInstance
+    def show(GameResource resource) {
+        respond resourceService.getResource(resource)
     }
 
     def create() {
-        respond new GameResource(params)
+        respond resourceService.createResource(params.game)
+    }
+
+    def edit(GameResource resource) {
+        respond resourceService.editResource(resource)
     }
 
     @Transactional
-    def save(GameResource gameResourceInstance) {
-        if (gameResourceInstance == null) {
-            notFound()
-            return
-        }
-
-        if (gameResourceInstance.hasErrors()) {
-            respond gameResourceInstance.errors, view:'create'
-            return
-        }
-
-        gameResourceInstance.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'gameResource.label', default: 'GameResource'), gameResourceInstance.id])
-                redirect gameResourceInstance
-            }
-            '*' { respond gameResourceInstance, [status: CREATED] }
-        }
-    }
-
-    def edit(GameResource gameResourceInstance) {
-        respond gameResourceInstance
-    }
-
-    @Transactional
-    def update(GameResource gameResourceInstance) {
-        if (gameResourceInstance == null) {
-            notFound()
-            return
-        }
-
-        if (gameResourceInstance.hasErrors()) {
-            respond gameResourceInstance.errors, view:'edit'
-            return
-        }
-
-        gameResourceInstance.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'GameResource.label', default: 'GameResource'), gameResourceInstance.id])
-                redirect gameResourceInstance
-            }
-            '*'{ respond gameResourceInstance, [status: OK] }
+    def save(GameResource resource) {
+        if (validateData(resource, 'create')) {
+            resourceService.saveResource(resource)
+            respondChange('default.created.message', CREATED, resource)
         }
     }
 
     @Transactional
-    def delete(GameResource gameResourceInstance) {
-
-        if (gameResourceInstance == null) {
-            notFound()
-            return
-        }
-
-        gameResourceInstance.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'GameResource.label', default: 'GameResource'), gameResourceInstance.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
+    def update(GameResource resource) {
+        if (validateData(resource, 'edit')) {
+            resourceService.saveResource(resource)
+            respondChange('default.updated.message', OK, resource)
         }
     }
 
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'gameResource.label', default: 'GameResource'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
+    @Transactional
+    def delete(GameResource resource) {
+        if(validateData(resource)) {
+            resourceService.deleteResource(resource)
+            respondChange('default.deleted.message', NO_CONTENT, null, resource.id)
         }
+    }
+
+    @Transactional
+    def addOrigin(GameResource resource, String originTitle) {
+        doAjax {
+
+            def origin = new ResourceOrigin(title: originTitle, resource: resource)
+            if(origin.hasErrors())
+                throw new AjaxException(g.renderErrors(bean: origin).toString())
+
+            def result = resourceService.addOrigin(resource, origin)
+            if(result == null && origin.hasErrors()) {
+                throw new AjaxException(g.renderErrors(bean: origin).toString())
+            }
+
+            render template: 'origins', model: [origins: resource.origins]
+        }
+    }
+
+    @Transactional
+    def deleteOrigin(ResourceOrigin origin) {
+        doAjax {
+            def resource = origin.resource
+            resourceService.deleteOrigin(resource, origin)
+            render template: 'origins', model: [origins: resource.origins]
+        }
+    }
+
+    @Override
+    protected String labelCode() {
+        return 'resource.label'
     }
 }

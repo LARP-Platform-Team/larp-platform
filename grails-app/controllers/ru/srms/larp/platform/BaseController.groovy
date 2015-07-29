@@ -1,6 +1,7 @@
 package ru.srms.larp.platform
 
 import org.springframework.http.HttpStatus
+import ru.srms.larp.platform.exceptions.AjaxException
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 import static org.springframework.http.HttpStatus.NOT_FOUND
@@ -117,21 +118,16 @@ abstract class BaseController {
     protected def doAjax(Closure action) {
         try {
             action()
-        } catch (Exception any) {
-            renderAjaxError(any)
+
+        } catch (AjaxException e) {
+            renderAjaxError(e.getMessage())
+        }
+        catch (Exception other) {
+            renderAjaxError("Что-то пошло не так: ${other.class.simpleName} (${other.message})")
         }
     }
 
     // TODO разобраться, почему он все время пытается вызвать эти методы при возникновении ошибок (из-за чего их пришлось сделать public)
-
-    /**
-     * Renders an error for ajax action from exception
-     * @param e
-     */
-    public def renderAjaxError(Exception e) {
-        renderAjaxError("Что-то пошло не так: ${e.class.simpleName} (${e.message})")
-    }
-
     /**
      * Renders an error message for ajax action from exception
      * @param message message it is

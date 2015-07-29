@@ -12,6 +12,8 @@ import ru.srms.larp.platform.game.mail.MailBox
 import ru.srms.larp.platform.game.news.NewsFeed
 import ru.srms.larp.platform.game.news.NewsItem
 import ru.srms.larp.platform.game.resources.GameResource
+import ru.srms.larp.platform.game.resources.ResourceInstance
+import ru.srms.larp.platform.game.resources.ResourceOrigin
 import ru.srms.larp.platform.game.roles.CharacterRole
 import ru.srms.larp.platform.game.roles.GameRole
 import ru.srms.larp.platform.sec.SpringRole
@@ -142,7 +144,15 @@ class BootStrap {
             def m4 = new LetterContent(subject: "Хай драфт", text: "Как оно а?!", sender: mailbox, recipients: [mailbox2, mailbox3], time: new Date()).save()
             new LetterRef(mailbox: mailbox, content: m4, type: LetterType.DRAFT).save()
 
+            // ресурсы
+            def money = new GameResource(title: "Деньги", measure: "руб", game: game2).save()
+            new GameResource(title: "Кровь", measure: "л.", game: game2).save()
             new GameResource(game: game2, title: "Мана", measure: "ед").save()
+            def bank = new ResourceOrigin(resource: money, title: "Банк Ололоево").save()
+            new ResourceOrigin(resource: money, title: "Банк Пурпурово").save()
+
+            new ResourceInstance(type: money, title: "Зарплатный счет", identifier: "1455-13345", value: 66.4).save()
+            new ResourceInstance(type: money, title: "Личный счет", identifier: "666ч666", value: 651, owner: lancelot, identifierTitle: "Код", origin: bank).save()
 
             // роли
             def r1 = new GameRole(title: "ФСБ", game: game2).save(flush: true)
@@ -159,7 +169,6 @@ class BootStrap {
             CharacterRole.create(merlin, r1)
 
             aclUtilService.addPermission(mFeed, r1.authority, READ)
-
 
 
     }
