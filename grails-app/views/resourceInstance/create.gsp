@@ -3,8 +3,8 @@
 <html>
 <head>
     <meta name="layout" content="main">
-    <g:set var="title" value="Создание ресурса"/>
     <g:set var="subject" value="${resourceInstanceInstance as ResourceInstance}"/>
+    <g:set var="title" value="Создание ресурса типа ${subject.type.title}"/>
     <title>${title}</title>
 </head>
 
@@ -13,7 +13,7 @@
     <ul>
         <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
         </li>
-        <li><ingame:link class="list" action="index">Все ресурсы</ingame:link></li>
+        <li><ingame:link class="list" controller="GameResource"  action="index">Все ресурсы</ingame:link></li>
         <li><ingame:link class="list" controller="GameResource" action="show"
                          resource="${subject.type}">${subject.type.title}</ingame:link></li>
     </ul>

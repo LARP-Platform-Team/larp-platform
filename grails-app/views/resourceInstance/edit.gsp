@@ -1,9 +1,10 @@
-<%@ page import="org.springframework.validation.FieldError" %>
+<%@ page import="ru.srms.larp.platform.game.resources.ResourceInstance; org.springframework.validation.FieldError" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="layout" content="main">
-    <g:set var="title" value="Редактирование ресурса ${gameResourceInstance?.title}"/>
+    <g:set var="subject" value="${resourceInstanceInstance as ResourceInstance}"/>
+    <g:set var="title" value="Редактирование ресурса ${subject?.title}"/>
     <title>${title}</title>
 </head>
 
@@ -12,7 +13,9 @@
     <ul>
         <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
         </li>
-        <li><ingame:link class="list" action="index">Все ресурсы</ingame:link></li>
+        <li><ingame:link class="list" controller="GameResource"  action="index">Все ресурсы</ingame:link></li>
+        <li><ingame:link class="list" controller="GameResource" action="show"
+                         resource="${subject.type}">${subject.type.title}</ingame:link></li>
     </ul>
 </div>
 
@@ -21,18 +24,9 @@
     <g:if test="${flash.message}">
         <div class="message" role="status">${flash.message}</div>
     </g:if>
-    <g:hasErrors bean="${gameResourceInstance}">
-        <ul class="errors" role="alert">
-        <g:eachError bean="${gameResourceInstance}" var="error">
-            <li<g:if
-            test="${error in FieldError}">data-field-id="${error.field}"</g:if>>
-            <g:message error="${error}"/>
-            </li>
-        </g:eachError>
-        </ul>
-    </g:hasErrors>
-    <ingame:form url="[resource: gameResourceInstance, action: 'update']" method="post">
-        <g:hiddenField name="version" value="${gameResourceInstance?.version}"/>
+    <g:render template="/shared/fromErrors" bean="subject" var="item"/>
+    <ingame:form url="[resource: subject, action: 'update']" method="post">
+        <g:hiddenField name="version" value="${subject?.version}"/>
         <fieldset class="form">
             <g:render template="form"/>
         </fieldset>

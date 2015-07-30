@@ -47,9 +47,8 @@
               <g:each in="${subject.instances}" status="i" var="instance">
 
                 <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                  <td><ingame:link action="show"
-                                   id="${instance.id}">${instance.title}</ingame:link></td>
-                  <td>${instance.value}</td>
+                  <td>${instance.title}</td>
+                  <td>${instance.value} ${instance.type.measure}</td>
                   <td>${instance.identifierTitle}: ${instance.identifier}</td>
                   <td>${instance.owner}</td>
                   <td>${instance.origin?.title}</td>

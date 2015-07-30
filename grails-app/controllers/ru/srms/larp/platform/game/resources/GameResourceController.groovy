@@ -78,6 +78,8 @@ class GameResourceController extends BaseController {
     @Transactional
     def deleteOrigin(ResourceOrigin origin) {
         doAjax {
+            if(ResourceInstance.countByOrigin(origin) > 0)
+                throw new AjaxException("Невозможно удалить источник, т.к. он используется")
             def resource = origin.resource
             resourceService.deleteOrigin(resource, origin)
             render template: 'origins', model: [origins: resource.origins]

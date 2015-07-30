@@ -7,6 +7,7 @@ import org.springframework.security.acls.model.Sid
 import ru.srms.larp.platform.game.Titled
 import ru.srms.larp.platform.game.mail.MailBox
 import ru.srms.larp.platform.game.news.NewsFeed
+import ru.srms.larp.platform.game.resources.ResourceInstance
 import ru.srms.larp.platform.game.roles.GameRole
 import ru.srms.larp.platform.sec.permissions.AclConfigGroup
 import ru.srms.larp.platform.sec.permissions.AclConfigModel
@@ -53,6 +54,8 @@ class GameAclService {
           models: getAclModels(roleSid, NewsFeed.findAllByGame(role.game)))
       result += new AclConfigGroup(title: "Почтовые ящики", clazz: MailBox.class,
           models: getAclModels(roleSid, MailBox.findAllByGame(role.game)))
+      result += new AclConfigGroup(title: "Ресурсы", clazz: ResourceInstance.class,
+        models: getAclModels(roleSid, ResourceInstance.getAllByGame(role.game)))
 
         return result
     }

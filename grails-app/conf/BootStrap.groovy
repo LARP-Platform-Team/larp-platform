@@ -151,8 +151,10 @@ class BootStrap {
             def bank = new ResourceOrigin(resource: money, title: "Банк Ололоево").save()
             new ResourceOrigin(resource: money, title: "Банк Пурпурово").save()
 
-            new ResourceInstance(type: money, title: "Зарплатный счет", identifier: "1455-13345", value: 66.4).save()
-            new ResourceInstance(type: money, title: "Личный счет", identifier: "666ч666", value: 651, owner: lancelot, identifierTitle: "Код", origin: bank).save()
+            def res1 = new ResourceInstance(type: money, title: "Зарплатный счет", identifier: "1455-13345", value: 66.4).save()
+            def res2 = new ResourceInstance(type: money, title: "Личный счет", identifier: "666ч666", value: 651, owner: lancelot, identifierTitle: "Код", origin: bank).save()
+            gameAclService.createAcl(res1)
+            gameAclService.createAcl(res2)
 
             // роли
             def r1 = new GameRole(title: "ФСБ", game: game2).save(flush: true)

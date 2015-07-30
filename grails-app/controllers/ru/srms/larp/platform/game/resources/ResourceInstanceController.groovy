@@ -20,6 +20,8 @@ class ResourceInstanceController extends BaseController {
   }
 
   def create() {
+    if(!GameResource.exists(params.typeId))
+      throw new Exception("Неверный тип ресурсы")
     def type = GameResource.get(params.typeId)
     respond resourceService.createResourceInstance(type)
   }
@@ -31,25 +33,49 @@ class ResourceInstanceController extends BaseController {
   @Transactional
   def save(ResourceInstance resource) {
     if (validateData(resource, 'create')) {
+      params.replaceRedirect = true
       resourceService.saveResourceInstance(resource)
       respondChange('default.created.message', CREATED, resource)
     }
   }
 
   @Transactional
-  def update(GameResource resource) {
+  def update() {
+      params.replaceRedirect = true
+
+      // saving old params to change permission correctly
+      def resource = ResourceInstance.get(params.id)
+      def oldResource = new HashMap<>(resource.properties)
+      resource.properties = params
+
     if (validateData(resource, 'edit')) {
-      resourceService.saveResourceInstance(resource)
+      resourceService.saveResourceInstance(resource, oldResource)
       respondChange('default.updated.message', OK, resource)
     }
   }
 
   @Transactional
-  def delete(GameResource resource) {
+  def delete(ResourceInstance resource) {
     if(validateData(resource)) {
+      // save feed id to params for redirect
+      params.replaceRedirect = true
+      params.type = [:]
+      params.type.id = resource.type.id
+
       resourceService.deleteResourceInstance(resource)
       respondChange('default.deleted.message', NO_CONTENT, null, resource.id)
     }
+  }
+
+  @Override
+  protected Map redirectParams() {
+    def attrs = super.redirectParams()
+    if(params.replaceRedirect) {
+      attrs.controller = 'GameResource'
+      attrs.action = 'show'
+      attrs.id = params.type.id
+    }
+    return attrs
   }
 
   @Override

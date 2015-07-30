@@ -29,6 +29,10 @@ class ResourceInstance implements InGameStuff, Titled {
     identifierTitle maxSize: 64
   }
 
+  public static getAllByGame(Game game) {
+    ResourceInstance.findAll("from ResourceInstance as res WHERE res.type.game=? ORDER BY res.type.title, res.title", [game])
+  }
+
   @Override
   Game extractGame() {
     return type.game
@@ -36,6 +40,6 @@ class ResourceInstance implements InGameStuff, Titled {
 
   @Override
   String extractTitle() {
-    return title
+    return type.title+ ": " + title
   }
 }
