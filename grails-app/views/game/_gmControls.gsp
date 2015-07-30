@@ -3,3 +3,4 @@
 <ingame:link class="edit" controller="gameRole" action="index">Роли</ingame:link>
 <ingame:link class="edit" controller="newsFeed" action="index">Новости</ingame:link>
 <ingame:link class="edit" controller="mailBox" action="index">Почта</ingame:link>
+<ingame:link class="edit" controller="gameResource" action="index">Ресурсы</ingame:link>
