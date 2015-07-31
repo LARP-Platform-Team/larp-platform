@@ -22,3 +22,7 @@ a.deleted {
     text-decoration: line-through;
     color: #666666;
 }
+
+.bread-crumbs {
+    padding: 10px 20px;
+}
