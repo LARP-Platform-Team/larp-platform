@@ -71,6 +71,7 @@ abstract class BaseController {
     }
 
     /**
+     * TODO accept text instead of messageCode
      * Make appropriate respond after instance was somehow changed
      * @param messageCode code for information message relevant to performed action
      * @param status http status code
@@ -80,7 +81,7 @@ abstract class BaseController {
      */
     protected def respondChange(String messageCode, HttpStatus status, def object, def id = null) {
 
-        flash.message = message(code: messageCode, args: [message(code: labelCode()), id ?: object?.id])
+        flash.message = message(code: messageCode, default: messageCode, args: [message(code: labelCode()), id ?: object?.id])
         redirect redirectParams()
 
         // TODO если "удалить" делать ссылкой, то редиректа не происходит. разобраться.

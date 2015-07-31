@@ -24,7 +24,7 @@
     <g:if test="${flash.message}">
         <div class="message" role="status">${flash.message}</div>
     </g:if>
-    <g:render template="/shared/fromErrors" bean="subject" var="item"/>
+    <g:render template="/shared/fromErrors" bean="${subject}" var="item"/>
     <ingame:form url="[resource: subject, action: 'update']" method="post">
         <g:hiddenField name="version" value="${subject?.version}"/>
         <fieldset class="form">

@@ -49,7 +49,7 @@
                 <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                   <td>${instance.title}</td>
                   <td>${instance.value} ${instance.type.measure}</td>
-                  <td>${instance.identifierTitle}: ${instance.identifier}</td>
+                  <td>${instance.fullId}</td>
                   <td>${instance.owner}</td>
                   <td>${instance.origin?.title}</td>
                   <td class="buttons">
