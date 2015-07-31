@@ -12,7 +12,6 @@ class ResourceInstance implements InGameStuff, Titled {
 
   String title
   String identifier
-  String identifierTitle = "Номер счета"
   ResourceOrigin origin
   Boolean transferable = false
   Boolean ownerEditable = false
@@ -26,11 +25,30 @@ class ResourceInstance implements InGameStuff, Titled {
     origin nullable: true
     title maxSize: 64, unique: ['type']
     identifier maxSize: 64, unique: ['type']
-    identifierTitle maxSize: 64
   }
 
-  public static getAllByGame(Game game) {
+  public static def getAllByGame(Game game) {
     ResourceInstance.findAll("from ResourceInstance as res WHERE res.type.game=? ORDER BY res.type.title, res.title", [game])
+  }
+
+  public def getTransferLogs() {
+    TransferLogEntry.findAllBySourceOrTarget(this, this);
+  }
+
+  public static def groupByType(List<ResourceInstance> list) {
+    Map<GameResource, List<ResourceInstance>> result = [:]
+    list.each {
+      result.putIfAbsent(it.type, [])
+      result.get(it.type).add(it)
+    }
+    result
+  }
+
+  String getFullId() {
+    def result = this.identifier
+    if(this.type.identifierTitle)
+      result = "${this.type.identifierTitle}: ${result}"
+    return result
   }
 
   @Override

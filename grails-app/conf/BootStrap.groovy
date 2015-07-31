@@ -145,16 +145,20 @@ class BootStrap {
             new LetterRef(mailbox: mailbox, content: m4, type: LetterType.DRAFT).save()
 
             // ресурсы
-            def money = new GameResource(title: "Деньги", measure: "руб", game: game2).save()
-            new GameResource(title: "Кровь", measure: "л.", game: game2).save()
-            new GameResource(game: game2, title: "Мана", measure: "ед").save()
+            def money = new GameResource(title: "Деньги", measure: "руб", game: game2, identifierTitle: "Счет #").save()
+            new GameResource(title: "Кровь", measure: "л.", game: game2, identifierTitle: "Карта донора").save()
+            new GameResource(game: game2, title: "Мана", measure: "ед", identifierTitle: "").save()
             def bank = new ResourceOrigin(resource: money, title: "Банк Ололоево").save()
             new ResourceOrigin(resource: money, title: "Банк Пурпурово").save()
 
             def res1 = new ResourceInstance(type: money, title: "Зарплатный счет", identifier: "1455-13345", value: 66.4).save()
-            def res2 = new ResourceInstance(type: money, title: "Личный счет", identifier: "666ч666", value: 651, owner: lancelot, identifierTitle: "Код", origin: bank).save()
+            def res2 = new ResourceInstance(type: money, title: "Личный счет", identifier: "666ч666",
+                value: 651, owner: lancelot, transferable: true, ownerEditable: true, origin: bank).save()
             gameAclService.createAcl(res1)
             gameAclService.createAcl(res2)
+            aclUtilService.addPermission(res2, lancelot.authority, READ)
+            aclUtilService.addPermission(res2, lancelot.authority, CREATE)
+            aclUtilService.addPermission(res2, lancelot.authority, WRITE)
 
             // роли
             def r1 = new GameRole(title: "ФСБ", game: game2).save(flush: true)

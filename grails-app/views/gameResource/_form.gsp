@@ -5,6 +5,11 @@
     <g:field type="text" name="title" required="" value="${gameResourceInstance?.title}"/>
 </div>
 
+<div class="fieldcontain ${hasErrors(bean: subject, field: 'identifierTitle', 'error')}">
+    <label for="identifierTitle">Название идентификатора</label>
+    <g:field type="text" name="identifierTitle" required="" value="${gameResourceInstance?.identifierTitle}"/>
+</div>
+
 <div class="fieldcontain ${hasErrors(bean: gameResourceInstance, field: 'measure', 'error')}">
     <label for="measure">Единица измерения</label>
     <g:textField name="measure" value="${gameResourceInstance?.measure}"/>

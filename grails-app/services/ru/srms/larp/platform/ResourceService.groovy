@@ -2,11 +2,10 @@ package ru.srms.larp.platform
 
 import grails.plugin.springsecurity.acl.AclUtilService
 import grails.transaction.Transactional
+import org.springframework.security.access.prepost.PostFilter
 import org.springframework.security.access.prepost.PreAuthorize
 import ru.srms.larp.platform.game.Game
-import ru.srms.larp.platform.game.resources.GameResource
-import ru.srms.larp.platform.game.resources.ResourceInstance
-import ru.srms.larp.platform.game.resources.ResourceOrigin
+import ru.srms.larp.platform.game.resources.*
 
 import static org.springframework.security.acls.domain.BasePermission.*
 
@@ -55,6 +54,11 @@ class ResourceService {
     origin.save()
   }
 
+  @PostFilter("hasPermission(#game, admin) or hasPermission(filterObject, read)")
+  def findInstancesByGame(Game game) {
+    ResourceInstance.getAllByGame(game)
+  }
+
   @Transactional
   @PreAuthorize("hasPermission(#resource.game, admin)")
   def deleteOrigin(GameResource resource, ResourceOrigin origin) {
@@ -63,7 +67,7 @@ class ResourceService {
     origin.delete()
   }
 
-  @PreAuthorize("hasPermission(#resource.extractGame(), admin)")
+  @PreAuthorize("hasPermission(#resource.extractGame(), admin) or hasPermission(#resource, read)")
   def getResourceInstance(ResourceInstance resource) { resource }
 
   @PreAuthorize("hasPermission(#type.game, admin)")
@@ -82,6 +86,35 @@ class ResourceService {
     if (insert) gameAclService.createAcl(resource)
     changePermissions(resource, oldResource)
   }
+
+  @Transactional
+  @PreAuthorize("hasPermission(#resource.extractGame(), admin) or hasPermission(#resource, write)")
+  def updateResourceValue(ResourceInstance resource) {
+    resource.save()
+  }
+
+  @Transactional
+  @PreAuthorize("hasPermission(#data.source.extractGame(), admin) or hasPermission(#data.source, create)")
+  def transfer(TransferData data) {
+    def source = data.source
+    def target = ResourceInstance.findByIdentifierAndType(data.transferTargetId, source.type)
+    if (!target)
+      throw new Exception("No transfer target was found")
+
+    source.value -= data.transferValue
+    source.save(flush: true)
+
+    target.value += data.transferValue
+    target.save(flush: true)
+
+    // save a log entry
+    TransferLogEntry logEntry = new TransferLogEntry(
+        value: data.transferValue, comment: data.comment, source: source, target: target,
+        sourceName: source.fullId, targetName: target.fullId)
+    if (logEntry.validate())
+      logEntry.save(flush: true)
+  }
+
 
   @Transactional
   @PreAuthorize("hasPermission(#resource.extractGame(), admin)")
@@ -118,6 +151,10 @@ class ResourceService {
   }
 
   private def changePermissions(ResourceInstance resource, Map oldResource) {
+    // init null object
+    if (oldResource == null)
+      oldResource = [owner: null]
+
     if (oldResource.owner) deletePermissions(resource, oldResource)
     if (resource.owner) addPermissions(resource, oldResource)
   }

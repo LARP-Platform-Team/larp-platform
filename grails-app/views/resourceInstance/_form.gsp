@@ -15,11 +15,6 @@
     <g:field type="text" name="identifier" required="" value="${subject?.identifier}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: subject, field: 'identifierTitle', 'error')}">
-    <label for="identifier">Название идентификатора</label>
-    <g:field type="text" name="identifierTitle" required="" value="${subject?.identifierTitle}"/>
-</div>
-
 <div class="fieldcontain ${hasErrors(bean: subject, field: 'origin', 'error')}">
     <label for="origin.id">Источник</label>
     <g:select name="origin.id" from="${subject.type.origins}" value="${subject.origin?.id}"
