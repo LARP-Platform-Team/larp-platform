@@ -21,6 +21,9 @@
 	<body>
 		<div id="grailsLogo" role="banner"><a target="_blank" href="https://bitbucket.org/TrebleSnake/larp-platform/wiki/Home">Платформа городских ролевочек</a></div>
 		<div class="bread-crumbs"><g:breadCrumbs/></div>
+		<g:if test="${flash.error}">
+			<div class="errors" role="status">${flash.error}</div>
+		</g:if>
 		<g:layoutBody/>
     <div class="footer" role="contentinfo">
         <sec:ifLoggedIn>

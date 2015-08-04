@@ -165,3 +165,7 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 ]
 
 grails.plugin.springsecurity.acl.authority.changeAclDetails = 'ROLE_ACL_CHANGE_DETAILS'
+
+// Mail sending
+grails.mail.default.from="no-reply@larp.srms.club"
+grails.mail.disabled=true
