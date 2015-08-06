@@ -169,3 +169,6 @@ grails.plugin.springsecurity.acl.authority.changeAclDetails = 'ROLE_ACL_CHANGE_D
 // Mail sending
 grails.mail.default.from="no-reply@larp.srms.club"
 grails.mail.disabled=true
+
+// Asset pipeline settings
+grails.assets.excludes = ["semantic/**"]

@@ -50,11 +50,4 @@ class SnippetsTagLib {
           (params.character as Titled).extractTitle())
     }
   }
-
-  def currentAccount = { attrs, body ->
-    if(springSecurityService.loggedIn) {
-      def userId = springSecurityService.principal.id
-      out << g.link([controller: 'account', id: userId], 'Личный кабинет')
-    }
-  }
 }

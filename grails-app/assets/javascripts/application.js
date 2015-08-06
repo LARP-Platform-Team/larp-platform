@@ -7,6 +7,7 @@
 //
 //= require jquery
 //= require_tree .
+//= require ../semantic/semantic
 //= require_self
 
 if (typeof jQuery !== 'undefined') {
