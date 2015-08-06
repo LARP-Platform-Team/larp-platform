@@ -104,6 +104,7 @@ abstract class BaseController {
      * @return map of redirect params
      */
     protected Map redirectParams() {
+        // TODO retrieve defaultAction somehow instead of just "index"
         def defaults = [action: 'index', params: [:], method: "GET"]
         if(params.gameAlias)
             defaults.params.gameAlias = params.gameAlias

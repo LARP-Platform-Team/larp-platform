@@ -11,6 +11,9 @@ class UrlMappings {
         // spring security login controller
         "/login/$action?"(controller: 'login')
 
+        // account settings
+        "/account/$action?/$id?"(controller: 'account')
+
         // spring security ui register controller
         "/register/$action?/$id?"(controller: 'register')
 

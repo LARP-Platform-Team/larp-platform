@@ -151,7 +151,7 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/**/images/**':                  ['permitAll'],
 	'/**/favicon.ico':                ['permitAll'],
 
-  // Sptring Security UI
+  // Spring Security UI
   '/acl-class/**': ['ROLE_ADMIN'],
   '/acl-sid/**': ['ROLE_ADMIN'],
   '/acl-object-identity/**': ['ROLE_ADMIN'],
