@@ -65,7 +65,7 @@
 
                 <g:each in="${gameInstance.masters}" var="m">
                     <span class="property-value" aria-labelledby="masters-label"><g:link
-                            controller="springUser" action="show"
+                            controller="account" action="show"
                             id="${m.id}">${m?.encodeAsHTML()}</g:link></span>
                 </g:each>
 

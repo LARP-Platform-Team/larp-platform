@@ -1,6 +1,8 @@
 package ru.srms.larp.platform.game.resources
 
-@grails.validation.Validateable
+import grails.validation.Validateable
+
+@Validateable
 class TransferData {
   String transferTargetId
   String comment

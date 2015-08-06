@@ -108,6 +108,7 @@ environments {
     }
 }
 
+// TODO is it working?
 // user config
 grails.security.publicControllers = ['assets']
 
@@ -137,15 +138,34 @@ log4j.main = {
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'ru.srms.larp.platform.sec.SpringUser'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'ru.srms.larp.platform.sec.SpringUserSpringRole'
 grails.plugin.springsecurity.authority.className = 'ru.srms.larp.platform.sec.SpringRole'
+
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/':                              ['permitAll'],
 	'/index':                         ['permitAll'],
 	'/index.gsp':                     ['permitAll'],
 	'/assets/**':                     ['permitAll'],
+	'/register/**':                   ['permitAll'],
+  '/plugins/**':                    ['permitAll'],
 	'/**/js/**':                      ['permitAll'],
 	'/**/css/**':                     ['permitAll'],
 	'/**/images/**':                  ['permitAll'],
-	'/**/favicon.ico':                ['permitAll']
+	'/**/favicon.ico':                ['permitAll'],
+
+  // Spring Security UI
+  '/acl-class/**': ['ROLE_ADMIN'],
+  '/acl-sid/**': ['ROLE_ADMIN'],
+  '/acl-object-identity/**': ['ROLE_ADMIN'],
+  '/acl-entry/**': ['ROLE_ADMIN'],
+  //'/persistentLogin/**': ['ROLE_ADMIN'],
+  //'/requestmap/**': ['ROLE_ADMIN'],
+  '/security-info/**': ['ROLE_ADMIN'],
+  '/registration-code/**': ['ROLE_ADMIN'],
+  '/role/**': ['ROLE_ADMIN'],
+  '/user/**': ['ROLE_ADMIN'],
 ]
 
 grails.plugin.springsecurity.acl.authority.changeAclDetails = 'ROLE_ACL_CHANGE_DETAILS'
+
+// Mail sending
+grails.mail.default.from="no-reply@larp.srms.club"
+grails.mail.disabled=true

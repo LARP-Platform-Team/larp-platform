@@ -74,6 +74,13 @@ grails.project.dependency.resolution = {
 
 //        compile ':spring-security-core:2.0-RC4'
         compile ":spring-security-acl:2.0-RC2"
+        compile ":spring-security-ui:1.0-RC2"
+//        Dependencies
+//        spring-security-core	2.0
+//        mail	1.0
+//        jquery	1.10.2
+//        jquery-ui	1.10.3
+//        famfamfam	1.0
 
         // Uncomment these to enable additional asset-pipeline capabilities
         //compile ":sass-asset-pipeline:1.9.0"

@@ -7,10 +7,18 @@ class UrlMappings {
         // main page
         "/"(controller:'game')
 
+        // TODO optimize this mappings
         // spring security login controller
-        "/login/$action?"{
-            controller = 'login'
-        }
+        "/login/$action?"(controller: 'login')
+
+        // account settings
+        "/account/$action?/$id?"(controller: 'account')
+
+        // spring security ui register controller
+        "/register/$action?/$id?"(controller: 'register')
+
+        // spring security ui administration
+        "/root/$controller/$action?/$id?"()
 
         // game root actions
         "/game/$action?/$id?"(controller: 'game')

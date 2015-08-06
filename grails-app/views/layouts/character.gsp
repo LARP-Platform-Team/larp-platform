@@ -29,9 +29,11 @@
 						<g:availableResources/>
         </aside>
     <div class="footer" role="contentinfo">
-        <sec:ifLoggedIn>
-            <sec:loggedInUserInfo field="username"/> [<sec:username/>]: <a href="${createLink(uri: '/j_spring_security_logout')}">Выйти</a>
-        </sec:ifLoggedIn>
+			<sec:ifLoggedIn>
+				Привет, <sec:loggedInUserInfo field="username"/>!
+				<g:currentAccount/>
+				<a href="${createLink(uri: '/j_spring_security_logout')}">Выйти</a>
+			</sec:ifLoggedIn>
         <sec:ifNotLoggedIn>
             <g:link controller="login" action="auth">Войти</g:link>
         </sec:ifNotLoggedIn>
