@@ -1,5 +1,6 @@
 package larp.platform
 
+import grails.plugin.springsecurity.SpringSecurityService
 import ru.srms.larp.platform.MailboxService
 import ru.srms.larp.platform.NewsService
 import ru.srms.larp.platform.ResourceService
@@ -13,6 +14,7 @@ class SnippetsTagLib {
   NewsService newsService
   MailboxService mailboxService
   ResourceService resourceService
+  SpringSecurityService springSecurityService
 
   def availableMailboxes = { attrs, body ->
     out << render(template: '/mailBox/available', model: [
@@ -46,6 +48,13 @@ class SnippetsTagLib {
           mapping: 'playAs',
           params: [gameAlias: params.gameAlias, charAlias: params.charAlias]],
           (params.character as Titled).extractTitle())
+    }
+  }
+
+  def currentAccount = { attrs, body ->
+    if(springSecurityService.loggedIn) {
+      def userId = springSecurityService.principal.id
+      out << g.link([controller: 'account', id: userId], 'Личный кабинет')
     }
   }
 }

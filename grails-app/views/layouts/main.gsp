@@ -5,34 +5,43 @@
 <!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
 <!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"><!--<![endif]-->
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title><g:layoutTitle default="Grails"/></title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="shortcut icon" href="${assetPath(src: 'favicon.ico')}" type="image/x-icon">
-		<link rel="apple-touch-icon" href="${assetPath(src: 'apple-touch-icon.png')}">
-		<link rel="apple-touch-icon" sizes="114x114" href="${assetPath(src: 'apple-touch-icon-retina.png')}">
-        <g:javascript library="jquery" />
-  		<asset:stylesheet src="application.css"/>
-		<asset:javascript src="application.js"/>
-		<g:layoutHead/>
-	</head>
-	<body>
-		<div id="grailsLogo" role="banner"><a target="_blank" href="https://bitbucket.org/TrebleSnake/larp-platform/wiki/Home">Платформа городских ролевочек</a></div>
-		<div class="bread-crumbs"><g:breadCrumbs/></div>
-		<g:if test="${flash.error}">
-			<div class="errors" role="status">${flash.error}</div>
-		</g:if>
-		<g:layoutBody/>
-    <div class="footer" role="contentinfo">
-        <sec:ifLoggedIn>
-            <sec:loggedInUserInfo field="username"/> [<sec:username/>]: <a href="${createLink(uri: '/j_spring_security_logout')}">Выйти</a>
-        </sec:ifLoggedIn>
-        <sec:ifNotLoggedIn>
-            <g:link controller="login" action="auth">Войти</g:link>
-        </sec:ifNotLoggedIn>
-    </div>
-		<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
-	</body>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title><g:layoutTitle default="Grails"/></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="${assetPath(src: 'favicon.ico')}" type="image/x-icon">
+  <link rel="apple-touch-icon" href="${assetPath(src: 'apple-touch-icon.png')}">
+  <link rel="apple-touch-icon" sizes="114x114"
+        href="${assetPath(src: 'apple-touch-icon-retina.png')}">
+  <g:javascript library="jquery"/>
+  <asset:stylesheet src="application.css"/>
+  <asset:javascript src="application.js"/>
+  <g:layoutHead/>
+</head>
+
+<body>
+<div id="grailsLogo" role="banner"><a target="_blank"
+                                      href="https://bitbucket.org/TrebleSnake/larp-platform/wiki/Home">Платформа городских ролевочек</a>
+</div>
+
+<div class="bread-crumbs"><g:breadCrumbs/></div>
+<g:if test="${flash.error}">
+  <div class="errors" role="status">${flash.error}</div>
+</g:if>
+<g:layoutBody/>
+<div class="footer" role="contentinfo">
+  <sec:ifLoggedIn>
+    Привет, <sec:loggedInUserInfo field="username"/>!
+    <g:currentAccount/>
+    <a href="${createLink(uri: '/j_spring_security_logout')}">Выйти</a>
+  </sec:ifLoggedIn>
+  <sec:ifNotLoggedIn>
+    <g:link controller="login" action="auth">Войти</g:link>
+  </sec:ifNotLoggedIn>
+</div>
+
+<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt"
+                                                                   default="Loading&hellip;"/></div>
+</body>
 </html>
