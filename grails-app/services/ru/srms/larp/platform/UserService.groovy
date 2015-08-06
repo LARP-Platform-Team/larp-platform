@@ -9,7 +9,7 @@ class UserService {
 
   @Transactional
   @PreAuthorize("isFullyAuthenticated() and principal.username == #user.username")
-  def saveUser(SpringUser user) {
+  def save(SpringUser user) {
     user.save()
   }
 }

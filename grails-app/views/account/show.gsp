@@ -24,9 +24,12 @@
   </g:if>
 
   <div class="property-list">
-    <div>Пока единственное, что можно показать - почта. ${subject.email}. Потом, конечно, она показываться не будет кому попало.</div>
-    <div>
-      <sec:access expression="isFullyAuthenticated() and (hasRole('ROLE_ADMIN') or principal.username == '${subject.username}')">
+    <div><b>${subject.email}</b> - пока единственное, что можно показать - почта. Потом, конечно, она показываться не будет кому попало.</div>
+
+    <sec:access expression="isFullyAuthenticated() and (hasRole('ROLE_ADMIN') or principal.username == '${subject.username}')">
+
+      <section>
+        <h1>Изменить личные данные</h1>
         <g:render template="/shared/fromErrors" bean="${subject}" var="item"/>
         <ingame:form url="[id: subject.id, controller: 'account', action: 'update']" method="post">
           <g:hiddenField name="version" value="${subject?.version}"/>
@@ -37,8 +40,24 @@
             <g:actionSubmit class="save" action="update" value="Сохранить"/>
           </fieldset>
         </ingame:form>
-      </sec:access>
-    </div>
+      </section>
+
+      <section>
+        <h1>Изменить пароль</h1>
+        <g:render template="/shared/fromErrors" bean="${changePassword}" var="item"/>
+        <ingame:form url="[id: subject.id, controller: 'account', action: 'changePassword']"
+                     method="post">
+          <g:hiddenField name="version" value="${subject?.version}"/>
+          <fieldset class="form">
+            <g:render template="changePasswordForm"/>
+          </fieldset>
+          <fieldset class="buttons">
+            <g:actionSubmit class="save" action="changePassword" value="Сохранить"/>
+          </fieldset>
+        </ingame:form>
+      </section>
+
+    </sec:access>
   </div>
 
   <section>

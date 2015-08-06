@@ -31,9 +31,25 @@ class AccountController extends BaseController {
     user.properties['email'] = params
     user.validate()
     if (validateData(user, 'show')) {
-      userService.saveUser(user)
+      userService.save(user)
       respondChange('default.updated.message', OK, user)
     }
+  }
+
+  @Transactional
+  def changePassword(ChangePasswordCommand passwordCommand) {
+    def user = SpringUser.get(params.id)
+    // TODO check if null
+
+    passwordCommand.username = user.username
+    if(!passwordCommand.validate()) {
+      respond user, model: [changePassword: passwordCommand], view: 'show'
+      return
+    }
+
+    user.password = passwordCommand.newPassword
+    userService.save(user)
+    respondChange('Пароль успешно изменен', OK, user)
   }
 
   @Override
