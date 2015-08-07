@@ -16,7 +16,7 @@
   <asset:stylesheet src="application.css"/>
   <asset:javascript src="application.js"/>
 
-  <title><g:layoutTitle default="Grails"/></title>
+  <title><g:layoutTitle default="Платформа городских ролевок"/></title>
 
   <g:layoutHead/>
 </head>
@@ -44,14 +44,14 @@
           <div class="ui two tiny buttons">
             <a class="ui basic violet button"
                href="${createLink(controller: 'account', id: sec.loggedInUserInfo([field: 'id']))}">Кабинет</a>
-            <a class="ui basic violet button"
+            <a class="ui basic pink button"
                href="${createLink(uri: '/j_spring_security_logout')}">Выйти</a>
           </div>
         </div>
       </sec:ifLoggedIn>
 
       <sec:ifNotLoggedIn>
-        <g:link controller="login" action="auth">Войти</g:link>
+        <g:link controller="login" action="auth" class="ui basic violet button">Войти</g:link>
       </sec:ifNotLoggedIn>
     </div>
   </header>
@@ -61,19 +61,16 @@
   </nav>
 
   <main class="ui attached segment">
-    <g:if test="${flash.error}">
-      <div class="errors" role="status">${flash.error}</div>
-    </g:if>
-    <g:if test="${flash.message}">
-      <div class="message" role="status">${flash.message}</div>
-    </g:if>
-
+    <h1><g:layoutTitle/></h1>
+    <div class="ui divider"></div>
+    <g:render template="/layouts/basicFlash"/>
     <g:layoutBody/>
-
+    <div class="ui hidden clearing divider"></div>
   </main>
 
   <footer class="ui bottom attached segment">
   &copy; S.R.M.S.
   </footer>
 </div>
+</body>
 </html>

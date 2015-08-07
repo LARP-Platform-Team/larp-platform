@@ -25,7 +25,7 @@
   <div class="property-list">
     <div>Текущее значение:
       <sec:permitted object="${subject}" permission="write">
-        <g:render template="/shared/fromErrors" bean="${subject}" var="item"/>
+        <g:render template="/shared/fromErrors" bean="${subject}" var="subject"/>
         <ingame:form url="[resource: subject, action: 'changeValue']" method="post">
           <fieldset class="form">
             <div class="fieldcontain ${hasErrors(bean: subject, field: 'value', 'error')}">
@@ -46,7 +46,7 @@
     <div class="property-list">
       <div>Произвести перевод</div>
 
-      <g:render template="/shared/fromErrors" bean="${transferData}" var="item"/>
+      <g:render template="/shared/fromErrors" bean="${transferData}" var="subject"/>
       <ingame:form url="[resource: subject, action: 'transfer']" method="post">
         <fieldset class="form">
 

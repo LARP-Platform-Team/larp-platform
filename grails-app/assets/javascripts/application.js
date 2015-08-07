@@ -17,5 +17,16 @@ if (typeof jQuery !== 'undefined') {
 		}).ajaxStop(function() {
 			$(this).fadeOut();
 		});
+
+
+		$('.ui.message .close').on('click', function () {
+			$(this)
+				.closest('.message')
+				.transition('fade');
+		});
+
+		$('.ui.checkbox, .ui.radio.checkbox').checkbox();
+		$('select.dropdown').dropdown();
+
 	})(jQuery);
 }

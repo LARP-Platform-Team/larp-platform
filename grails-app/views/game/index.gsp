@@ -1,61 +1,54 @@
 <%@ page import="ru.srms.larp.platform.game.Game" %>
+<sec:ifLoggedIn>
+    <g:set var="template" value="/nested/contentWithActions"/>
+</sec:ifLoggedIn>
+<sec:ifNotLoggedIn>
+    <g:set var="template" value="/nested/contentWithoutActions"/>
+</sec:ifNotLoggedIn>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="main">
-    <g:set var="entityName" value="${message(code: 'game.label', default: 'Game')}"/>
-    <title><g:message code="default.list.label" args="[entityName]"/></title>
+    <meta name="layout" content="${template}">
+    <g:set var="subject" value="${gameInstanceList as List<Game>}"/>
+    <g:set var="title" value="Все игры"/>
+    <title>${title}</title>
 </head>
 
 <body>
-<a href="#list-game" class="skip" tabindex="-1"><g:message code="default.link.skip.label"
-                                                           default="Skip to content&hellip;"/></a>
 
-<div class="nav" role="navigation">
-    <ul>
-        <li><a class="home" href="${createLink(uri: '/')}"><g:message
-                code="default.home.label"/></a></li>
-
-        <sec:ifLoggedIn>
-            <li><g:link class="create" action="create">
-                <g:message code="default.new.label" args="[entityName]"/></g:link></li>
-        </sec:ifLoggedIn>
-    </ul>
-</div>
-
-<div id="list-game" class="content scaffold-list" role="main">
-    <h1><g:message code="default.list.label" args="[entityName]"/></h1>
-    <g:if test="${flash.message}">
-        <div class="message" role="status">${flash.message}</div>
-    </g:if>
-    <table>
+<content tag="content">
+    <table class="ui celled padded very basic table">
         <thead>
         <tr>
-            <g:sortableColumn property="title"
-                              title="${message(code: 'game.title.label', default: 'Title')}"/>
-
-            <g:sortableColumn property="overview"
-                              title="${message(code: 'game.overview.label', default: 'Overview')}"/>
+            <g:sortableColumn property="title" title="Название"/>
+            <th>Описание</th>
         </tr>
         </thead>
         <tbody>
-        <g:each in="${gameInstanceList}" status="i" var="gameInstance">
-            <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-
+        <g:each in="${subject}" var="game">
+            <tr>
                 <td>
-                    <link:game gameAlias="${gameInstance.alias}">${gameInstance.title}</link:game>
+                    <link:game gameAlias="${game.alias}">${game.title}</link:game>
                 </td>
-
-                <td>${fieldValue(bean: gameInstance, field: "overview")}</td>
-
+                <td>${game.overview}</td>
             </tr>
         </g:each>
         </tbody>
+        <tfoot>
+        <tr><th colspan="2">
+            <div class="ui right floated pagination menu">
+                <g:semanticPaginate total="${gameInstanceCount ?: 0}"/>
+            </div>
+        </th></tr>
+        </tfoot>
     </table>
+</content>
 
-    <div class="pagination">
-        <g:paginate total="${gameInstanceCount ?: 0}"/>
-    </div>
-</div>
+<sec:ifLoggedIn>
+    <content tag="actions">
+        <g:link class="item" action="create"><i
+            class="add green icon"></i> Создать игру</g:link>
+</content>
+</sec:ifLoggedIn>
 </body>
 </html>
