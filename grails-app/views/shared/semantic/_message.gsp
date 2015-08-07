@@ -5,7 +5,7 @@
           type == 'info' ? 'info' : null
 }"/>
 
-<div class="ui message ${type} ${icon ? 'icon' : ''}">
+<div class="ui visible message ${type} ${icon ? 'icon' : ''}">
 
   <g:if test="${icon}">
     <i class="${icon} icon"></i>

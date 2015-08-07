@@ -16,9 +16,15 @@ class GameService {
 
     SpringSecurityService springSecurityService
     def aclUtilService
+    def gameAclService
 
     def save(Game game) {
+        boolean insert = game.id == null
         game.save flush:true
+        if(insert) {
+            gameAclService.createAcl(game)
+            addGameMaster(game, springSecurityService.currentUser)
+        }
     }
 
     @PreAuthorize("hasPermission(#game, admin)")
@@ -26,9 +32,9 @@ class GameService {
         game.save flush:true
     }
 
-    @PreAuthorize("hasPermission(#id, 'ru.srms.larp.platform.game.Game', admin)")
-    Game edit(Long id) {
-        Game.get(id)
+    @PreAuthorize("hasPermission(#game, admin)")
+    Game edit(Game game) {
+        game
     }
 
     @PostFilter("hasPermission(filterObject, read) or \
@@ -39,21 +45,7 @@ class GameService {
 
     @PreAuthorize("hasPermission(#game, admin)")
     def addMaster(Game game, SpringUser master) {
-        if(game.masters.contains(master))
-            throw new RuntimeException("Мастер уже назначен на игру.")
-        game.addToMasters(master)
-        game.save()
-
-        // maybe we need to add roles to user - depends on game-master future policy
-        def roleGm = SpringRole.findByAuthority(SpringRole.GAME_MASTER_ROLE)
-        def roleAclEditor = SpringRole.findByAuthority(SpringRole.ACL_EDITOR_ROLE)
-        if(!master.authorities.contains(roleGm))
-            SpringUserSpringRole.create(master, roleGm)
-        if(!master.authorities.contains(roleAclEditor))
-            SpringUserSpringRole.create(master, roleAclEditor)
-
-        // add acl-permission to user
-        aclUtilService.addPermission(game, master.username, BasePermission.ADMINISTRATION)
+        addGameMaster(game, master)
     }
 
     @PreAuthorize("hasPermission(#game, admin)")
@@ -69,5 +61,24 @@ class GameService {
 
         // remove acl-permission from user
         aclUtilService.deletePermission(game, master.username, BasePermission.ADMINISTRATION)
+    }
+
+    private def addGameMaster(Game game, SpringUser master) {
+        if(game.masters && game.masters.contains(master))
+            throw new RuntimeException("Мастер уже назначен на игру.")
+        game.addToMasters(master)
+        game.save()
+
+        // TODO использовать ROLE_GM для людей,которые могут СОЗДАВАТЬ игры
+//        def roleGm = SpringRole.findByAuthority(SpringRole.GAME_MASTER_ROLE)
+//        if(!master.authorities.contains(roleGm))
+//            SpringUserSpringRole.create(master, roleGm)
+
+        def roleAclEditor = SpringRole.findByAuthority(SpringRole.ACL_EDITOR_ROLE)
+        if(!master.authorities.contains(roleAclEditor))
+            SpringUserSpringRole.create(master, roleAclEditor)
+
+        // add acl-permission to user
+        aclUtilService.addPermission(game, master.username, BasePermission.ADMINISTRATION)
     }
 }

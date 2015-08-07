@@ -57,9 +57,9 @@ class BootStrap {
                     .addToMasters(gm1)
                     .save()
 
-            for(def i = 0; i < 30; i++) {
-                    new Game(title: "Игра №$i", alias: "game-$i", overview: "Игра по $i.").save()
-            }
+//            for(def i = 0; i < 30; i++) {
+//                    new Game(title: "Игра №$i", alias: "game-$i", overview: "Игра по $i.").save()
+//            }
 
 
 //            have to be authenticated as an admin to create ACLs

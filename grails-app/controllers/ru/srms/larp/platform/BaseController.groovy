@@ -67,7 +67,7 @@ abstract class BaseController {
      * Make appropriate respond if instance was not found
      */
     protected void notFound() {
-        respondChange('default.not.found.message', NOT_FOUND, null, params.id)
+        respondChange(message(code: 'default.not.found.message').toString(), NOT_FOUND, null, params.id)
     }
 
     /**
@@ -81,7 +81,8 @@ abstract class BaseController {
      */
     protected def respondChange(String messageCode, HttpStatus status, def object, def id = null) {
 
-        flash.message = message(code: messageCode, default: messageCode, args: [message(code: labelCode()), id ?: object?.id])
+        flash.success = messageCode;
+                //message(code: messageCode, default: messageCode, args: [message(code: labelCode()), id ?: object?.id])
         redirect redirectParams()
 
         // TODO если "удалить" делать ссылкой, то редиректа не происходит. разобраться.
@@ -120,9 +121,8 @@ abstract class BaseController {
     protected def doAjax(Closure action) {
         try {
             action()
-
         } catch (AjaxException e) {
-            renderAjaxError(e.getMessage())
+            renderAjaxError(ui.message([type: 'error'], e.getMessage()).toString())
         }
         catch (Exception other) {
             renderAjaxError("Что-то пошло не так: ${other.class.simpleName} (${other.message})")

@@ -36,7 +36,7 @@
       <sec:ifLoggedIn>
         <div class="ui card">
           <div class="content">
-            <img class="right floated mini ui image" src="/images/someavatar.gif">
+            <img class="right floated mini ui image" src="${assetPath(src: 'dummy.png')}">
             <div class="header"><sec:loggedInUserInfo field="username"/></div>
         <div class="meta">Some info...</div>
         </div>

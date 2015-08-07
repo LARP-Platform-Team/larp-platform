@@ -11,6 +11,9 @@ class UITagLib {
       icon = '<i class="ui icon ' + attrs.icon + '"></i>'
     }
 
+    if(attrs.class)
+      classes += " ${attrs.class}"
+
     out << '<button class="' + classes +'" type="submit">' + icon + body() + '</button>'
   }
 
