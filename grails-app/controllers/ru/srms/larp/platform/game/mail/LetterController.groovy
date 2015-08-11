@@ -91,8 +91,4 @@ class LetterController extends BaseController {
     return result
   }
 
-  @Override
-  protected String labelCode() {
-    return 'letter.label'
-  }
 }

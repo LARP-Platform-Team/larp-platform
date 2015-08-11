@@ -1,5 +1,3 @@
-<%@ page import="ru.srms.larp.platform.game.character.GameCharacter; ru.srms.larp.platform.game.mail.MailBox" %>
-
 <div class="${hasErrors(bean: gameResourceInstance, field: 'title', 'error')} required field">
     <label for="title">Название<span class="required-indicator">*</span></label>
     <g:field type="text" name="title" required="" value="${gameResourceInstance?.title}"/>

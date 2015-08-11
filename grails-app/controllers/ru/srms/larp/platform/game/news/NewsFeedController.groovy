@@ -61,6 +61,4 @@ class NewsFeedController extends BaseController {
         }
     }
 
-    @Override
-    protected String labelCode() { 'newsFeed.label' }
 }

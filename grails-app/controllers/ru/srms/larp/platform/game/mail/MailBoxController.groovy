@@ -62,8 +62,4 @@ class MailBoxController extends BaseController {
     }
 
 
-    @Override
-    protected String labelCode() {
-        return 'mailBox.label'
-    }
 }

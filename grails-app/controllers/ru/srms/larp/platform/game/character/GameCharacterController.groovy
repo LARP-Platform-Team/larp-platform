@@ -97,8 +97,4 @@ class GameCharacterController extends BaseController {
         }
     }
 
-    @Override
-    protected String labelCode() {
-        return 'gameCharacter.label'
-    }
 }

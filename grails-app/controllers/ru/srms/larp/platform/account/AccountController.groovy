@@ -60,8 +60,4 @@ class AccountController extends BaseController {
     return attrs
   }
 
-  @Override
-  protected String labelCode() {
-    return "Аккаунт"
-  }
 }

@@ -11,6 +11,8 @@
 <body>
 
 <content tag="actions">
+  <ingame:link class="item" controller="ResourceInstance" action="create" params="[typeId: subject.id]">
+      <i class="green plus icon"></i> Создать экземпляр</ingame:link>
   <ingame:link class="item" action="index"><i class="arrow left grey icon"></i> Назад</ingame:link>
 </content>
 
@@ -43,10 +45,10 @@
             <td>${item.owner}</td>
             <td>${item.origin?.title}</td>
             <td class="buttons">
-              <ingame:link action="edit" id="${item.id}" class="ui yellow icon basic button"
+              <ingame:link action="edit" resource="${item}" class="ui yellow icon basic button"
                            title="Редактировать">
                 <i class="yellow edit icon"></i></ingame:link>
-              <ingame:link action="delete" id="${item.id}" class="ui red icon basic button"
+              <ingame:link action="delete" resource="${item}" class="ui red icon basic button"
                            title="Удалить"
                            onclick="return confirm('Вы уверены?');"><i
                   class="red delete icon"></i></ingame:link>

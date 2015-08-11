@@ -129,7 +129,5 @@ class GameRoleController extends BaseController {
         render template: 'characters', model: [characters: gameRole.characters]
     }
 
-    @Override
-    protected String labelCode() { 'gameRole.label' }
 
 }

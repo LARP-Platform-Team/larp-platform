@@ -61,7 +61,6 @@ abstract class BaseController {
     /**
      * @return i18n message code for domain class label
      */
-    abstract protected String labelCode()
 
     /**
      * Make appropriate respond if instance was not found

@@ -86,8 +86,4 @@ class GameResourceController extends BaseController {
         }
     }
 
-    @Override
-    protected String labelCode() {
-        return 'resource.label'
-    }
 }
