@@ -6,7 +6,7 @@
   </head>
 
   <body>
-  <div class="ui two columns grid">
+  <div class="ui two columns stackable grid">
 
     <div class="ui thirteen wide column">
       <g:pageProperty name="page.content"/>

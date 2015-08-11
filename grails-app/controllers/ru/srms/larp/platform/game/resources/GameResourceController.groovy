@@ -38,7 +38,7 @@ class GameResourceController extends BaseController {
     def save(GameResource resource) {
         if (validateData(resource, 'create')) {
             resourceService.saveResource(resource)
-            respondChange('default.created.message', CREATED, resource)
+            respondChange('Игровой ресурс успешно добавлен', CREATED, resource)
         }
     }
 
@@ -46,7 +46,7 @@ class GameResourceController extends BaseController {
     def update(GameResource resource) {
         if (validateData(resource, 'edit')) {
             resourceService.saveResource(resource)
-            respondChange('default.updated.message', OK, resource)
+            respondChange('Игровой ресурс обновлен', OK, resource)
         }
     }
 
@@ -54,7 +54,7 @@ class GameResourceController extends BaseController {
     def delete(GameResource resource) {
         if(validateData(resource)) {
             resourceService.deleteResource(resource)
-            respondChange('default.deleted.message', NO_CONTENT, null, resource.id)
+            respondChange('Игровой ресурс удален', NO_CONTENT, null, resource.id)
         }
     }
 
@@ -71,7 +71,7 @@ class GameResourceController extends BaseController {
                 throw new AjaxException(g.renderErrors(bean: origin).toString())
             }
 
-            render template: 'origins', model: [origins: resource.origins]
+            render template: 'origins', model: [items: resource.origins]
         }
     }
 
@@ -82,7 +82,7 @@ class GameResourceController extends BaseController {
                 throw new AjaxException("Невозможно удалить источник, т.к. он используется")
             def resource = origin.resource
             resourceService.deleteOrigin(resource, origin)
-            render template: 'origins', model: [origins: resource.origins]
+            render template: 'origins', model: [items: resource.origins]
         }
     }
 

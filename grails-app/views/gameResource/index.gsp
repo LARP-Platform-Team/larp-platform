@@ -1,51 +1,47 @@
+<%@ page import="ru.srms.larp.platform.game.resources.GameResource" %>
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="layout" content="main">
+  <meta name="layout" content="/nested/contentWithActions">
+  <g:set var="subject" value="${gameResourceInstanceList as List<GameResource>}"/>
   <g:set var="title" value="Игровые ресурсы"/>
   <title>${title}</title>
 </head>
 
 <body>
-<div class="nav" role="navigation">
-  <ul>
-    <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
-    </li>
-    <li><ingame:link class="create" action="create">Добавить</ingame:link></li>
-  </ul>
-</div>
 
-<div id="list-gameResources" class="content scaffold-list" role="main">
-  <h1>${title}</h1>
-  <g:if test="${flash.message}">
-    <div class="message" role="status">${flash.message}</div>
-  </g:if>
-  <table>
+<content tag="actions">
+  <ingame:link class="item" action="create"><i class="add green icon"></i> Добавить</ingame:link>
+</content>
+
+<content tag="content">
+  <table class="ui celled padded very basic table">
     <thead>
     <tr>
-      <g:sortableColumn property="title" title="Название"/>
+      <th>Название</th>
       <th>Ед. изм.</th>
       <th>Действия</th>
     </tr>
     </thead>
     <tbody>
-    <g:each in="${gameResourceInstanceList}" status="i" var="res">
-      <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-        <td><ingame:link action="show"
-                         id="${res.id}">${res.title}</ingame:link></td>
-        <td>${res.measure}</td>
-        <td class="buttons">
-          <ingame:link class="edit" action="edit" resource="${res}">Редактировать</ingame:link>
-          <ingame:link class="delete" action="delete" resource="${res}">Удалить</ingame:link>
+    <g:each in="${subject}" var="item">
+      <tr>
+        <td><ingame:link action="show" id="${item.id}">${item.title}</ingame:link></td>
+        <td>${item.measure}</td>
+        <td>
+          <ingame:link action="show" id="${item.id}" class="ui blue icon basic button"
+                       title="Настроить"><i class="blue setting icon"></i></ingame:link>
+          <ingame:link action="edit" id="${item.id}" class="ui yellow icon basic button"
+                       title="Редактировать"><i class="yellow edit icon"></i></ingame:link>
+          <ingame:link action="delete" id="${item.id}" class="ui red icon basic button"
+                       title="Удалить" onclick="return confirm('Вы уверены?');">
+            <i class="red delete icon"></i></ingame:link>
         </td>
       </tr>
     </g:each>
     </tbody>
+    <g:render template="/shared/semantic/tablePaginate" model="[colspan: 3, itemsQty: itemsCount]"/>
   </table>
-
-  <div class="pagination">
-    <g:paginate total="${itemsCount ?: 0}"/>
-  </div>
-</div>
+</content>
 </body>
 </html>

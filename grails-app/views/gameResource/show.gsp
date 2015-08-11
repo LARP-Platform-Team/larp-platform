@@ -2,95 +2,89 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="layout" content="main">
-  <g:set var="title" value="Ресурс ${gameResourceInstance?.title}"/>
+  <meta name="layout" content="/nested/contentWithActions">
   <g:set var="subject" value="${gameResourceInstance as GameResource}"/>
+  <g:set var="title" value="Настройка ресурса ${subject.title}"/>
   <title>${title}</title>
 </head>
 
 <body>
-<div class="nav" role="navigation">
-  <ul>
-    <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
-    </li>
-    <li><ingame:link class="list" action="index">Все ресурсы</ingame:link></li>
-  </ul>
-</div>
 
-<div id="show-gameResource" class="content property-list scaffold-create" role="main">
-  <h1>${title}</h1>
-  <g:if test="${flash.message}">
-    <div class="message" role="status">${flash.message}</div>
-  </g:if>
+<content tag="actions">
+  <ingame:link class="item" action="index"><i class="arrow left grey icon"></i> Назад</ingame:link>
+</content>
+
+<content tag="content">
 
   <section>
     <h2>Экземпляры</h2>
 
-    <div class="nav" style="display: inline-block"><ingame:link class="create" controller="ResourceInstance" params="[typeId: subject.id]"
-                                                                action="create">Добавить</ingame:link></div>
-
-    <div>
-      <g:if test="${subject.instances.size() == 0}">Нет</g:if>
-      <g:else>
-            <table>
-              <thead>
-              <tr>
-                <g:sortableColumn property="title" title="Название"/>
-                <g:sortableColumn property="value" title="Значение"/>
-                <th>Идентификатор</th>
-                <g:sortableColumn property="owner" title="Владелец"/>
-                <g:sortableColumn property="origin" title="Источник"/>
-                <th>Действия</th>
-              </tr>
-              </thead>
-              <tbody>
-              <g:each in="${subject.instances}" status="i" var="instance">
-
-                <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                  <td>${instance.title}</td>
-                  <td>${instance.value} ${instance.type.measure}</td>
-                  <td>${instance.fullId}</td>
-                  <td>${instance.owner}</td>
-                  <td>${instance.origin?.title}</td>
-                  <td class="buttons">
-                    <ingame:link class="edit" action="edit" resource="${instance}">Редактировать</ingame:link>
-                    <ingame:link class="delete" action="delete" resource="${instance}">Удалить</ingame:link>
-                  </td>
-                </tr>
-              </g:each>
-              </tbody>
-            </table>
-      </g:else>
-    </div>
+    <g:if test="${subject.instances.size() == 0}">
+      <ui:message type="info">Экземпляров ресурса данного типа пока нет.</ui:message>
+    </g:if>
+    <g:else>
+      <table class="ui celled padded very basic table">
+        <thead>
+        <tr>
+          <th>Название</th>
+          <th>Значение</th>
+          <th>Идентификатор</th>
+          <th>Владелец</th>
+          <th>Источник</th>
+          <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <g:each in="${subject.instances}" var="item">
+          <tr>
+            <td>${item.title}</td>
+            <td>${item.value} ${item.type.measure}</td>
+            <td>${item.fullId}</td>
+            <td>${item.owner}</td>
+            <td>${item.origin?.title}</td>
+            <td class="buttons">
+              <ingame:link action="edit" id="${item.id}" class="ui yellow icon basic button"
+                           title="Редактировать">
+                <i class="yellow edit icon"></i></ingame:link>
+              <ingame:link action="delete" id="${item.id}" class="ui red icon basic button"
+                           title="Удалить"
+                           onclick="return confirm('Вы уверены?');"><i
+                  class="red delete icon"></i></ingame:link>
+            </td>
+          </tr>
+        </g:each>
+        </tbody>
+        <g:render template="/shared/semantic/tablePaginate"
+                  model="[colspan: 6, itemsQty: itemsCount]"/>
+      </table>
+    </g:else>
 
   </section>
 
   <br/><!-- sorry for that-->
 
-  <section>
+  <section class="ui pilled segment">
     <h2>Источники</h2>
-    <ingame:formRemote name="origins"
-                       url="[resource: gameResourceInstance, action: 'addOrigin']"
-                       update="[success: 'resource-origins', failure: 'addOriginError']"
-                       method="POST">
+    <ingame:formRemote name="origins" class="ui form"
+                       url="[resource: subject, action: 'addOrigin']" method="POST"
+                       update="[success: 'itemsContainer', failure: 'addOriginError']">
 
-      <fieldset class="form">
-        <div class="fieldcontain">
-          <label>Существующие</label>
-          <g:render template="origins" model="[origins: gameResourceInstance.origins]"/>
-        </div>
+      <div id="itemsContainer">
+        <g:render template="origins" model="[items: subject.origins]"/>
+      </div>
 
-        <div class="fieldcontain">
-          <label for="newOriginTitle">Название источника:</label>
+      <div class="ui grid">
+      <div class="eight wide column">
+        <div class="ui action input">
           <g:textField name="originTitle" id="newOriginTitle" required="required"/>
+          <ui:submit class="right" icon="plus">Добавить</ui:submit>
         </div>
-
-        <g:submitButton name="addOrigin" value="Добавить"/>
-      </fieldset>
+        </div>
+      </div>
 
     </ingame:formRemote>
   </section>
 
-</div>
+</content>
 </body>
 </html>

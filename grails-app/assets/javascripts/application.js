@@ -11,13 +11,12 @@
 //= require_self
 
 if (typeof jQuery !== 'undefined') {
-	(function($) {
-		$('#spinner').ajaxStart(function() {
+	$(function () {
+		$('#spinner').ajaxStart(function () {
 			$(this).fadeIn();
-		}).ajaxStop(function() {
+		}).ajaxStop(function () {
 			$(this).fadeOut();
 		});
-
 
 		$('.ui.message .close').on('click', function () {
 			$(this)
@@ -26,7 +25,8 @@ if (typeof jQuery !== 'undefined') {
 		});
 
 		$('.ui.checkbox, .ui.radio.checkbox').checkbox();
-		$('select.dropdown').dropdown();
 
-	})(jQuery);
+		$('select.dropdown').dropdown();
+		$('.ui[title]').popup();
+	});
 }

@@ -41,7 +41,7 @@ class NewsFeedController extends BaseController {
     def save(NewsFeed feed) {
         if (validateData(feed, 'create')) {
             newsService.saveFeed(feed)
-            respondChange('default.created.message', CREATED, feed)
+            respondChange('Новостная лента успешно создана', CREATED, feed)
         }
     }
 
@@ -49,7 +49,7 @@ class NewsFeedController extends BaseController {
     def update(NewsFeed feed) {
         if (validateData(feed, 'edit')) {
             newsService.saveFeed(feed)
-            respondChange('default.updated.message', OK, feed)
+            respondChange('Новостная лента успешно обновлена', OK, feed)
         }
     }
 
@@ -57,7 +57,7 @@ class NewsFeedController extends BaseController {
     def delete(NewsFeed feed) {
         if(validateData(feed)) {
             newsService.deleteFeed(feed)
-            respondChange('default.deleted.message', NO_CONTENT, null, feed.id)
+            respondChange('Новостная лента удалена', NO_CONTENT, null, feed.id)
         }
     }
 

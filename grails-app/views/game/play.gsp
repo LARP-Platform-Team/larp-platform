@@ -1,4 +1,4 @@
-<%@ page import="ru.srms.larp.platform.game.Game" %>
+<%@ page import="ru.srms.larp.platform.game.character.GameCharacter; ru.srms.larp.platform.game.Game" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,6 +29,7 @@
         <div class="ten wide column">
             <section class="ui pilled segment">
                 <div class="ui green ribbon label">Об игре</div>
+                <div class="ui small hidden divider"></div>
                 <div class="content">${subject.overview}</div>
             </section>
         </div>
@@ -39,8 +40,8 @@
                 <div class="ui violet ribbon label">Ваши персонажи</div>
 
                 <g:if test="${characters}">
-                    <g:each in="${characters}" var="cc">
-                        <g:set var="c" value="${cc as ru.srms.larp.platform.game.character.GameCharacter}"/>
+                    <g:each in="${characters}" var="item">
+                        <g:set var="c" value="${item as GameCharacter}"/>
                         <g:link mapping="playAs" params="[gameAlias: subject.alias, charAlias: c.alias]" class="ui card">
                             <div class="content">
                                 <div class="header">${c.name}</div>
@@ -75,9 +76,6 @@
                 </div>
             </section>
         </div>
-
-
-
 
     </div>
 </content>

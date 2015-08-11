@@ -1,19 +1,17 @@
 <%@ page import="ru.srms.larp.platform.game.character.GameCharacter; ru.srms.larp.platform.game.mail.MailBox" %>
 
-<div class="fieldcontain ${hasErrors(bean: mailBoxInstance, field: 'address', 'error')} required">
-	<label for="address">Адрес<span class="required-indicator">*</span></label>
-	<g:field type="email" name="address" required="" value="${mailBoxInstance?.address}"/>
+<div class="${hasErrors(bean: mailBoxInstance, field: 'address', 'error')} required field">
+	<label for="address">Адрес</label>
+	<g:field type="email" name="address" placeholder="address@domain.zon" required="" value="${mailBoxInstance?.address}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: mailBoxInstance, field: 'name', 'error')}">
+<div class="${hasErrors(bean: mailBoxInstance, field: 'name', 'error')} field">
 	<label for="name">Имя отправителя</label>
 	<g:textField name="name" value="${mailBoxInstance?.name}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: mailBoxInstance, field: 'owner', 'error')} ">
+<div class="${hasErrors(bean: mailBoxInstance, field: 'owner', 'error')} field">
 	<label for="owner">Владелец</label>
 	<g:select id="owner" name="owner.id" from="${GameCharacter.findAllByGame(params.game)}"
-						optionKey="id" value="${mailBoxInstance?.owner?.id}" class="many-to-one" noSelection="['null': '']"/>
+						optionKey="id" value="${mailBoxInstance?.owner?.id}" class="dropdown" noSelection="['null': 'нет']"/>
 </div>
-
-<g:hiddenField name="game.id" id="game" value="${params.game.id}"/>

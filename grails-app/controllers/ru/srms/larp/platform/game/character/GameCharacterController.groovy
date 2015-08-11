@@ -5,6 +5,7 @@ import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseController
 import ru.srms.larp.platform.CharacterService
 import ru.srms.larp.platform.GameRoleService
+import ru.srms.larp.platform.exceptions.AjaxException
 import ru.srms.larp.platform.game.roles.GameRole
 
 import static org.springframework.http.HttpStatus.*
@@ -46,7 +47,7 @@ class GameCharacterController extends BaseController {
     def save(GameCharacter character) {
         if(validateData(character, 'create')) {
             characterService.save(character)
-            respondChange('default.created.message', CREATED, character)
+            respondChange('Персонаж успешно добавлен', CREATED, character)
         }
     }
 
@@ -57,7 +58,7 @@ class GameCharacterController extends BaseController {
         character.properties = params
         if(validateData(character, 'edit')) {
             characterService.save(character, oldPlayer)
-            respondChange('default.updated.message', OK, character)
+            respondChange('Персонаж обновлен', OK, character)
         }
     }
 
@@ -65,7 +66,7 @@ class GameCharacterController extends BaseController {
     def delete(GameCharacter character) {
         if(validateData(character)) {
             characterService.delete(character)
-            respondChange('default.deleted.message', NO_CONTENT, null, character.id)
+            respondChange('Персонаж удален', NO_CONTENT, null, character.id)
         }
     }
 
@@ -74,13 +75,13 @@ class GameCharacterController extends BaseController {
         doAjax {
             Long id = params.role?.id as Long
             if (!id || !GameRole.exists(id))
-                throw new Exception("Указана неверная роль!")
+                throw new AjaxException("Указана неверная роль!")
 
             if(character.roles.find({it.id == id}))
-                throw new Exception("У персонажа уже есть указанная роль!")
+                throw new AjaxException("У персонажа уже есть указанная роль!")
 
             gameRoleService.add(GameRole.get(id), character)
-            render template: 'roles', model: [roles: character.roles]
+            render template: 'roles', model: [items: character.roles]
         }
     }
 
@@ -89,10 +90,10 @@ class GameCharacterController extends BaseController {
         doAjax {
             Long id = params.roleId as Long
             if (!id || !GameRole.exists(id))
-                throw new Exception("Указана неверная роль!")
+                throw new AjaxException("Указана неверная роль!")
 
             gameRoleService.remove(GameRole.get(id), character)
-            render template: 'roles', model: [roles: character.roles]
+            render template: 'roles', model: [items: character.roles]
         }
     }
 

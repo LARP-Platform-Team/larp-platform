@@ -34,13 +34,8 @@
             </tr>
         </g:each>
         </tbody>
-        <tfoot>
-        <tr><th colspan="2">
-            <div class="ui right floated pagination menu">
-                <g:semanticPaginate total="${gameInstanceCount ?: 0}"/>
-            </div>
-        </th></tr>
-        </tfoot>
+        <g:render template="/shared/semantic/tablePaginate"
+                  model="[colspan: 2, itemsQty: gameInstanceCount]"/>
     </table>
 </content>
 

@@ -6,15 +6,22 @@ class UITagLib {
   def submit = { attrs, body ->
     def classes = 'ui submit button'
     def icon = ''
-    if(attrs.icon) {
-      classes += ' labeled icon'
-      icon = '<i class="ui icon ' + attrs.icon + '"></i>'
-    }
+    def text = body()
 
     if(attrs.class)
       classes += " ${attrs.class}"
 
-    out << '<button class="' + classes +'" type="submit">' + icon + body() + '</button>'
+    if (text && text.toString().length() > 0)
+      classes += ' labeled'
+
+    if(attrs.icon) {
+      classes += ' icon'
+      icon = '<i class="' + attrs.icon + ' icon"></i>'
+    }
+
+    def title = attrs.title ? 'title="' + attrs.title + '"' : '';
+
+    out << '<button class="' + classes + '" type="submit"' + title + '>' + icon + body() + '</button>'
   }
 
   def message = {attrs, body ->

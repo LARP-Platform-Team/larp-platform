@@ -15,7 +15,6 @@
 
   <asset:stylesheet src="application.css"/>
   <asset:javascript src="application.js"/>
-
   <title><g:layoutTitle default="Платформа городских ролевок"/></title>
 
   <g:layoutHead/>
@@ -72,5 +71,6 @@
   &copy; S.R.M.S.
   </footer>
 </div>
+
 </body>
 </html>
