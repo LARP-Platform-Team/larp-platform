@@ -1,5 +1,5 @@
-<section>
-  <h1>Доступные почтовые ящики</h1>
+<section class="ui pilled segment">
+  <div class="ui blue ribbon label">Почта</div>
   <ul class="property-list">
     <g:each in="${items}" var="box">
       <li>

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="layout" content="/nested/contentWithActions">
+  <meta name="layout" content="mainWithActions">
   <g:set var="subject" value="${gameCharacterInstance as GameCharacter}"/>
   <g:set var="title" value="Редактирование персонажа"/>
   <title>${title}</title>

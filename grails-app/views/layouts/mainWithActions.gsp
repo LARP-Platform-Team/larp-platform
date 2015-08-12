@@ -1,4 +1,4 @@
-<g:applyLayout name="main">
+<g:applyLayout name="base">
   <html>
   <head>
     <title><g:layoutTitle/></title>

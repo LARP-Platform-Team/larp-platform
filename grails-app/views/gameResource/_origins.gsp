@@ -12,7 +12,11 @@
         </ingame:remoteLink>
       </div>
       <div class="content">
-        <div class="header">${item.title}</div>
+        <div class="header">
+          ${item.title}
+          <%-- TODO надо разобраться со стилями --%>
+          <g:if test="${!item.title.contains(" ")}"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</g:if>
+        </div>
       </div>
     </div>
   </g:each>

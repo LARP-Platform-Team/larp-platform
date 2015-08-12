@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="layout" content="/nested/contentWithActions">
+  <meta name="layout" content="mainWithActions">
   <g:set var="subject" value="${gameResourceInstanceList as List<GameResource>}"/>
   <g:set var="title" value="Игровые ресурсы"/>
   <title>${title}</title>

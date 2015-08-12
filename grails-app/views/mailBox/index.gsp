@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="layout" content="/nested/contentWithActions">
+  <meta name="layout" content="mainWithActions">
   <g:set var="subject" value="${mailBoxInstanceList as List<MailBox>}"/>
   <g:set var="title" value="Почтовые ящики"/>
   <title>${title}</title>

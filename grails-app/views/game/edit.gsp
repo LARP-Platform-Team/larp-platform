@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="/nested/contentWithoutActions">
+    <meta name="layout" content="main">
     <g:set var="subject" value="${gameInstance as Game}"/>
     <g:set var="title" value="Параметры игры ${subject.title}"/>
     <title>${title}</title>

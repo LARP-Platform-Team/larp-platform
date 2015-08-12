@@ -1,6 +1,6 @@
 <%@ page import="ru.srms.larp.platform.game.resources.ResourceInstance" %>
-<section>
-  <h1>Доступные ресурсы</h1>
+<section class="ui pilled segment">
+  <div class="ui blue ribbon label">Ресурсы</div>
   <ul class="property-list">
     <g:each in="${items}" var="item">
       <li>

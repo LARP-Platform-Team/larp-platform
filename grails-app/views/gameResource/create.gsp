@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="layout" content="/nested/contentWithActions">
+  <meta name="layout" content="mainWithActions">
   <g:set var="subject" value="${newsFeedInstance as GameResource}"/>
   <g:set var="title" value="Создание ресурса"/>
   <title>${title}</title>

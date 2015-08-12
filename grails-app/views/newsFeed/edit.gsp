@@ -1,7 +1,7 @@
 <%@ page import="org.springframework.validation.FieldError; ru.srms.larp.platform.game.news.NewsFeed" %>
 <!DOCTYPE html>
 <head>
-  <meta name="layout" content="/nested/contentWithActions">
+  <meta name="layout" content="mainWithActions">
   <g:set var="subject" value="${newsFeedInstance as NewsFeed}"/>
   <g:set var="title" value="Редактирование новостной ленты ${subject.title}"/>
   <title>${title}</title>

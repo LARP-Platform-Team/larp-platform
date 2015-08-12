@@ -2,79 +2,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="main">
-    <g:set var="entityName" value="${message(code: 'gameRole.label', default: 'GameRole')}"/>
-    <title><g:message code="default.edit.label" args="[entityName]"/></title>
+  <meta name="layout" content="mainWithActions">
+  <g:set var="subject" value="${gameRoleInstance as GameRole}"/>
+  <g:set var="title" value="Редактирование игровой роли ${subject.title}"/>
+  <title>${title}</title>
 </head>
 
 <body>
-<a href="#edit-gameRole" class="skip" tabindex="-1"><g:message code="default.link.skip.label"
-                                                               default="Skip to content&hellip;"/></a>
+<content tag="actions">
+  <ingame:link class="item" action="index"><i class="cancel grey icon"></i> Отмена</ingame:link>
+</content>
 
-<div class="nav" role="navigation">
-    <ul>
-        <li><a class="home" href="${createLink(uri: '/')}"><g:message
-                code="default.home.label"/></a></li>
-        <li><ingame:link class="list" action="index"><g:message code="default.list.label"
-                                                                args="[entityName]"/></ingame:link></li>
-        <li><ingame:link class="create" action="create"><g:message code="default.new.label"
-                                                                   args="[entityName]"/></ingame:link></li>
-    </ul>
-</div>
+<content tag="content">
+  <div class="ui two column stackable grid">
+    <div class="eight wide column">
+      <g:render template="/shared/fromErrors" bean="${subject}" var="subject"/>
+      <ingame:form class="ui form" url="[resource: subject, action: 'save']">
+        <g:render template="form"/>
+        <g:hiddenField name="version" value="${subject?.version}"/>
+        <ui:submit icon="checkmark">Сохранить</ui:submit>
+      </ingame:form>
+    </div>
 
-<div id="edit-gameRole" class="content scaffold-edit" role="main">
-    <h1><g:message code="default.edit.label" args="[entityName]"/></h1>
-    <g:if test="${flash.message}">
-        <div class="message" role="status">${flash.message}</div>
-    </g:if>
-    <g:hasErrors bean="${gameRoleInstance}">
-        <ul class="errors" role="alert">
-            <g:eachError bean="${gameRoleInstance}" var="error">
-                <li <g:if test="${error in FieldError}">data-field-id="${error.field}"</g:if>><g:message
-                        error="${error}"/></li>
-            </g:eachError>
-        </ul>
-    </g:hasErrors>
-    <ingame:form url="[resource: gameRoleInstance, action: 'update']" method="POST">
-        <g:hiddenField name="version" value="${gameRoleInstance?.version}"/>
-        <fieldset class="form">
-            <g:render template="form"/>
-        </fieldset>
-        <fieldset class="buttons">
-            <g:actionSubmit class="save" action="update"
-                            value="${message(code: 'default.button.update.label', default: 'Update')}"/>
-        </fieldset>
-    </ingame:form>
+    <div class="eight wide column">
+      <section class="ui pilled segment">
+        <div class="ui blue ribbon label">Персонажи</div>
+        <ingame:formRemote name="characters" class="ui form" method="POST"
+                           url="[resource: subject, action: 'addToChar']"
+                           update="[success: 'charactersContainer', failure: 'addCharError']">
 
-    <ingame:formRemote name="characters"
-                       url="[resource: gameRoleInstance, action: 'addToChar']"
-                       update="[success: 'role-characters', failure: 'addCharError']" method="POST">
+          <div id="charactersContainer">
+            <g:render template="characters" model="[characters: subject.characters]"/>
+          </div>
 
-        <fieldset class="form">
-            <div class="fieldcontain">
-                <label for="characters">
-                    <g:message code="characters.label" default="Персонажи"/>
-                </label>
-
-                <g:render template="characters" model="[characters: gameRoleInstance.characters]"/>
-            </div>
-
-            <div class="fieldcontain">
-                <label for="characters">Выбрать персонажа</label>
-                <g:select name="character.id" from="${GameCharacter.findAllByGame(params.game)}"
-                optionKey="id" />
-            </div>
-
-        </fieldset>
-        <fieldset class="buttons">
-            <g:submitButton name="addCharacter" value="Назначить"/>
-        </fieldset>
-    </ingame:formRemote>
-
-
-
-
-
-</div>
+          <div class="ui action input">
+            <g:select name="character.id" from="${GameCharacter.findAllByGame(params.game)}"
+                      optionKey="id" class="ui dropdown"/>
+            <ui:submit class="right icon" icon="add user" title="Выбрать персонажа"/>
+          </div>
+        </ingame:formRemote>
+      </section>
+    </div>
+  </div>
+</content>
 </body>
 </html>

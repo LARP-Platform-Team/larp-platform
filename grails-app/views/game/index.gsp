@@ -1,9 +1,9 @@
 <%@ page import="ru.srms.larp.platform.game.Game" %>
 <sec:ifLoggedIn>
-    <g:set var="template" value="/nested/contentWithActions"/>
+    <g:set var="template" value="mainWithActions"/>
 </sec:ifLoggedIn>
 <sec:ifNotLoggedIn>
-    <g:set var="template" value="/nested/contentWithoutActions"/>
+    <g:set var="template" value="main"/>
 </sec:ifNotLoggedIn>
 <!DOCTYPE html>
 <html>

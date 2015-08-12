@@ -28,5 +28,7 @@ if (typeof jQuery !== 'undefined') {
 
 		$('select.dropdown').dropdown();
 		$('.ui[title]').popup();
+
+		$('.ui.accordion').accordion({exclusive: false})
 	});
 }

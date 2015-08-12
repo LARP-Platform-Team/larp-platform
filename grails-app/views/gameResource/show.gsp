@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="layout" content="/nested/contentWithActions">
+  <meta name="layout" content="mainWithActions">
   <g:set var="subject" value="${gameResourceInstance as GameResource}"/>
   <g:set var="title" value="Настройка ресурса ${subject.title}"/>
   <title>${title}</title>
@@ -78,7 +78,7 @@
       <div class="ui grid">
       <div class="eight wide column">
         <div class="ui action input">
-          <g:textField name="originTitle" id="newOriginTitle" required="required"/>
+          <g:textField name="originTitle" placeholder="Введите название" id="newOriginTitle" required="required"/>
           <ui:submit class="right" icon="plus">Добавить</ui:submit>
         </div>
         </div>
