@@ -34,8 +34,11 @@
           </ingame:form>
         </sec:permitted>
         <sec:notPermitted object="${subject}" permission="write">
-          <div class="ui hedaer">Текущее значение:</div>
-          ${subject.value}<g:if test="${subject.type.measure}">${subject.type.measure}</g:if>
+          <div style="padding-top: 10px"></div>
+          <strong>
+            Текущее значение: <span class="ui violet circular label">${subject.value}</span>
+            <g:if test="${subject.type.measure}">${subject.type.measure}</g:if>
+          </strong>
         </sec:notPermitted>
       </section>
     </div>
@@ -74,10 +77,13 @@
       <section class="ui pilled segment">
         <div class="ui blue ribbon label">История переводов</div>
 
-        <div class="ui list">
+        <div class="ui selection list">
           <g:each in="${subject.transferLogs}" var="log">
             <g:render template="transferLog" model="[log: log, parent: subject]"/>
           </g:each>
+          <g:if test="${subject.transferLogs.size() == 0}">
+            <ui:message type="info">История переводов пуста</ui:message>
+          </g:if>
         </div>
       </section>
   </div>
