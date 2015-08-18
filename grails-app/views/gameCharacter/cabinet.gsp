@@ -16,7 +16,7 @@
 </content>
 
 <content tag="content">
-  <g:if test="${!character.isDead}">
+  <g:if test="${character.isDead}">
     <div class="ui black ribbon label" title="Пресонаж мертв, увы :("><i class="big white frown icon"></i> R.I.P.</div>
     <div class="ui hidden divider"></div>
   </g:if>
