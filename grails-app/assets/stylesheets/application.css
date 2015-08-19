@@ -10,22 +10,15 @@
 *= require ../semantic/semantic
 *= require_self
 */
-.game-role {
-    border-left: 1px solid #777;
-    padding-left: 15px;
-    margin-bottom: 10px;
-    background-color: #fbfbfb;
-}
-
 a.deleted {
     text-decoration: line-through;
     color: #666666;
 }
 
-.bread-crumbs {
-    padding: 10px 20px;
-}
-
 #mainHeader {
     border-top: 0;
+}
+
+.menu .item {
+    cursor: pointer;
 }

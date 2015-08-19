@@ -30,5 +30,7 @@ if (typeof jQuery !== 'undefined') {
 		$('.ui[title]').popup();
 
 		$('.ui.accordion').accordion({exclusive: false})
+
+		$('.ui.tabular.menu .item').tab();
 	});
 }

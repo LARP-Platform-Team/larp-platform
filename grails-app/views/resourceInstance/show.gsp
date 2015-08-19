@@ -14,6 +14,7 @@
           class="item"><i
       class="arrow left grey icon"></i> Назад</g:link>
 </content>
+
 <content tag="content">
   <div class="ui two column stackable grid">
     <div class="seven wide column">
