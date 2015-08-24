@@ -70,6 +70,13 @@
                              value="${transferData?.transferTargetId}"/>
               </div>
             </div>
+            <div
+                    class="${hasErrors(bean: transferData, field: 'comment', 'error')} field">
+              <label for="value">Комментарий:</label>
+              <g:textField name="comment"
+                          placeholder="Текст комментария"
+                          value="${transferData?.comment}"/>
+            </div>
             <ui:submit name="send" icon="right arrow">Отправить</ui:submit>
           </ingame:form>
         </section>

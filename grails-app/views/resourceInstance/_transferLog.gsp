@@ -16,5 +16,9 @@
 
     <div class="description"><g:render template="/shared/date" model="[date: log.date]"/></div>
     ${outcome ? "Получатель" : "Отправитель"}: ${log.targetName}
+
+    <g:if test="${log.comment}">
+      <div class="comment">Комментарий: ${log.comment}</div>
+    </g:if>
   </div>
 </div>
