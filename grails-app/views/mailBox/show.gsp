@@ -28,8 +28,10 @@
       <div class="ui vertical secondary fluid tabular pointing menu">
         <g:each in="${LetterType.values()}" var="tab" status="i">
           <a href="#" class="item ${i == 0 ? "active" : ""}"
-               data-tab="tab-${tab.toString()}"><i class="${tab.icon} icon"></i> ${tab.title}
-            <div class="ui ${letters.get(tab).size() == 0 ? "grey" : "green"} label">${letters.get(tab).size()}</div></a>
+             data-tab="tab-${tab.toString()}"><i class="${tab.icon} icon"></i> ${tab.title}
+            <div
+                class="ui ${letters.get(tab).size() == 0 ? "grey" : "green"} label">${letters.get(tab).size()}</div>
+          </a>
         </g:each>
       </div>
     </div>
@@ -38,13 +40,24 @@
       <div class="ui segment">
         <g:each in="${LetterType.values()}" var="tab" status="i">
           <div class="ui tab ${i == 0 ? "active" : ""}" data-tab="tab-${tab.toString()}">
-          <g:each in="${letters.get(tab)}" var="letter">
-            <g:checkBox name="tt"/>
-            ${tab.getAddress(letter.content)}
-            <ingame:link controller="letter" class="${letter.deleted ? 'deleted' : ''}"
-                           action="show"
-                           id="${letter.id}">${letter.content.subject}</ingame:link>
-          </g:each>
+            <table class="ui celled padded very basic table">
+              <thead>
+              <tr>
+                <th>От кого/Кому</th>
+                <th>Тема</th>
+              </tr>
+              </thead>
+              <tbody>
+              <g:each in="${letters.get(tab)}" var="letter">
+                <tr>
+                <td>${tab.getAddress(letter.content)}</td>
+                <td><ingame:link controller="letter" class="${letter.deleted ? 'deleted' : ''}"
+                             action="show"
+                             id="${letter.id}">${letter.content.subject}</ingame:link></td>
+                </tr>
+              </g:each>
+              </tbody>
+            </table>
           </div>
         </g:each>
       </div>

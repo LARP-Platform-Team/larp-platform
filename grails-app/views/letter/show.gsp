@@ -2,72 +2,62 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="layout" content="main">
-  <g:set var="letter" value="${letterRefInstance as LetterRef}"/>
-  <g:set var="title" value="${letter.content.subject}"/>
+  <meta name="layout" content="mainWithActions"/>
+  <g:set var="subject" value="${letterRefInstance as LetterRef}"/>
+  <g:set var="title" value="${subject.content.subject}"/>
   <title>${title}</title>
 </head>
 
 <body>
-<div class="nav" role="navigation">
-  <ul>
-    <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
-    </li>
-  </ul>
-</div>
+<content tag="actions">
+  <ingame:link class="item" controller="MailBox" id="${subject.mailboxId}" action="show">
+    <i class="arrow left grey icon"></i> Назад</ingame:link>
+</content>
 
-<div id="show-letter" class="content scaffold-show" role="main">
-  <h1>${title}</h1>
-  <g:if test="${flash.message}">
-    <div class="message" role="status">${flash.message}</div>
-  </g:if>
-  <ol class="property-list letter">
+<content tag="content">
+  <div class="ui fluid card">
+    <div class="content">
+      <div class="header">${subject.content.subject}</div>
 
-    <li class="fieldcontain">
-      <span id="time-label" class="property-label">Время отправки</span>
-      <span class="property-value" aria-labelledby="time-label">
-        <g:render template="/shared/date" model="[date: letter.content.time]"/></span>
-    </li>
+      <div class="meta">
+        <span>
+          От кого: ${subject.content.letterFrom}, Кому: ${subject.content.letterTo}
+        </span>
 
-    <li class="fieldcontain">
-      <span id="sender-label" class="property-label">От кого</span>
-      <span class="property-value"
-            aria-labelledby="sender-label">${letter.content.letterFrom}</span>
-    </li>
+        <div class="right floated time">
+          <g:render template="/shared/date" model="[date: subject.content.time]"/>
+        </div>
+      </div>
 
-    <li class="fieldcontain">
-      <span id="recipients-label" class="property-label">Кому</span>
-      <span class="property-value"
-            aria-labelledby="recipients-label">${letter.content.letterTo}</span>
-    </li>
+      <div class="description">
+        ${subject.content.text}
+      </div>
+    </div>
 
-    <li class="fieldcontain">
-      <span id="subject-label" class="property-label">Тема</span>
-      <span class="property-value"
-            aria-labelledby="subject-label">${letter.content.subject}</span>
+    <div class="extra content">
 
-    </li>
-    <li class="fieldcontain">
-      <span id="text-label" class="property-label">Текст</span>
-      <span class="property-value" aria-labelledby="text-label">${letter.content.text}</span>
-    </li>
+        <g:if test="${subject.type.equals(LetterType.DRAFT)}">
+          <sec:permitted object="${subject.mailbox}" permission="create">
+            <ingame:link controller="letter" class="ui yellow basic icon labeled button"
+                         action="edit"
+                         id="${subject.id}">
+              <i class="edit yellow icon"></i>Редактировать</ingame:link>
+            <ingame:link controller="letter" class="ui blue basic icon labeled button" action="send"
+                         id="${subject.id}"
+                         onclick="return confirm('Вы уверены?');">
+              <i class="send blue icon"></i> Отправить</ingame:link>
+          </sec:permitted>
+        </g:if>
 
-  </ol>
-  <fieldset class="buttons".>
-    <g:if test="${letter.type.equals(LetterType.DRAFT)}">
-      <sec:permitted object="${letter.mailbox}" permission="create">
-        <ingame:link controller="letter" class="edit" action="edit" id="${letter.id}">Редактировать</ingame:link>
-        <ingame:link controller="letter" class="save" action="send" id="${letter.id}"
-                     onclick="return confirm('Вы уверены?');">Отправить</ingame:link>
-      </sec:permitted>
-    </g:if>
+        <sec:permitted object="${subject.mailbox}" permission="delete">
+          <ingame:link controller="letter" class="ui red basic icon labeled button" action="delete" id="${subject.id}"
+                       onclick="return confirm('Вы уверены?');">
+            <i class="delete red icon"></i> Удалить</ingame:link>
+        </sec:permitted>
 
-    <sec:permitted object="${letter.mailbox}" permission="delete">
-      <ingame:link controller="letter" class="delete" action="delete" id="${letter.id}"
-                   onclick="return confirm('Вы уверены?');">Удалить</ingame:link>
-    </sec:permitted>
+    </div>
+  </div>
 
-  </fieldset>
-</div>
+</content>
 </body>
 </html>

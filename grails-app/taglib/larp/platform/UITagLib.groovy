@@ -19,9 +19,14 @@ class UITagLib {
       icon = '<i class="' + attrs.icon + ' icon"></i>'
     }
 
-    def title = attrs.title ? 'title="' + attrs.title + '"' : '';
+    def name = ''
+    if(attrs.name) {
+      name = " name=\"${attrs.name}\""
+    }
 
-    out << '<button class="' + classes + '" type="submit"' + title + '>' + icon + body() + '</button>'
+    def title = attrs.title ? ' title="' + attrs.title + '"' : '';
+
+    out << '<button class="' + classes + '" type="submit"' + title + name + '>' + icon + body() + '</button>'
   }
 
   def message = {attrs, body ->

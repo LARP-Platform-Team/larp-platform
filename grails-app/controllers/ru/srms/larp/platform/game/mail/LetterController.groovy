@@ -44,7 +44,7 @@ class LetterController extends BaseController {
 
     if (validateData(letter, 'create')) {
       mailboxService.saveLetter(letter)
-      respondChange('default.created.message', CREATED, letter)
+      respondChange('Письмо сохранено', CREATED, letter)
     }
   }
 
@@ -57,7 +57,7 @@ class LetterController extends BaseController {
 
     if (validateData(letter, 'create')) {
       mailboxService.saveLetter(letter)
-      respondChange('default.created.message', CREATED, letter)
+      respondChange('Письмо обновлено', CREATED, letter)
     }
   }
 
@@ -70,7 +70,7 @@ class LetterController extends BaseController {
 
     if (validateData(letter, 'create')) {
       mailboxService.saveLetter(letter)
-      respondChange('default.created.message', CREATED, letter)
+      respondChange('Письмо успешно отправлено', CREATED, letter)
     }
   }
 
@@ -78,7 +78,7 @@ class LetterController extends BaseController {
   def delete(LetterRef letter) {
     if (validateData(letter)) {
       mailboxService.deleteLetter(letter)
-      respondChange('default.deleted.message', NO_CONTENT, null, letter.id)
+      respondChange('Письмо удалено', NO_CONTENT, null, letter.id)
     }
   }
 
