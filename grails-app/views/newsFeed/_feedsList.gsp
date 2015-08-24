@@ -1,5 +1,5 @@
-<section>
-    <h1>Доступные новостные ленты</h1>
+<section class="ui pilled segment">
+    <div class="ui blue ribbon label">Новости</div>
     <ul class="property-list">
         <g:each in="${feeds}" var="feed">
             <li>

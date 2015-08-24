@@ -7,22 +7,18 @@
 * You're free to add application-wide styles to this file and they'll appear at the top of the
 * compiled file, but it's generally better to create a new file per style scope.
 *
-*= require main
-*= require mobile
+*= require ../semantic/semantic
 *= require_self
 */
-.game-role {
-    border-left: 1px solid #777;
-    padding-left: 15px;
-    margin-bottom: 10px;
-    background-color: #fbfbfb;
-}
-
 a.deleted {
     text-decoration: line-through;
     color: #666666;
 }
 
-.bread-crumbs {
-    padding: 10px 20px;
+#mainHeader {
+    border-top: 0;
+}
+
+.menu .item {
+    cursor: pointer;
 }

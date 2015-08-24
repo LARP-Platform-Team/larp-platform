@@ -1,73 +1,62 @@
-<%@ page import="ru.srms.larp.platform.sec.permissions.GamePermission" %>
+<%@ page import="ru.srms.larp.platform.sec.permissions.AclConfigGroup; ru.srms.larp.platform.game.roles.GameRole; ru.srms.larp.platform.sec.permissions.GamePermission" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="main">
-    <g:set var="entityName" value="${message(code: 'gameRole.label', default: 'GameRole')}"/>
-    <title><g:message code="default.edit.label" args="[entityName]"/></title>
+  <meta name="layout" content="mainWithActions">
+  <g:set var="subject" value="${gameRoleInstance as GameRole}"/>
+  <g:set var="acls" value="${acls as List<AclConfigGroup>}"/>
+  <g:set var="title" value="Права роли ${subject.title}"/>
+  <title>${title}</title>
 </head>
 
 <body>
-<a href="#edit-gameRole" class="skip" tabindex="-1"><g:message code="default.link.skip.label"
-                                                               default="Skip to content&hellip;"/></a>
+<content tag="actions">
+  <ingame:link class="item" action="index"><i class="arrow left grey icon"></i> Назад</ingame:link>
+</content>
 
-<div class="nav" role="navigation">
-    <ul>
-        <li><a class="home" href="${createLink(uri: '/')}"><g:message
-                code="default.home.label"/></a></li>
-        <li><ingame:link class="list" action="index"><g:message code="default.list.label"
-                                                                args="[entityName]"/></ingame:link></li>
-        <li><ingame:link class="create" action="create"><g:message code="default.new.label"
-                                                                   args="[entityName]"/></ingame:link></li>
-    </ul>
-</div>
+<content tag="content">
 
-<div id="edit-gameRole" class="content scaffold-edit" role="main">
-    <h1>Настройка <g:message code="default.edit.label" args="[entityName]"/></h1>
-    <g:if test="${flash.message}">
-        <div class="message" role="status">${flash.message}</div>
-    </g:if>
+  <div class="ui styled accordion">
+    <g:each in="${acls}" var="aclGroup">
+      <div class="title"><i class="dropdown icon"></i> ${aclGroup.title}</div>
 
-    <table>
-        <thead>
-        <tr>
+      <div class="content">
+        <table class="ui table">
+          <thead><tr>
             <th>Элемент</th>
             <g:each in="${GamePermission.values()}" var="perm">
-                <th>${perm.toString()}</th>
+              <th>${perm.toString()}</th>
             </g:each>
-        </tr>
-        </thead>
-        <tbody>
-        <g:each in="${acls}" var="aclGroup">
+          </tr></thead>
+          <tbody>
+          <g:each in="${aclGroup.models}" var="aclItem">
             <tr>
-                <td style="text-align: center; font-weight: bold" colspan="${GamePermission.values().size() + 1}">
-                    ${aclGroup.title}
-                </td>
-            </tr>
-        <g:each in="${aclGroup.models}" var="aclItem">
-            <tr>
-                <td>${aclItem.id} -- ${aclItem.title}</td>
-                <g:each in="${GamePermission.values()}" var="perm">
-                    <td>
-                        <ingame:remoteLink
-                                elementId="permisson-cell-${aclItem.id}-${perm.toString()}"
-                                url="[action: 'setPermission', id: params.id, params: [
-                                        itemId: aclItem.id,
-                                        clazz: aclGroup.clazz.name,
-                                        permission: perm.toString()
-                                ]]"
-                                update="[success: 'permisson-cell-'+aclItem.id+'-'+perm.toString(), failure: 'setPermissionError']">
-                        ${aclItem.permissions.contains(perm)}
-                        </ingame:remoteLink>
-                    </td>
-                </g:each>
-            </tr>
-        </g:each>
-        </g:each>
-        </tbody>
-    </table>
-    <div class="errors" id="setPermissionError"></div>
+              <td>${aclItem.id} -- ${aclItem.title}</td>
+              <g:each in="${GamePermission.values()}" var="perm">
+                <td>
+                  <ingame:remoteLink
+                      elementId="permisson-cell-${aclItem.id}-${perm.toString()}"
+                      url="[action: 'setPermission', id: params.id, params: [
+                          itemId    : aclItem.id,
+                          clazz     : aclGroup.clazz.name,
+                          permission: perm.toString()
+                      ]]"
+                      update="[success: 'permisson-cell-' + aclItem.id + '-' + perm.toString(), failure: 'setPermissionError']">
 
-</div>
+                    <tmpl:permission value="${aclItem.permissions.contains(perm)}"/>
+                  </ingame:remoteLink>
+                </td>
+              </g:each>
+            </tr>
+          </g:each>
+          </tbody>
+        </table>
+      </div>
+    </g:each>
+  </div>
+
+  <div class="errors" id="setPermissionError"></div>
+
+</content>
 </body>
 </html>

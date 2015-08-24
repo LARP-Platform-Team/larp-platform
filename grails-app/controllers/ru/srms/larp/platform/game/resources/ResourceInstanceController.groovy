@@ -37,7 +37,7 @@ class ResourceInstanceController extends BaseController {
     params.redirectToParent = false
     if (validateData(resource, 'show')) {
       resourceService.updateResourceValue(resource)
-      respondChange('default.updated.message', OK, resource)
+      respondChange('Вы успешно изменили значение', OK, resource)
     }
   }
 
@@ -61,7 +61,7 @@ class ResourceInstanceController extends BaseController {
     if (validateData(resource, 'create')) {
       params.redirectToParent = true
       resourceService.saveResourceInstance(resource)
-      respondChange('default.created.message', CREATED, resource)
+      respondChange('Экземпляр ресурса успешно создан', CREATED, resource)
     }
   }
 
@@ -75,7 +75,7 @@ class ResourceInstanceController extends BaseController {
 
     if (validateData(resource, 'edit')) {
       resourceService.saveResourceInstance(resource, oldResource)
-      respondChange('default.updated.message', OK, resource)
+      respondChange('Экземпляр ресурса обновлен', OK, resource)
     }
   }
 
@@ -88,7 +88,7 @@ class ResourceInstanceController extends BaseController {
       params.type.id = resource.type.id
 
       resourceService.deleteResourceInstance(resource)
-      respondChange('default.deleted.message', NO_CONTENT, null, resource.id)
+      respondChange('Экземпляр ресурса удален', NO_CONTENT, null, resource.id)
     }
   }
 
@@ -107,8 +107,4 @@ class ResourceInstanceController extends BaseController {
     return attrs
   }
 
-  @Override
-  protected String labelCode() {
-    return 'resourceInstance.label'
-  }
 }

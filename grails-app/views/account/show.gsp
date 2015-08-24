@@ -30,7 +30,7 @@
 
       <section>
         <h1>Изменить личные данные</h1>
-        <g:render template="/shared/fromErrors" bean="${subject}" var="item"/>
+        <g:render template="/shared/fromErrors" bean="${subject}" var="subject"/>
         <ingame:form url="[id: subject.id, controller: 'account', action: 'update']" method="post">
           <g:hiddenField name="version" value="${subject?.version}"/>
           <fieldset class="form">
@@ -44,7 +44,7 @@
 
       <section>
         <h1>Изменить пароль</h1>
-        <g:render template="/shared/fromErrors" bean="${changePassword}" var="item"/>
+        <g:render template="/shared/fromErrors" bean="${changePassword}" var="subject"/>
         <ingame:form url="[id: subject.id, controller: 'account', action: 'changePassword']"
                      method="post">
           <g:hiddenField name="version" value="${subject?.version}"/>

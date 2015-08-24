@@ -47,7 +47,7 @@ class ResourceInstance implements InGameStuff, Titled {
   String getFullId() {
     def result = this.identifier
     if(this.type.identifierTitle)
-      result = "${this.type.identifierTitle}: ${result}"
+      result = "${this.type.identifierTitle}${result}"
     return result
   }
 

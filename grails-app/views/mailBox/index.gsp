@@ -2,51 +2,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="layout" content="main">
+  <meta name="layout" content="mainWithActions">
+  <g:set var="subject" value="${mailBoxInstanceList as List<MailBox>}"/>
   <g:set var="title" value="Почтовые ящики"/>
   <title>${title}</title>
 </head>
 
 <body>
-<div class="nav" role="navigation">
-  <ul>
-    <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
-    </li>
-    <li><ingame:link class="create" action="create">Добавить</ingame:link></li>
-  </ul>
-</div>
+<content tag="actions">
+  <ingame:link class="item" action="create"><i class="add green icon"></i> Добавить</ingame:link>
+</content>
 
-<div id="list-mailBox" class="content scaffold-list" role="main">
-  <h1>${title}</h1>
-  <g:if test="${flash.message}">
-    <div class="message" role="status">${flash.message}</div>
-  </g:if>
-  <table>
+<content tag="content">
+  <table class="ui celled padded very basic table">
     <thead>
     <tr>
-      <g:sortableColumn property="address" title="Адрес"/>
-      <g:sortableColumn property="owner" title="Владелец"/>
+      <th>Адрес</th>
+      <th>Владелец</th>
       <th>Действия</th>
     </tr>
     </thead>
     <tbody>
-    <g:each in="${mailBoxInstanceList}" status="i" var="box">
-      <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-        <td><ingame:link action="show"
-                         id="${box.id}">${box.toString()}</ingame:link></td>
-        <td>${box.owner}</td>
+    <g:each in="${subject}" var="item">
+      <tr>
+        <td><ingame:link action="show" id="${item.id}">${item.toString()}</ingame:link></td>
+        <td>${item.owner}</td>
         <td class="buttons">
-          <ingame:link class="edit" action="edit" resource="${box}">Редактировать</ingame:link>
-          <ingame:link class="delete" action="delete" resource="${box}">Удалить</ingame:link>
+          <ingame:link action="edit" id="${item.id}" class="ui yellow icon basic button"
+                       title="Редактировать"><i class="yellow edit icon"></i></ingame:link>
+          <ingame:link action="delete" id="${item.id}" class="ui red icon basic button"
+                       title="Удалить" onclick="return confirm('Вы уверены?');">
+            <i class="red delete icon"></i></ingame:link>
         </td>
       </tr>
     </g:each>
     </tbody>
+    <g:render template="/shared/semantic/tablePaginate"
+              model="[colspan: 3, itemsQty: itemsCount]"/>
   </table>
+</content>
 
-  <div class="pagination">
-    <g:paginate total="${itemsCount ?: 0}"/>
-  </div>
-</div>
 </body>
 </html>

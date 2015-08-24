@@ -1,68 +1,51 @@
-<%@ page import="ru.srms.larp.platform.game.roles.GameRole; org.springframework.validation.FieldError; ru.srms.larp.platform.game.news.NewsFeed" %>
+<%@ page import="ru.srms.larp.platform.game.character.GameCharacter; ru.srms.larp.platform.game.roles.GameRole;" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="main">
-    <g:set var="title" value="Редактировать персонажа"/>
-    <title>${title}</title>
+  <meta name="layout" content="mainWithActions">
+  <g:set var="subject" value="${gameCharacterInstance as GameCharacter}"/>
+  <g:set var="title" value="Редактирование персонажа"/>
+  <title>${title}</title>
 </head>
 
 <body>
-<div class="nav" role="navigation">
-    <ul>
-        <li><a class="home" href="${createLink(uri: '/')}"><g:message
-                code="default.home.label"/></a></li>
-        <li><ingame:link class="list" action="index">Все персонажи</ingame:link></li>
-        <li><ingame:link class="create" action="create">Создать персонажа</ingame:link></li>
-    </ul>
-</div>
 
-<div id="edit-newsFeed" class="content scaffold-edit" role="main">
-    <h1>${title}</h1>
-    <g:if test="${flash.message}">
-        <div class="message" role="status">${flash.message}</div>
-    </g:if>
-    <g:hasErrors bean="${gameCharacterInstance}">
-        <ul class="errors" role="alert">
-            <g:eachError bean="${gameCharacterInstance}" var="error">
-                <li <g:if test="${error in FieldError}">data-field-id="${error.field}"</g:if>><g:message
-                        error="${error}"/></li>
-            </g:eachError>
-        </ul>
-    </g:hasErrors>
-    <ingame:form url="[resource: gameCharacterInstance, action: 'update']">
-        <g:hiddenField name="version" value="${gameCharacterInstance?.version}"/>
-        <fieldset class="form">
-            <g:render template="form"/>
-        </fieldset>
-        <fieldset class="buttons">
-            <g:actionSubmit class="save" action="update"
-                            value="${message(code: 'default.button.update.label', default: 'Update')}"/>
-        </fieldset>
-    </ingame:form>
+<content tag="actions">
+  <ingame:link class="item" action="index"><i class="cancel grey icon"></i> Отмена</ingame:link>
+</content>
+
+<content tag="content">
+  <div class="ui two column stackable grid">
+    <div class="eight wide column">
+      <g:render template="/shared/fromErrors" bean="${subject}" var="subject"/>
+      <ingame:form class="ui form" url="[resource: subject, action: 'update']">
+        <g:render template="form"/>
+        <g:hiddenField name="version" value="${subject?.version}"/>
+        <ui:submit icon="checkmark">Сохранить</ui:submit>
+      </ingame:form>
+    </div>
 
     %{-- TODO может, в шаблон вынести всю эту конструкцию (в gameRole/edit так же) --}%
-    <ingame:formRemote name="roles"
-                       url="[resource: gameCharacterInstance, action: 'addRole']"
-                       update="[success: 'characterRoles', failure: 'addRoleError']" method="POST">
+    <div class="eight wide column">
+      <section class="ui pilled segment">
+        <div class="ui blue ribbon label">Роли</div>
+        <ingame:formRemote name="roles" url="[resource: subject, action: 'addRole']" method="POST"
+                           update="[success: 'rolesContainer', failure: 'addRoleError']">
 
-        <fieldset class="form">
-            <div class="fieldcontain">
-                <label>Роли</label>
-                <g:render template="roles" model="[roles: gameCharacterInstance.roles]"/>
-            </div>
+          <div id="rolesContainer">
+            <g:render template="roles" model="[items: subject.roles]"/>
+          </div>
 
-            <div class="fieldcontain">
-                <label for="role.id">Выбрать Роль</label>
-                <g:select id="role.id" name="role.id" from="${GameRole.findAllByGame(params.game)}"
-                          optionKey="id" />
-            </div>
+          <div class="ui action input">
+            <g:select name="role.id" from="${GameRole.findAllByGame(params.game)}"
+                      optionKey="id" class="ui dropdown"/>
+            <ui:submit class="right icon" icon="check circle outline" title="Назначить"/>
+          </div>
+        </ingame:formRemote>
+      </section>
+    </div>
+  </div>
+</content>
 
-        </fieldset>
-        <fieldset class="buttons">
-            <g:submitButton name="addRole" value="Назначить"/>
-        </fieldset>
-    </ingame:formRemote>
-</div>
 </body>
 </html>

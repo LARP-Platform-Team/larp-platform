@@ -1,49 +1,26 @@
-<%@ page import="org.springframework.validation.FieldError" %>
+<%@ page import="ru.srms.larp.platform.game.news.NewsFeed; org.springframework.validation.FieldError" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="main">
-    <g:set var="entityName" value="${message(code: 'newsFeed.label', default: 'NewsFeed')}"/>
-    <title><g:message code="default.create.label" args="[entityName]"/></title>
+  <meta name="layout" content="mainWithActions">
+  <g:set var="subject" value="${newsFeedInstance as NewsFeed}"/>
+  <g:set var="title" value="Создание новостной ленты"/>
+  <title>${title}</title>
 </head>
 
 <body>
-<a href="#create-newsFeed" class="skip" tabindex="-1"><g:message code="default.link.skip.label"
-                                                                 default="Skip to content&hellip;"/></a>
 
-<div class="nav" role="navigation">
-    <ul>
-        <li><a class="home" href="${createLink(uri: '/')}"><g:message
-                code="default.home.label"/></a></li>
-        <li>
-            <ingame:link class="list" action="index"><g:message code="default.list.label"
-                                                               args="[entityName]"/></ingame:link>
-        </li>
-    </ul>
-</div>
+<content tag="actions">
+  <ingame:link class="item" action="index"><i class="cancel grey icon"></i> Отмена</ingame:link>
+</content>
 
-<div id="create-newsFeed" class="content scaffold-create" role="main">
-    <h1><g:message code="default.create.label" args="[entityName]"/></h1>
-    <g:if test="${flash.message}">
-        <div class="message" role="status">${flash.message}</div>
-    </g:if>
-    <g:hasErrors bean="${newsFeedInstance}">
-        <ul class="errors" role="alert">
-            <g:eachError bean="${newsFeedInstance}" var="error">
-                <li <g:if test="${error in FieldError}">data-field-id="${error.field}"</g:if>><g:message
-                        error="${error}"/></li>
-            </g:eachError>
-        </ul>
-    </g:hasErrors>
-    <ingame:form url="[resource: newsFeedInstance, action: 'save']">
-        <fieldset class="form">
-            <g:render template="form"/>
-        </fieldset>
-        <fieldset class="buttons">
-            <g:submitButton name="create" class="save"
-                            value="${message(code: 'default.button.create.label')}"/>
-        </fieldset>
-    </ingame:form>
-</div>
+<content tag="content">
+  <g:render template="/shared/fromErrors" bean="${subject}" var="subject"/>
+  <ingame:form class="ui form" url="[resource: subject, action: 'save']">
+    <g:render template="form"/>
+    <ui:submit icon="add">Сохранить</ui:submit>
+  </ingame:form>
+</content>
+
 </body>
 </html>

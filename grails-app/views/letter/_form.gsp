@@ -2,20 +2,22 @@
 
 <g:set var="letter" value="${letterRefInstance as LetterRef}"/>
 
-<div class="fieldcontain ${hasErrors(bean: letter, field: 'content.recipients', 'error')} required">
-	<label for="content.recipients">Кому<span class="required-indicator">*</span></label>
-	<g:select name="content.recipients" from="${MailBox.findAllByIdNotEqual(params.mailboxId)}"
-		value="${letter?.content?.recipients}" optionKey="id" multiple="true"/>
+<div class="ui two fields">
+  <div class="${hasErrors(bean: letter, field: 'content.subject', 'error')} required field">
+    <label for="content.subject">Тема</label>
+    <g:textField name="content.subject" required="" value="${letter?.content?.subject}"/>
+  </div>
+
+  <div class="${hasErrors(bean: letter, field: 'content.recipients', 'error')} required field">
+    <label for="content.recipients">Кому</label>
+    <g:select name="content.recipients" from="${MailBox.findAllByIdNotEqual(params.mailboxId)}"
+              value="${letter?.content?.recipients}" optionKey="id" multiple="true" class="ui dropdown"/>
+  </div>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: letter, field: 'content.subject', 'error')} required">
-	<label for="content.subject">Тема<span class="required-indicator">*</span></label>
-	<g:textField name="content.subject" required="" value="${letter?.content?.subject}"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: letter, field: 'content.text', 'error')} required">
-	<label for="content.text">Текст<span class="required-indicator">*</span></label>
-	<g:textArea name="content.text" required="" value="${letter?.content?.text}"/>
+<div class="${hasErrors(bean: letter, field: 'content.text', 'error')} required field">
+  <label for="content.text">Текст</label>
+  <g:textArea name="content.text" required="" value="${letter?.content?.text}"/>
 </div>
 
 <g:hiddenField name="mailbox.id" value="${params.mailboxId ?: letter.mailbox.id}"/>

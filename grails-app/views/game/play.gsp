@@ -1,88 +1,83 @@
-<%@ page import="ru.srms.larp.platform.game.Game" %>
+<%@ page import="ru.srms.larp.platform.game.character.GameCharacter; ru.srms.larp.platform.game.Game" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="main">
-    <g:set var="entityName" value="${message(code: 'game.label', default: 'Game')}"/>
-    <title><g:message code="default.show.label" args="[entityName]"/></title>
+    <meta name="layout" content="mainWithActions">
+    <g:set var="subject" value="${gameInstance as Game}"/>
+    <g:set var="title" value="${subject.title}"/>
+    <title>${title}</title>
 </head>
 
 <body>
-<a href="#show-game" class="skip" tabindex="-1"><g:message code="default.link.skip.label"
-                                                           default="Skip to content&hellip;"/></a>
 
-<div class="nav" role="navigation">
-    <ul>
-        <li><a class="home" href="${createLink(uri: '/')}"><g:message
-                code="default.home.label"/></a></li>
-        <li><g:link class="list" action="index"><g:message code="default.list.label"
-                                                           args="[entityName]"/></g:link></li>
+<content tag="actions">
+    <g:link class="item" action="create"><i
+            class="add green icon"></i> Создать игру</g:link>
+    <sec:permitted object="${subject}" permission="administration">
+        <tmpl:gmControls game="${subject}"/>
+    </sec:permitted>
+    <sec:ifAllGranted roles="ROLE_ADMIN">
+        <g:link class="item" action="delete" resource="${subject}"
+                onclick="return confirm('Вы уверены?');"><i
+                class="delete red icon"></i> Удалить</g:link>
+    </sec:ifAllGranted>
+</content>
 
-        <sec:ifLoggedIn>
-            <li><g:link class="create" action="create"><g:message code="default.new.label"
-                                                              args="[entityName]"/></g:link></li>
-        </sec:ifLoggedIn>
-    </ul>
-</div>
+<content tag="content">
+    <div class="ui two columns grid">
 
-<div id="show-game" class="content scaffold-show" role="main">
+        <div class="ten wide column">
+            <section class="ui pilled segment">
+                <div class="ui green ribbon label">Об игре</div>
+                <div class="ui small hidden divider"></div>
+                <div class="content">${subject.overview}</div>
+            </section>
+        </div>
 
-    <h1><g:fieldValue bean="${gameInstance}" field="title"/></h1>
+        <div class="six wide column">
 
-    <g:if test="${flash.message}">
-        <div class="message" role="status">${flash.message}</div>
-    </g:if>
+            <section class="ui pilled segment">
+                <div class="ui violet ribbon label">Ваши персонажи</div>
 
-    <ol class="property-list game">
+                <g:if test="${characters}">
+                    <g:each in="${characters}" var="item">
+                        <g:set var="c" value="${item as GameCharacter}"/>
+                        <g:link mapping="playAs" params="[gameAlias: subject.alias, charAlias: c.alias]" class="ui card">
+                            <div class="content">
+                                <div class="header">${c.name}</div>
+                                <div class="meta">
+                                    <g:each in="${c.roles}" var="role" status="i">
+                                        ${role.title}
+                                        <g:if test="${i < c.roles.size() - 1}">, </g:if>
+                                    </g:each>
+                                </div>
+                            </div>
+                            <div class="extra content">
+                                <div class="right floated">
+                                0 <i class="outline mail icon"></i>
+                                </div>
+                            </div>
+                        </g:link>
+                    </g:each>
+                </g:if>
+                <g:else>
+                    <ui:message type="info">Увы, в этой игре у вас пока нет персонажей.</ui:message>
+                </g:else>
+            </section>
 
-        <g:if test="${gameInstance?.overview}">
-            <li class="fieldcontain">
-                <span id="overview-label" class="property-label"><g:message
-                        code="game.overview.label" default="Overview"/></span>
+            <section class="ui pilled segment">
+                <div class="ui red ribbon label">Мастера</div>
+                <div class="ui selection list">
+                    <g:each in="${subject.masters}" var="m">
+                        <g:link class="labeled icon item" controller="account" id="${m.id}">
+                            <div class="header"><i class="user icon"></i> ${m.username}</div>
+                        </g:link>
+                    </g:each>
+                </div>
+            </section>
+        </div>
 
-                <span class="property-value" aria-labelledby="overview-label"><g:fieldValue
-                        bean="${gameInstance}" field="overview"/></span>
-
-            </li>
-        </g:if>
-
-        <g:if test="${characters}">
-            <li class="fieldcontain">
-                <span id="characters-label" class="property-label">Вы можете играть за:</span>
-
-                <g:each in="${characters}" var="c">
-                    <span class="property-value" aria-labelledby="characters-label">
-                        <link:playAs charAlias="${c.alias}" gameAlias="${gameInstance.alias}">${c.name}</link:playAs>
-                    </span>
-                </g:each>
-            </li>
-        </g:if>
-
-
-        <li class="fieldcontain">
-                <span id="masters-label" class="property-label"><g:message code="game.masters.label"
-                                                                           default="Masters"/></span>
-
-                <g:each in="${gameInstance.masters}" var="m">
-                    <span class="property-value" aria-labelledby="masters-label"><g:link
-                            controller="account" action="show"
-                            id="${m.id}">${m?.encodeAsHTML()}</g:link></span>
-                </g:each>
-
-            </li>
-
-    </ol>
-        <fieldset class="buttons">
-            <sec:permitted object="${gameInstance}" permission="administration">
-               <tmpl:gmControls game="${gameInstance}"/>
-            </sec:permitted>
-
-
-            <sec:ifAllGranted roles="ROLE_ADMIN">
-                <g:link class="delete" action="delete" resource="${gameInstance}"
-                        onclick="return confirm('Вы уверены?');">Удалить</g:link>
-            </sec:ifAllGranted>
-        </fieldset>
-</div>
+    </div>
+</content>
 </body>
 </html>

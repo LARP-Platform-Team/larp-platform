@@ -2,37 +2,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="main">
-    <g:set var="feed" value="${newsFeedInstance as NewsFeed}"/>
-    <title>${feed.title}</title>
+  <meta name="layout" content="mainWithActions">
+  <g:set var="subject" value="${newsFeedInstance as NewsFeed}"/>
+  <g:set var="title" value="${subject.title}"/>
+  <title>${title}</title>
 </head>
 
 <body>
-<div class="nav" role="navigation">
-    <ul>
-        <li><a class="home" href="${createLink(uri: '/')}"><g:message
-                code="default.home.label"/></a></li>
+<content tag="actions">
+  <g:link mapping="playAs" params="[gameAlias: params.gameAlias, charAlias: params.charAlias]"
+          class="item"><i
+      class="arrow left grey icon"></i> Назад</g:link>
 
-        <sec:permitted object="${feed}" permission="create">
-        <li><ingame:link class="create" controller="newsItem" action="create" params="[feedId: feed.id]">
-            Добавить новость
-        </ingame:link></li>
-        </sec:permitted>
-    </ul>
-</div>
+  <sec:permitted object="${subject}" permission="create">
+    <ingame:link class="item" controller="newsItem" action="create" params="[feedId: subject.id]">
+      <i class="add green icon"></i> Добавить новость
+    </ingame:link>
+  </sec:permitted>
+</content>
+<content tag="content">
+  <div class="ui divided items">
+    <g:render template="/newsItem/show" collection="${newsItems}" var="item"/>
+  </div>
 
-<div id="show-newsFeed" class="content scaffold-show" role="main">
-    <h1>${feed.title}</h1>
-    <g:if test="${flash.message}">
-        <div class="message" role="status">${flash.message}</div>
-    </g:if>
-    <div class="property-list newsFeed">
-        <g:render template="/newsItem/show" collection="${newsItems}" var="item"/>
-    </div>
+  <div class="ui pagination menu">
+    <ingame:semanticPaginate id="${subject.id}" total="${newsItemsCount ?: 0}"/>
+  </div>
+</content>
 
-    <div class="pagination">
-        <ingame:paginate action="show" id="${feed.id}" total="${newsItemsCount}"/>
-    </div>
-</div>
 </body>
 </html>

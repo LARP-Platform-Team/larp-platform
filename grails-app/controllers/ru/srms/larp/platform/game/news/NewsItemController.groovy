@@ -30,7 +30,7 @@ class NewsItemController extends BaseController {
     def save(NewsItem newsItem) {
         if (validateData(newsItem, 'create')) {
             newsService.saveNews(newsItem)
-            respondChange('default.created.message', CREATED, newsItem)
+            respondChange('Новость успешно добавлена', CREATED, newsItem)
         }
     }
 
@@ -38,7 +38,7 @@ class NewsItemController extends BaseController {
     def update(NewsItem newsItem) {
         if (validateData(newsItem, 'edit')) {
             newsService.updateNews(newsItem)
-            respondChange('default.updated.message', OK, newsItem)
+            respondChange('Новость обновлена', OK, newsItem)
         }
     }
 
@@ -49,7 +49,7 @@ class NewsItemController extends BaseController {
             // save feed id to params for redirect
             params.feed = [:]
             params.feed.id = newsItem.feed.id
-            respondChange('default.deleted.message', NO_CONTENT, null, newsItem.id)
+            respondChange('Новость удалена', NO_CONTENT, null, newsItem.id)
         }
     }
 
@@ -62,6 +62,4 @@ class NewsItemController extends BaseController {
         return attrs
     }
 
-    @Override
-    protected String labelCode() { return 'newsItem.label' }
 }

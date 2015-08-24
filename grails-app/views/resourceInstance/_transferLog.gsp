@@ -1,10 +1,20 @@
 <g:set var="outcome" value="${log.source == parent}"/>
 <g:set var="target" value="${outcome ? log.target : log.source}"/>
 
+<div class="item" title="${outcome ? "Исходящий" : "Входящий"}">
+  <g:if test="${outcome}">
+    <i class="red arrow up icon"></i>
+  </g:if>
+  <g:else>
+    <i class="green arrow down icon"></i>
+  </g:else>
 
-<span class="date">[<g:render template="/shared/date" model="[date: log.date]"/>]</span>
-<span class="type">${outcome ? "Исходящий" : "Входящий"} перевод</span>
-<span class="target">${outcome ? "Получатель" : "Отправитель"}:
-  <span class="targetId">${target.fullId}</span>
-</span>
-<span class="value">Значение: ${log.value}</span>
+  <div class="content">
+    <div class="header">
+      ${log.value} ${log.target ? log.target.type.measure : log.source ? log.source.type.measure : ""}
+    </div>
+
+    <div class="description"><g:render template="/shared/date" model="[date: log.date]"/></div>
+    ${outcome ? "Получатель" : "Отправитель"}: ${log.targetName}
+  </div>
+</div>

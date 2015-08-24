@@ -1,43 +1,26 @@
-<%@ page import="grails.plugin.springsecurity.SpringSecurityService" %>
-<!DOCTYPE html>
-<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
-<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
-<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
-<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"><!--<![endif]-->
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title><g:layoutTitle default="Grails"/></title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="shortcut icon" href="${assetPath(src: 'favicon.ico')}" type="image/x-icon">
-		<link rel="apple-touch-icon" href="${assetPath(src: 'apple-touch-icon.png')}">
-		<link rel="apple-touch-icon" sizes="114x114" href="${assetPath(src: 'apple-touch-icon-retina.png')}">
-  		<asset:stylesheet src="application.css"/>
-		<asset:javascript src="application.js"/>
-        <g:javascript library="jquery" />
-		<g:layoutHead/>
-	</head>
-	<body>
-	<div id="grailsLogo" role="banner"><a target="_blank" href="https://bitbucket.org/TrebleSnake/larp-platform/wiki/Home">Платформа городских ролевочек</a></div>
-		<div class="bread-crumbs"><g:breadCrumbs/></div>
-		<g:layoutBody/>
-        <aside class="content">
-            <h1>Прочее</h1>
-            <g:newsFeeds/>
-						<g:availableMailboxes/>
-						<g:availableResources/>
-        </aside>
-    <div class="footer" role="contentinfo">
-			<sec:ifLoggedIn>
-				Привет, <sec:loggedInUserInfo field="username"/>!
-				<g:currentAccount/>
-				<a href="${createLink(uri: '/j_spring_security_logout')}">Выйти</a>
-			</sec:ifLoggedIn>
-        <sec:ifNotLoggedIn>
-            <g:link controller="login" action="auth">Войти</g:link>
-        </sec:ifNotLoggedIn>
+<g:applyLayout name="base">
+  <html>
+  <head>
+    <title><g:layoutTitle/></title>
+    <g:layoutHead/>
+  </head>
+
+  <body>
+
+  <div class="ui two columns stackable grid">
+
+    <aside class="three wide column">
+      <h1 сlass="ui small">Вам доступны</h1>
+      <g:newsFeeds/>
+      <g:availableMailboxes/>
+      <g:availableResources/>
+    </aside>
+
+    <div class="ui thirteen wide column">
+      <g:pageProperty name="page.content"/>
     </div>
-		<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
-	</body>
-</html>
+
+  </div>
+  </body>
+  </html>
+</g:applyLayout>

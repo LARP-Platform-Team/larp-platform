@@ -1,0 +1,12 @@
+/*******************************
+     User Global Variables
+*******************************/
+@primaryColor   : @blue;
+@secondaryColor : @teal;
+@yellow         : #FBBD08;
+
+/*-------------------
+      Base Sizes
+--------------------*/
+
+@fontSize          : 14px;

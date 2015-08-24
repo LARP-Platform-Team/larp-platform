@@ -37,7 +37,7 @@ class MailBoxController extends BaseController {
     def save(MailBox instance) {
         if(validateData(instance, 'create')) {
             mailboxService.save(instance)
-            respondChange('default.created.message', CREATED, instance)
+            respondChange('Почтовый ящик успешно создан', CREATED, instance)
         }
     }
 
@@ -49,7 +49,7 @@ class MailBoxController extends BaseController {
         instance.properties = params
         if(validateData(instance, 'edit')) {
             mailboxService.save(instance, oldOwner)
-            respondChange('default.updated.message', OK, instance)
+            respondChange('Почтовый ящик обновлен', OK, instance)
         }
     }
 
@@ -57,13 +57,9 @@ class MailBoxController extends BaseController {
     def delete(MailBox instance) {
         if(validateData(instance)) {
             mailboxService.delete(instance)
-            respondChange('default.deleted.message', NO_CONTENT, null, instance.id)
+            respondChange('Почтовый ящик удален', NO_CONTENT, null, instance.id)
         }
     }
 
 
-    @Override
-    protected String labelCode() {
-        return 'mailBox.label'
-    }
 }

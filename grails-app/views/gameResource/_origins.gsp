@@ -1,8 +1,27 @@
-<span id="resource-origins">
-    <g:each in="${origins}" var="origin">
-        <span>${origin.title} [<ingame:remoteLink
-                url="[action: 'deleteOrigin', id: origin.id]"
-                update="[success: 'resource-origins', failure: 'addOriginError']">x</ingame:remoteLink>] |</span>
-    </g:each>
-    <div class="errors" id="addOriginError"></div>
-</span>
+<div class="ui middle aligned horizontal relaxed divided selection list">
+  <g:if test="${!items}">
+    <br/><ui:message type="info">Пока не добавлено ни одного источника.</ui:message>
+  </g:if>
+  <g:each in="${items}" var="item">
+    <div class="item">
+      <div class="ui right floated buttons content">
+        <ingame:remoteLink class="ui compact icon red basic button" title="Удалить"
+                           url="[action: 'deleteOrigin', id: item.id]"
+                           update="[success: 'itemsContainer', failure: 'addOriginError']">
+          <i class="red delete icon"></i>
+        </ingame:remoteLink>
+      </div>
+      <div class="content">
+        <div class="header">
+          ${item.title}
+          <%-- TODO надо разобраться со стилями --%>
+          <g:if test="${!item.title.contains(" ")}"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</g:if>
+        </div>
+      </div>
+    </div>
+  </g:each>
+
+</div>
+
+<div id="addOriginError"></div>
+<div class="ui divider"></div>

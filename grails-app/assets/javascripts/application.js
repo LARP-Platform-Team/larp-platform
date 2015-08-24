@@ -7,14 +7,30 @@
 //
 //= require jquery
 //= require_tree .
+//= require ../semantic/semantic
 //= require_self
 
 if (typeof jQuery !== 'undefined') {
-	(function($) {
-		$('#spinner').ajaxStart(function() {
+	$(function () {
+		$('#spinner').ajaxStart(function () {
 			$(this).fadeIn();
-		}).ajaxStop(function() {
+		}).ajaxStop(function () {
 			$(this).fadeOut();
 		});
-	})(jQuery);
+
+		$('.ui.message .close').on('click', function () {
+			$(this)
+				.closest('.message')
+				.transition('fade');
+		});
+
+		$('.ui.checkbox, .ui.radio.checkbox').checkbox();
+
+		$('select.dropdown').dropdown();
+		$('.ui[title]').popup();
+
+		$('.ui.accordion').accordion({exclusive: false})
+
+		$('.ui.tabular.menu .item').tab();
+	});
 }
