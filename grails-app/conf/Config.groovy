@@ -4,14 +4,15 @@ grails.app.context = '/'
 // config files can be ConfigSlurper scripts, Java properties files, or classes
 // in the classpath in ConfigSlurper format
 
-// grails.config.locations = [ "classpath:${appName}-config.properties",
-//                             "classpath:${appName}-config.groovy",
-//                             "file:${userHome}/.grails/${appName}-config.properties",
-//                             "file:${userHome}/.grails/${appName}-config.groovy"]
-
-// if (System.properties["${appName}.config.location"]) {
-//    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
-// }
+// Если определена переменная среды с именем "${appName}.config.location", использовать ее
+if (System.properties["${appName}.config.location"]) {
+  println "Env var for config found. Loading config from: file:" + System.properties["${appName}.config.location"]
+  grails.config.locations = ["file:" + System.properties["${appName}.config.location"]]
+}
+else {
+  println "Loading config from: classpath:${appName}.config.groovy"
+  grails.config.locations = ["classpath:${appName}.config.groovy"]
+}
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 
@@ -165,10 +166,6 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 ]
 
 grails.plugin.springsecurity.acl.authority.changeAclDetails = 'ROLE_ACL_CHANGE_DETAILS'
-
-// Mail sending
-grails.mail.default.from="no-reply@larp.srms.club"
-grails.mail.disabled=true
 
 // Asset pipeline settings
 grails.assets.excludes = ["semantic/**"]
