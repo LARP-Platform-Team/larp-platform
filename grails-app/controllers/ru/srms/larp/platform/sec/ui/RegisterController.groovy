@@ -13,12 +13,18 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
   @Override
   def register(RegisterCommand command) {
 
+    if(!params.containsKey('doRegister')) {
+      render view: 'index', model: [command: new RegisterCommand()]
+      return
+    }
+
     if (command.hasErrors()) {
       render view: 'index', model: [command: command]
       return
     }
 
     String salt = saltSource instanceof NullSaltSource ? null : command.username
+    // TODO makle enabled: true only for dev enviroment
     def user = lookupUserClass().newInstance(email: command.email, username: command.username,
         accountLocked: false, enabled: true)
 
