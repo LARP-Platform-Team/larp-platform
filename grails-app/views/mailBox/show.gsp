@@ -64,33 +64,6 @@
     </div>
 
   </div>
-
-
-  %{--<ol class="property-list mailBox">--}%
-  %{--<g:each in="${letters}" var="item">--}%
-  %{--<g:set var="letterType" value="${item.key as LetterType}"/>--}%
-  %{--<br/>${letterType} (${item.value.size()}):--}%
-  %{--<table><tr>--}%
-  %{--<th></th>--}%
-  %{--<th>Адрес</th>--}%
-  %{--<th>Тема</th>--}%
-  %{--<th>Действия</th>--}%
-  %{--</tr>--}%
-  %{--<g:each in="${item.value}" var="letter">--}%
-  %{--<tr>--}%
-  %{--<td><g:checkBox name="tt"/></td>--}%
-  %{--<td>${letterType.getAddress(letter.content)}</td>--}%
-  %{--<td>--}%
-  %{--<ingame:link controller="letter" class="${letter.deleted ? 'deleted' : ''}"--}%
-  %{--action="show"--}%
-  %{--id="${letter.id}">${letter.content.subject}</ingame:link>--}%
-  %{--</td>--}%
-  %{--<td></td>--}%
-  %{--</tr>--}%
-  %{--</g:each>--}%
-  %{--</table>--}%
-  %{--</g:each>--}%
-  %{--</ol>--}%
 </content>
 </body>
 </html>
