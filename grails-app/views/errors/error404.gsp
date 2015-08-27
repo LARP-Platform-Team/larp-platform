@@ -1,10 +1,12 @@
 <html>
 <head>
-    <title>Not found!</title>
-    <meta name='layout' content='main' />
+  <title>Ошибка! Страница не найдена.</title>
+  <meta name='layout' content='main'/>
 </head>
+
 <body>
-<h1>Not found</h1>
-<p>We're sorry, but page you are looking for is not found.</p>
+<content tag="content">
+  <ui:message type="warning">Извините, но, похоже, этой страницы не существует.</ui:message>
+</content>
 </body>
 </html>

@@ -47,6 +47,9 @@ class GameController extends BaseController {
 
     @Transactional
     def update(Game game) {
+        if(!params.modules)
+          game.modules.clear()
+
         if (validateData(game, 'edit')) {
             gameService.update(game)
             respondChange('Параметры игры изменены', OK, game)

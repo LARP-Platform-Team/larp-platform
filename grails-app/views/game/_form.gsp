@@ -19,3 +19,9 @@
     <g:textArea name="overview" cols="40" rows="5" maxlength="9999" required="" placeholder="Описание"
                 value="${gameInstance?.overview}"/>
 </div>
+
+<div class="${hasErrors(bean: gameInstance, field: 'modules', 'error')} field">
+  <label for="overview">Модули:</label>
+      <g:select name="modules" from="${Game.GameModule.values()}"
+              value="${gameInstance?.modules}" optionValue="title" multiple="true" class="ui dropdown"/>
+</div>
