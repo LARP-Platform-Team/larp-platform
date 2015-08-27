@@ -9,7 +9,7 @@ class Game implements Titled {
     String alias
     String overview
     // TODO is characters relation side needed here?
-    static hasMany = [masters: SpringUser, characters: GameCharacter]
+    static hasMany = [masters: SpringUser, characters: GameCharacter, modules: GameModule]
 
     static constraints = {
         title unique: true
@@ -29,5 +29,17 @@ class Game implements Titled {
     @Override
     String extractTitle() {
         return title
+    }
+
+    static enum GameModule {
+      NEWS('Новости'),
+      MAIL('Почта'),
+      RESOURCES('Ресурсы и банки');
+
+      String title
+
+      GameModule(String title) {
+        this.title = title
+      }
     }
 }

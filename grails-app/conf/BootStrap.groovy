@@ -55,6 +55,7 @@ class BootStrap {
             Game game1 = new Game(title: "Красная шапочка", alias: "the-red-hat",
                     overview: "Игра по знаменитой сказке.")
                     .addToMasters(gm1)
+                        .addToModules(Game.GameModule.MAIL)
                     .save()
 
 //            for(def i = 0; i < 30; i++) {
@@ -92,6 +93,12 @@ class BootStrap {
             Game game2 = new Game(title: "Камелот", alias: "CamelotAge77",
                     overview: "Игра о славных ряцарях камелота.")
             game2.addToMasters(gm1).addToMasters(gm2).save()
+            game2
+                .addToModules(Game.GameModule.MAIL)
+                .addToModules(Game.GameModule.NEWS)
+                .addToModules(Game.GameModule.RESOURCES)
+            .save()
+
             aclUtilService.addPermission(game2, gm2.username, ADMINISTRATION)
             aclUtilService.addPermission(game2, gm1.username, ADMINISTRATION)
 
