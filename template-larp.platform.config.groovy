@@ -67,3 +67,5 @@ grails.larp.platform.adminInitialPassword = "a"
 
 // Заполнять ли базу тестовыми данными
 grails.larp.platform.setupTestData = false
+// Очищать ли задачи Quartz-a, связанные с обновлением ресурсов
+grailsApplication.config.grails.larp.platform.clearQuartzResourceTasks = false

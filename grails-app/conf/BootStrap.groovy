@@ -12,7 +12,10 @@ import ru.srms.larp.platform.game.mail.LetterType
 import ru.srms.larp.platform.game.mail.MailBox
 import ru.srms.larp.platform.game.news.NewsFeed
 import ru.srms.larp.platform.game.news.NewsItem
-import ru.srms.larp.platform.game.resources.*
+import ru.srms.larp.platform.game.resources.GameResource
+import ru.srms.larp.platform.game.resources.PeriodicResourceUpdateJob
+import ru.srms.larp.platform.game.resources.ResourceInstance
+import ru.srms.larp.platform.game.resources.ResourceOrigin
 import ru.srms.larp.platform.game.roles.CharacterRole
 import ru.srms.larp.platform.game.roles.GameRole
 import ru.srms.larp.platform.sec.SpringRole
@@ -28,12 +31,18 @@ class BootStrap {
   def quartzScheduler
   def grailsApplication
   GameAclService gameAclService
-
   def init = { servletContext ->
 
     // create a Job for periodic resource update
-    def resourceUpdateJob = JobBuilder.newJob(ChangeResourceJob.class)
-        .withIdentity(ResourceInstanceController.PERIODIC_UPDATE_JOB_KEY, "LarpPlatform")
+    if (grailsApplication.config.grails.larp.platform.clearQuartzResourceTasks) {
+      println "Clearing quartz tasks..."
+      if(quartzScheduler.checkExists(PeriodicResourceUpdateJob.jobKey)) {
+        quartzScheduler.deleteJob(PeriodicResourceUpdateJob.jobKey)
+      }
+    }
+
+    def resourceUpdateJob = JobBuilder.newJob(PeriodicResourceUpdateJob.class)
+        .withIdentity(PeriodicResourceUpdateJob.jobKey)
         .storeDurably()
         .build()
     quartzScheduler.addJob(resourceUpdateJob, true)

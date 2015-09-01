@@ -2,6 +2,8 @@ package ru.srms.larp.platform
 
 import grails.plugin.springsecurity.acl.AclUtilService
 import grails.transaction.Transactional
+import org.quartz.CronScheduleBuilder
+import org.quartz.TriggerBuilder
 import org.springframework.security.access.prepost.PostFilter
 import org.springframework.security.access.prepost.PreAuthorize
 import ru.srms.larp.platform.game.Game
@@ -14,6 +16,7 @@ class ResourceService {
 
   GameAclService gameAclService
   AclUtilService aclUtilService
+  def quartzScheduler
 
   @PreAuthorize("hasPermission(#game, admin)")
   def listResources(Game game, Map pagination) {
@@ -120,6 +123,60 @@ class ResourceService {
   @PreAuthorize("hasPermission(#resource.extractGame(), admin)")
   def deleteResourceInstance(ResourceInstance resource) {
     resource.delete()
+  }
+
+  @Transactional
+  @PreAuthorize("hasPermission(#target.extractGame(), admin)")
+  def createPeriodicRule(ResourceInstance target) {
+    new PeriodicRule(target: target)
+  }
+
+  @Transactional
+  @PreAuthorize("hasPermission(#rule.extractGame(), admin)")
+  def editPeriodicRule(PeriodicRule rule) { rule }
+
+  @Transactional
+  @PreAuthorize("hasPermission(#rule.extractGame(), admin)")
+  def savePeriodicRule(PeriodicRule rule) {
+    boolean insert = rule.id == null
+    rule.save(flush: true)
+    addTriggerForRule(rule, insert)
+  }
+
+  @Transactional
+  @PreAuthorize("hasPermission(#rule.extractGame(), admin)")
+  def deletePeriodicRule(PeriodicRule rule) {
+    rule.delete()
+  }
+
+  private def addTriggerForRule(PeriodicRule rule, boolean isNew)
+  {
+    def days = rule.fireDays.collect { it.code }.toArray(new int[rule.fireDays.size()])
+    if(days.length == 0)
+      throw new Exception("Days array is empty")
+
+    def trigger = TriggerBuilder.newTrigger()
+        .withIdentity(rule.triggerKey)
+        .forJob(PeriodicResourceUpdateJob.jobKey)
+        .usingJobData("ruleId", rule.id)
+        .withSchedule(
+          CronScheduleBuilder
+          .atHourAndMinuteOnGivenDaysOfWeek(rule.fireHour, rule.fireMinute, days)
+//        .inTimeZone(TimeZone)
+    )
+        .startNow()
+        .build()
+
+    if(isNew)
+      quartzScheduler.scheduleJob(trigger)
+    else
+      quartzScheduler.rescheduleJob(rule.triggerKey, trigger)
+
+    println "Next time: ${trigger.getNextFireTime()}"
+  }
+
+  private def removeTriggerForRule(PeriodicRule rule) {
+    quartzScheduler.unscheduleJob(rule.triggerKey)
   }
 
   private def deletePermissions(ResourceInstance resource, Map oldResource) {
