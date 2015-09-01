@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    <changeSet author="Treble Snake" id="1441104083628-1">
+        <createTable tableName="qrtz_blob_triggers">
+            <column name="sched_name" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trigger_name" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trigger_group" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="blob_data" type="bytea"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-2">
+        <createTable tableName="qrtz_calendars">
+            <column name="sched_name" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="calendar_name" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="calendar" type="bytea">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-3">
+        <createTable tableName="qrtz_cron_triggers">
+            <column name="sched_name" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trigger_name" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trigger_group" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cron_expression" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time_zone_id" type="VARCHAR(80)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-4">
+        <createTable tableName="qrtz_fired_triggers">
+            <column name="sched_name" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="entry_id" type="VARCHAR(95)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trigger_name" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trigger_group" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="instance_name" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fired_time" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="priority" type="int4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state" type="VARCHAR(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="job_name" type="VARCHAR(200)"/>
+            <column name="job_group" type="VARCHAR(200)"/>
+            <column name="is_nonconcurrent" type="bool"/>
+            <column name="requests_recovery" type="bool"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-5">
+        <createTable tableName="qrtz_job_details">
+            <column name="sched_name" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="job_name" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="job_group" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(250)"/>
+            <column name="job_class_name" type="VARCHAR(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_durable" type="bool">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_nonconcurrent" type="bool">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_update_data" type="bool">
+                <constraints nullable="false"/>
+            </column>
+            <column name="requests_recovery" type="bool">
+                <constraints nullable="false"/>
+            </column>
+            <column name="job_data" type="bytea"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-6">
+        <createTable tableName="qrtz_locks">
+            <column name="sched_name" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lock_name" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-7">
+        <createTable tableName="qrtz_paused_trigger_grps">
+            <column name="sched_name" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trigger_group" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-8">
+        <createTable tableName="qrtz_scheduler_state">
+            <column name="sched_name" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="instance_name" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_checkin_time" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="checkin_interval" type="int8">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-9">
+        <createTable tableName="qrtz_simple_triggers">
+            <column name="sched_name" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trigger_name" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trigger_group" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="repeat_count" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="repeat_interval" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="times_triggered" type="int8">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-10">
+        <createTable tableName="qrtz_simprop_triggers">
+            <column name="sched_name" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trigger_name" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trigger_group" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="str_prop_1" type="VARCHAR(512)"/>
+            <column name="str_prop_2" type="VARCHAR(512)"/>
+            <column name="str_prop_3" type="VARCHAR(512)"/>
+            <column name="int_prop_1" type="int4"/>
+            <column name="int_prop_2" type="int4"/>
+            <column name="long_prop_1" type="int8"/>
+            <column name="long_prop_2" type="int8"/>
+            <column name="dec_prop_1" type="NUMERIC(13,4)"/>
+            <column name="dec_prop_2" type="NUMERIC(13,4)"/>
+            <column name="bool_prop_1" type="bool"/>
+            <column name="bool_prop_2" type="bool"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-11">
+        <createTable tableName="qrtz_triggers">
+            <column name="sched_name" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trigger_name" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trigger_group" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="job_name" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="job_group" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(250)"/>
+            <column name="next_fire_time" type="int8"/>
+            <column name="prev_fire_time" type="int8"/>
+            <column name="priority" type="int4"/>
+            <column name="trigger_state" type="VARCHAR(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trigger_type" type="VARCHAR(8)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_time" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_time" type="int8"/>
+            <column name="calendar_name" type="VARCHAR(200)"/>
+            <column name="misfire_instr" type="int2"/>
+            <column name="job_data" type="bytea"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-12">
+        <addPrimaryKey columnNames="sched_name, trigger_name, trigger_group" constraintName="qrtz_blob_triggers_pkey" tableName="qrtz_blob_triggers"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-13">
+        <addPrimaryKey columnNames="sched_name, calendar_name" constraintName="qrtz_calendars_pkey" tableName="qrtz_calendars"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-14">
+        <addPrimaryKey columnNames="sched_name, trigger_name, trigger_group" constraintName="qrtz_cron_triggers_pkey" tableName="qrtz_cron_triggers"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-15">
+        <addPrimaryKey columnNames="sched_name, entry_id" constraintName="qrtz_fired_triggers_pkey" tableName="qrtz_fired_triggers"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-16">
+        <addPrimaryKey columnNames="sched_name, job_name, job_group" constraintName="qrtz_job_details_pkey" tableName="qrtz_job_details"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-17">
+        <addPrimaryKey columnNames="sched_name, lock_name" constraintName="qrtz_locks_pkey" tableName="qrtz_locks"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-18">
+        <addPrimaryKey columnNames="sched_name, trigger_group" constraintName="qrtz_paused_trigger_grps_pkey" tableName="qrtz_paused_trigger_grps"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-19">
+        <addPrimaryKey columnNames="sched_name, instance_name" constraintName="qrtz_scheduler_state_pkey" tableName="qrtz_scheduler_state"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-20">
+        <addPrimaryKey columnNames="sched_name, trigger_name, trigger_group" constraintName="qrtz_simple_triggers_pkey" tableName="qrtz_simple_triggers"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-21">
+        <addPrimaryKey columnNames="sched_name, trigger_name, trigger_group" constraintName="qrtz_simprop_triggers_pkey" tableName="qrtz_simprop_triggers"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-22">
+        <addPrimaryKey columnNames="sched_name, trigger_name, trigger_group" constraintName="qrtz_triggers_pkey" tableName="qrtz_triggers"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-28">
+        <createIndex indexName="idx_qrtz_ft_inst_job_req_rcvry" tableName="qrtz_fired_triggers" unique="false">
+            <column name="sched_name"/>
+            <column name="instance_name"/>
+            <column name="requests_recovery"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-29">
+        <createIndex indexName="idx_qrtz_ft_j_g" tableName="qrtz_fired_triggers" unique="false">
+            <column name="sched_name"/>
+            <column name="job_name"/>
+            <column name="job_group"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-30">
+        <createIndex indexName="idx_qrtz_ft_jg" tableName="qrtz_fired_triggers" unique="false">
+            <column name="sched_name"/>
+            <column name="job_group"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-31">
+        <createIndex indexName="idx_qrtz_ft_t_g" tableName="qrtz_fired_triggers" unique="false">
+            <column name="sched_name"/>
+            <column name="trigger_name"/>
+            <column name="trigger_group"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-32">
+        <createIndex indexName="idx_qrtz_ft_tg" tableName="qrtz_fired_triggers" unique="false">
+            <column name="sched_name"/>
+            <column name="trigger_group"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-33">
+        <createIndex indexName="idx_qrtz_ft_trig_inst_name" tableName="qrtz_fired_triggers" unique="false">
+            <column name="sched_name"/>
+            <column name="instance_name"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-34">
+        <createIndex indexName="idx_qrtz_j_grp" tableName="qrtz_job_details" unique="false">
+            <column name="sched_name"/>
+            <column name="job_group"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-35">
+        <createIndex indexName="idx_qrtz_j_req_recovery" tableName="qrtz_job_details" unique="false">
+            <column name="sched_name"/>
+            <column name="requests_recovery"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-36">
+        <createIndex indexName="idx_qrtz_t_c" tableName="qrtz_triggers" unique="false">
+            <column name="sched_name"/>
+            <column name="calendar_name"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-37">
+        <createIndex indexName="idx_qrtz_t_g" tableName="qrtz_triggers" unique="false">
+            <column name="sched_name"/>
+            <column name="trigger_group"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-38">
+        <createIndex indexName="idx_qrtz_t_jg" tableName="qrtz_triggers" unique="false">
+            <column name="sched_name"/>
+            <column name="job_group"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-39">
+        <createIndex indexName="idx_qrtz_t_n_g_state" tableName="qrtz_triggers" unique="false">
+            <column name="sched_name"/>
+            <column name="trigger_group"/>
+            <column name="trigger_state"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-40">
+        <createIndex indexName="idx_qrtz_t_n_state" tableName="qrtz_triggers" unique="false">
+            <column name="sched_name"/>
+            <column name="trigger_name"/>
+            <column name="trigger_group"/>
+            <column name="trigger_state"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-41">
+        <createIndex indexName="idx_qrtz_t_next_fire_time" tableName="qrtz_triggers" unique="false">
+            <column name="sched_name"/>
+            <column name="next_fire_time"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-42">
+        <createIndex indexName="idx_qrtz_t_nft_misfire" tableName="qrtz_triggers" unique="false">
+            <column name="sched_name"/>
+            <column name="misfire_instr"/>
+            <column name="next_fire_time"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-43">
+        <createIndex indexName="idx_qrtz_t_nft_st" tableName="qrtz_triggers" unique="false">
+            <column name="sched_name"/>
+            <column name="trigger_state"/>
+            <column name="next_fire_time"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-44">
+        <createIndex indexName="idx_qrtz_t_nft_st_misfire" tableName="qrtz_triggers" unique="false">
+            <column name="sched_name"/>
+            <column name="misfire_instr"/>
+            <column name="next_fire_time"/>
+            <column name="trigger_state"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-45">
+        <createIndex indexName="idx_qrtz_t_nft_st_misfire_grp" tableName="qrtz_triggers" unique="false">
+            <column name="sched_name"/>
+            <column name="misfire_instr"/>
+            <column name="next_fire_time"/>
+            <column name="trigger_group"/>
+            <column name="trigger_state"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-46">
+        <createIndex indexName="idx_qrtz_t_state" tableName="qrtz_triggers" unique="false">
+            <column name="sched_name"/>
+            <column name="trigger_state"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-23">
+        <addForeignKeyConstraint baseColumnNames="sched_name, trigger_name, trigger_group" baseTableName="qrtz_blob_triggers" baseTableSchemaName="public" constraintName="qrtz_blob_triggers_sched_name_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="sched_name, trigger_name, trigger_group" referencedTableName="qrtz_triggers" referencedTableSchemaName="public" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-24">
+        <addForeignKeyConstraint baseColumnNames="sched_name, trigger_name, trigger_group" baseTableName="qrtz_cron_triggers" baseTableSchemaName="public" constraintName="qrtz_cron_triggers_sched_name_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="sched_name, trigger_name, trigger_group" referencedTableName="qrtz_triggers" referencedTableSchemaName="public" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-25">
+        <addForeignKeyConstraint baseColumnNames="sched_name, trigger_name, trigger_group" baseTableName="qrtz_simple_triggers" baseTableSchemaName="public" constraintName="qrtz_simple_triggers_sched_name_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="sched_name, trigger_name, trigger_group" referencedTableName="qrtz_triggers" referencedTableSchemaName="public" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-26">
+        <addForeignKeyConstraint baseColumnNames="sched_name, trigger_name, trigger_group" baseTableName="qrtz_simprop_triggers" baseTableSchemaName="public" constraintName="qrtz_simprop_triggers_sched_name_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="sched_name, trigger_name, trigger_group" referencedTableName="qrtz_triggers" referencedTableSchemaName="public" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441104083628-27">
+        <addForeignKeyConstraint baseColumnNames="sched_name, job_name, job_group" baseTableName="qrtz_triggers" baseTableSchemaName="public" constraintName="qrtz_triggers_sched_name_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="sched_name, job_name, job_group" referencedTableName="qrtz_job_details" referencedTableSchemaName="public" referencesUniqueColumn="false"/>
+    </changeSet>
+</databaseChangeLog>

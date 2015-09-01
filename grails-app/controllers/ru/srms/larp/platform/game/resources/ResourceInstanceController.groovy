@@ -1,7 +1,9 @@
 package ru.srms.larp.platform.game.resources
 
+import grails.plugin.quartz2.TriggerHelper
 import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
+import org.quartz.JobKey
 import ru.srms.larp.platform.BaseModuleController
 import ru.srms.larp.platform.ResourceService
 import ru.srms.larp.platform.game.Game
@@ -13,8 +15,10 @@ import static org.springframework.http.HttpStatus.*
 class ResourceInstanceController extends BaseModuleController {
 
   ResourceService resourceService
+  def quartzScheduler
 
   static allowedMethods = [save: "POST", update: "POST", changeValue: "POST", transfer: "POST"]
+  public static final String PERIODIC_UPDATE_JOB_KEY = "PeriodicResourceUpdate"
 
   def show(ResourceInstance resource) {
     withModule {
@@ -87,6 +91,18 @@ class ResourceInstanceController extends BaseModuleController {
       def resource = ResourceInstance.get(params.id)
       def oldResource = new HashMap<>(resource.properties)
       resource.properties = params
+
+      if(params.quartz) {
+        println "Schedulgin ${params.quartz}"
+
+
+        def trigger = TriggerHelper.simpleTrigger(
+            JobKey.jobKey(PERIODIC_UPDATE_JOB_KEY, "LarpPlatform"),
+            new Date(new Date().time + 2000), 500, 2000, [theProp: params.quartz])
+
+        quartzScheduler.scheduleJob(trigger)
+
+      }
 
       if (validateData(resource, 'edit')) {
         resourceService.saveResourceInstance(resource, oldResource)
