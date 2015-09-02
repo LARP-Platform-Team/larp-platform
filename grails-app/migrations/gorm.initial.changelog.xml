@@ -1,0 +1,669 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    <changeSet author="Treble Snake" id="1441206323026-1">
+        <createTable tableName="acl_class">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="acl_class_PK"/>
+            </column>
+            <column name="class" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-2">
+        <createTable tableName="acl_entry">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="acl_entry_PK"/>
+            </column>
+            <column name="ace_order" type="int4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="acl_object_identity" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="audit_failure" type="bool">
+                <constraints nullable="false"/>
+            </column>
+            <column name="audit_success" type="bool">
+                <constraints nullable="false"/>
+            </column>
+            <column name="granting" type="bool">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mask" type="int4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sid" type="int8">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-3">
+        <createTable tableName="acl_object_identity">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="acl_object_id_PK"/>
+            </column>
+            <column name="object_id_class" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="entries_inheriting" type="bool">
+                <constraints nullable="false"/>
+            </column>
+            <column name="object_id_identity" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_sid" type="int8"/>
+            <column name="parent_object" type="int8"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-4">
+        <createTable tableName="acl_sid">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="acl_sid_PK"/>
+            </column>
+            <column name="principal" type="bool">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sid" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-5">
+        <createTable tableName="game">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="game_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="alias" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="overview" type="varchar(9999)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-6">
+        <createTable tableName="game_character">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="game_character_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="alias" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="game_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_dead" type="bool">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="player_id" type="int8"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-7">
+        <createTable tableName="game_character_roles">
+            <column name="character_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-8">
+        <createTable tableName="game_masters">
+            <column name="game_masters_id" type="int8"/>
+            <column name="spring_user_id" type="int8"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-9">
+        <createTable tableName="game_modules">
+            <column name="game_id" type="int8"/>
+            <column name="game$game_module" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-10">
+        <createTable tableName="game_resource">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="game_resource_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="game_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="identifier_title" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="measure" type="varchar(16)"/>
+            <column name="title" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-11">
+        <createTable tableName="game_role">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="game_role_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="game_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent_id" type="int8"/>
+            <column name="title" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-12">
+        <createTable tableName="letter_content">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="letter_content_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="letter_from" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="letter_to" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sender_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="subject" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="text" type="varchar(9999)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-13">
+        <createTable tableName="letter_content_mail_box">
+            <column name="letter_content_recipients_id" type="int8"/>
+            <column name="mail_box_id" type="int8"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-14">
+        <createTable tableName="letter_ref">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="letter_ref_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted" type="bool">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mailbox_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-15">
+        <createTable tableName="mail_box">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="mail_box_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="game_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(64)"/>
+            <column name="owner_id" type="int8"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-16">
+        <createTable tableName="news_feed">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="news_feed_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="game_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-17">
+        <createTable tableName="news_item">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="news_item_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="feed_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="text" type="varchar(9999)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-18">
+        <createTable tableName="registration_code">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="registration_PK"/>
+            </column>
+            <column name="date_created" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-19">
+        <createTable tableName="resource_instance">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="resource_instance_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="identifier" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="origin_id" type="int8"/>
+            <column name="owner_id" type="int8"/>
+            <column name="owner_editable" type="bool">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="transferable" type="bool">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="float8">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-20">
+        <createTable tableName="resource_origin">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="resource_origin_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resource_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-21">
+        <createTable tableName="resource_periodic_rule">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="resource_periodic_rule_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comment" type="varchar(128)"/>
+            <column name="fire_hour" type="int4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fire_minute" type="int4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="source_id" type="int8"/>
+            <column name="source_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="target_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="float8">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-22">
+        <createTable tableName="resource_periodic_rule_fire_days">
+            <column name="resource_periodic_rule_id" type="int8"/>
+            <column name="resource_periodic_rule$week_days" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-23">
+        <createTable tableName="spring_role">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="spring_role_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authority" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-24">
+        <createTable tableName="spring_user">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="spring_user_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_expired" type="bool">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_locked" type="bool">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="bool">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password_expired" type="bool">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-25">
+        <createTable tableName="spring_user_spring_role">
+            <column name="spring_role_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="spring_user_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-26">
+        <createTable tableName="transfer_log_entry">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="transfer_log_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comment" type="varchar(128)"/>
+            <column name="date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="source_id" type="int8"/>
+            <column name="source_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="target_id" type="int8"/>
+            <column name="target_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="float8">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-27">
+        <addPrimaryKey columnNames="character_id, role_id" constraintName="game_character_role_PK" tableName="game_character_roles"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-28">
+        <addPrimaryKey columnNames="spring_role_id, spring_user_id" constraintName="spring_user_role_PK" tableName="spring_user_spring_role"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-64">
+        <createIndex indexName="class_uniq_1441206322949" tableName="acl_class" unique="true">
+            <column name="class"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-65">
+        <createIndex indexName="unique_ace_order" tableName="acl_entry" unique="true">
+            <column name="acl_object_identity"/>
+            <column name="ace_order"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-66">
+        <createIndex indexName="unique_object_id_identity" tableName="acl_object_identity" unique="true">
+            <column name="object_id_class"/>
+            <column name="object_id_identity"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-67">
+        <createIndex indexName="unique_principal" tableName="acl_sid" unique="true">
+            <column name="sid"/>
+            <column name="principal"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-68">
+        <createIndex indexName="alias_uniq_1441206322964" tableName="game" unique="true">
+            <column name="alias"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-69">
+        <createIndex indexName="title_uniq_1441206322964" tableName="game" unique="true">
+            <column name="title"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-70">
+        <createIndex indexName="unique_character_alias" tableName="game_character" unique="true">
+            <column name="game_id"/>
+            <column name="alias"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-71">
+        <createIndex indexName="unique_character_name" tableName="game_character" unique="true">
+            <column name="game_id"/>
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-72">
+        <createIndex indexName="unique_resource_type_title" tableName="game_resource" unique="true">
+            <column name="game_id"/>
+            <column name="title"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-73">
+        <createIndex indexName="unique_mail_address" tableName="mail_box" unique="true">
+            <column name="game_id"/>
+            <column name="address"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-74">
+        <createIndex indexName="unique_news_feed_title" tableName="news_feed" unique="true">
+            <column name="game_id"/>
+            <column name="title"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-75">
+        <createIndex indexName="unique_resource_instance_identifier" tableName="resource_instance" unique="true">
+            <column name="type_id"/>
+            <column name="identifier"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-76">
+        <createIndex indexName="unique_resource_instance_title" tableName="resource_instance" unique="true">
+            <column name="type_id"/>
+            <column name="title"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-77">
+        <createIndex indexName="unique_resource_origin_title" tableName="resource_origin" unique="true">
+            <column name="resource_id"/>
+            <column name="title"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-78">
+        <createIndex indexName="authority_uniq_1441206322975" tableName="spring_role" unique="true">
+            <column name="authority"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-79">
+        <createIndex indexName="email_uniq_1441206322976" tableName="spring_user" unique="true">
+            <column name="email"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-80">
+        <createIndex indexName="username_uniq_1441206322977" tableName="spring_user" unique="true">
+            <column name="username"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-81">
+        <createSequence sequenceName="hibernate_sequence"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-29">
+        <addForeignKeyConstraint baseColumnNames="acl_object_identity" baseTableName="acl_entry" constraintName="FK5302D47D8B9F71F2" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="acl_object_identity" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-30">
+        <addForeignKeyConstraint baseColumnNames="sid" baseTableName="acl_entry" constraintName="FK5302D47D5B1B0850" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="acl_sid" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-31">
+        <addForeignKeyConstraint baseColumnNames="object_id_class" baseTableName="acl_object_identity" constraintName="FK2A2BB009699FB980" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="acl_class" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-32">
+        <addForeignKeyConstraint baseColumnNames="owner_sid" baseTableName="acl_object_identity" constraintName="FK2A2BB0095C2B98C4" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="acl_sid" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-33">
+        <addForeignKeyConstraint baseColumnNames="parent_object" baseTableName="acl_object_identity" constraintName="FK2A2BB0097FC8265D" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="acl_object_identity" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-34">
+        <addForeignKeyConstraint baseColumnNames="game_id" baseTableName="game_character" constraintName="FK493C3B1CE4D8C9D8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="game" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-35">
+        <addForeignKeyConstraint baseColumnNames="player_id" baseTableName="game_character" constraintName="FK493C3B1CADB2010C" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="spring_user" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-36">
+        <addForeignKeyConstraint baseColumnNames="character_id" baseTableName="game_character_roles" constraintName="FKEDA967DA694FCD25" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="game_character" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-37">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="game_character_roles" constraintName="FKEDA967DAA4764FB" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="game_role" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-38">
+        <addForeignKeyConstraint baseColumnNames="game_masters_id" baseTableName="game_masters" constraintName="FKC40E0304B13E186" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="game" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-39">
+        <addForeignKeyConstraint baseColumnNames="spring_user_id" baseTableName="game_masters" constraintName="FKC40E03048F065BB0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="spring_user" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-40">
+        <addForeignKeyConstraint baseColumnNames="game_id" baseTableName="game_modules" constraintName="FKDB1F083AE4D8C9D8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="game" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-41">
+        <addForeignKeyConstraint baseColumnNames="game_id" baseTableName="game_resource" constraintName="FK9871F9BBE4D8C9D8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="game" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-42">
+        <addForeignKeyConstraint baseColumnNames="game_id" baseTableName="game_role" constraintName="FK3BAB94A3E4D8C9D8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="game" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-43">
+        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="game_role" constraintName="FK3BAB94A3339C8047" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="game_role" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-44">
+        <addForeignKeyConstraint baseColumnNames="sender_id" baseTableName="letter_content" constraintName="FK841C7960530BE9E0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="mail_box" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-45">
+        <addForeignKeyConstraint baseColumnNames="letter_content_recipients_id" baseTableName="letter_content_mail_box" constraintName="FKB2334342AC8A0B7B" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="letter_content" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-46">
+        <addForeignKeyConstraint baseColumnNames="mail_box_id" baseTableName="letter_content_mail_box" constraintName="FKB233434238644212" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="mail_box" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-47">
+        <addForeignKeyConstraint baseColumnNames="content_id" baseTableName="letter_ref" constraintName="FK4B2388FA3FF5F0BB" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="letter_content" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-48">
+        <addForeignKeyConstraint baseColumnNames="mailbox_id" baseTableName="letter_ref" constraintName="FK4B2388FA1C5F7701" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="mail_box" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-49">
+        <addForeignKeyConstraint baseColumnNames="game_id" baseTableName="mail_box" constraintName="FKFF67FF43E4D8C9D8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="game" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-50">
+        <addForeignKeyConstraint baseColumnNames="owner_id" baseTableName="mail_box" constraintName="FKFF67FF432276F15B" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="game_character" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-51">
+        <addForeignKeyConstraint baseColumnNames="game_id" baseTableName="news_feed" constraintName="FK11EBDF8AE4D8C9D8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="game" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-52">
+        <addForeignKeyConstraint baseColumnNames="feed_id" baseTableName="news_item" constraintName="FK11ED74FFCC598FCA" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="news_feed" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-53">
+        <addForeignKeyConstraint baseColumnNames="origin_id" baseTableName="resource_instance" constraintName="FKC1D0B1A63EEE72EF" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="resource_origin" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-54">
+        <addForeignKeyConstraint baseColumnNames="owner_id" baseTableName="resource_instance" constraintName="FKC1D0B1A62276F15B" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="game_character" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-55">
+        <addForeignKeyConstraint baseColumnNames="type_id" baseTableName="resource_instance" constraintName="FKC1D0B1A623651567" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="game_resource" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-56">
+        <addForeignKeyConstraint baseColumnNames="resource_id" baseTableName="resource_origin" constraintName="FK27F1DC779FD3C013" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="game_resource" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-57">
+        <addForeignKeyConstraint baseColumnNames="source_id" baseTableName="resource_periodic_rule" constraintName="FK7DE287AF3FAE1609" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="resource_instance" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-58">
+        <addForeignKeyConstraint baseColumnNames="target_id" baseTableName="resource_periodic_rule" constraintName="FK7DE287AF744D10D3" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="resource_instance" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-59">
+        <addForeignKeyConstraint baseColumnNames="resource_periodic_rule_id" baseTableName="resource_periodic_rule_fire_days" constraintName="FK42618309D67C317" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="resource_periodic_rule" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-60">
+        <addForeignKeyConstraint baseColumnNames="spring_role_id" baseTableName="spring_user_spring_role" constraintName="FKA90D84E6E9DB97D0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="spring_role" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-61">
+        <addForeignKeyConstraint baseColumnNames="spring_user_id" baseTableName="spring_user_spring_role" constraintName="FKA90D84E68F065BB0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="spring_user" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-62">
+        <addForeignKeyConstraint baseColumnNames="source_id" baseTableName="transfer_log_entry" constraintName="FK175394633FAE1609" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="resource_instance" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1441206323026-63">
+        <addForeignKeyConstraint baseColumnNames="target_id" baseTableName="transfer_log_entry" constraintName="FK17539463744D10D3" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="resource_instance" referencesUniqueColumn="false"/>
+    </changeSet>
+</databaseChangeLog>

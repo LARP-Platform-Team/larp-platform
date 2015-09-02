@@ -13,7 +13,7 @@ class ResourceOrigin implements InGameStuff, Titled {
   static belongsTo = [resource: GameResource]
 
   static constraints = {
-    title maxSize: 64, unique: ['resource']
+    title maxSize: 64, unique: 'resource'
   }
 
   @Override

@@ -23,8 +23,8 @@ class ResourceInstance implements InGameStuff, Titled {
   static constraints = {
     owner nullable: true
     origin nullable: true
-    title maxSize: 64, unique: ['type']
-    identifier maxSize: 64, unique: ['type']
+    title maxSize: 64, unique: 'type'
+    identifier maxSize: 64, unique: 'type'
   }
 
   public static def getAllByGame(Game game) {

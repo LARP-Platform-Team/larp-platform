@@ -6,27 +6,24 @@ import ru.srms.larp.platform.game.Titled
 
 class NewsFeed implements InGameStuff, Titled {
 
-    String title
-    static belongsTo = [game: Game]
+  String title
+  static belongsTo = [game: Game]
+  static hasMany = [newsItems: NewsItem]
 
-    static hasMany = [newsItems: NewsItem]
+  static mapping = {
+    newsItems sort: 'created', order: 'desc'
+  }
+  static constraints = {
+    title maxSize: 64, unique: 'game'
+  }
 
-    static mapping = {
-        newsItems sort: 'created', order: 'desc'
-    }
-    static constraints = {
-        // TODO make it case-insensitive
-        title validator: {val, obj ->
-            NewsFeed.findByGameAndTitleIlikeAndIdNotEqual(obj.game, val, obj.id) == null}
-    }
+  @Override
+  String extractTitle() {
+    return title
+  }
 
-    @Override
-    String extractTitle() {
-        return title
-    }
-
-    @Override
-    Game extractGame() {
-        return game
-    }
+  @Override
+  Game extractGame() {
+    return game
+  }
 }

@@ -17,11 +17,9 @@ class GameResource implements InGameStuff, Titled {
   static belongsTo = [game: Game]
 
   static constraints = {
-    measure maxSize: 8, nullable: true
+    measure maxSize: 16, nullable: true
     identifierTitle maxSize: 64
-    // TODO replace this with unique:['property'] index everywhere!
-    title maxSize: 64, validator: {val, obj ->
-      GameResource.findByGameAndTitleIlikeAndIdNotEqual(obj.game, val, obj.id) == null}
+    title maxSize: 64, unique: 'game'
   }
 
   @Override

@@ -53,8 +53,9 @@ grails.project.dependency.resolution = {
     // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
     build 'commons-dbcp:commons-dbcp:1.4'
     runtime 'org.postgresql:postgresql:9.3-1101-jdbc41'
-    test 'org.grails:grails-datastore-test-support:1.0.2-grails-2.4'
     compile 'com.google.guava:guava-collections:r03'
+    // only for hibernate4
+    test 'org.grails:grails-datastore-test-support:1.0.2-grails-2.4'
   }
 
   plugins {
@@ -62,7 +63,9 @@ grails.project.dependency.resolution = {
     build ':tomcat:7.0.55'
 
     // plugins needed at runtime but not for compilation
-    runtime ':hibernate4:4.3.6.1' // or ':hibernate:3.6.10.18'
+    // if this is an issue (https://jira.grails.org/browse/GRAILS-11600) use 3rd version
+    // runtime ':hibernate:3.6.10.18'
+    runtime ':hibernate4:4.3.6.1'
     runtime ':database-migration:1.4.0'
 
     // plugins for the compile step
