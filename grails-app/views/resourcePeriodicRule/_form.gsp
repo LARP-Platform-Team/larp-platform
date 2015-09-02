@@ -1,4 +1,4 @@
-<%@ page import="ru.srms.larp.platform.game.resources.ResourcePeriodicRule; ru.srms.larp.platform.game.resources.PeriodicRule; ru.srms.larp.platform.game.resources.ResourceInstance" %>
+<%@ page import="ru.srms.larp.platform.game.resources.ResourcePeriodicRule; ru.srms.larp.platform.game.resources.ResourceInstance" %>
 <g:set var="subject" value="${subject as ResourcePeriodicRule}"/>
 <div class="ui three fields">
   <div class="${hasErrors(bean: subject, field: 'value', 'error')} required field">
