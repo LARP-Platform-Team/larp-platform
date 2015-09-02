@@ -5,7 +5,7 @@ import org.quartz.TriggerKey
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.InGameStuff
 
-class PeriodicRule implements InGameStuff {
+class ResourcePeriodicRule implements InGameStuff {
 
   Double value
   ResourceInstance source
@@ -23,6 +23,7 @@ class PeriodicRule implements InGameStuff {
     comment nullable: true, maxSize: 128
     sourceName validator: {val, obj -> StringUtils.isNotEmpty(val) || obj.source != null }
     value notEqual: 0d
+    fireDays validator: {val, obj -> val && val.size() > 0}
     fireHour range: 0..23
     fireMinute range: 0..59
   }
@@ -35,6 +36,11 @@ class PeriodicRule implements InGameStuff {
   def getTriggerKey() {
     TriggerKey.triggerKey("Rule_${this.id}", PeriodicResourceUpdateJob.PERIODIC_UPDATE_JOB_KEY)
   }
+
+  def getFormattedTime() {
+    String.format("%02d", fireHour) + ":" + String.format("%02d", fireMinute)
+  }
+
 
   static enum WeekDays {
     // TODO find some constants

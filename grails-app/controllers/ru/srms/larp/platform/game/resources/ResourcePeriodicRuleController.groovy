@@ -10,7 +10,7 @@ import static org.springframework.http.HttpStatus.*
 
 @Secured(['IS_AUTHENTICATED_REMEMBERED'])
 @Transactional(readOnly = true)
-class PeriodicRuleController extends BaseModuleController {
+class ResourcePeriodicRuleController extends BaseModuleController {
 
   ResourceService resourceService
 
@@ -25,16 +25,17 @@ class PeriodicRuleController extends BaseModuleController {
     }
   }
 
-  def edit(PeriodicRule rule) {
+  def edit(ResourcePeriodicRule rule) {
     withModule {
       respond resourceService.editPeriodicRule(rule)
     }
   }
 
   @Transactional
-  def save(PeriodicRule rule) {
+  def save(ResourcePeriodicRule rule) {
     withModule {
       rule.fireDays = readWeekDays()
+      rule.validate()
       if (validateData(rule, 'create')) {
         resourceService.savePeriodicRule(rule)
         respondChange('Правило периодического изменения успешно создано', CREATED, rule)
@@ -43,9 +44,10 @@ class PeriodicRuleController extends BaseModuleController {
   }
 
   @Transactional
-  def update(PeriodicRule rule) {
+  def update(ResourcePeriodicRule rule) {
     withModule {
       rule.fireDays = readWeekDays()
+      rule.validate()
       if (validateData(rule, 'edit')) {
         resourceService.savePeriodicRule(rule)
         respondChange('Правило периодического изменения обновлено', OK, rule)
@@ -54,12 +56,12 @@ class PeriodicRuleController extends BaseModuleController {
   }
 
   private def readWeekDays() {
-    PeriodicRule.WeekDays.values()
+    ResourcePeriodicRule.WeekDays.values()
         .findAll { params[it.toString()] }
   }
 
   @Transactional
-  def delete(PeriodicRule rule) {
+  def delete(ResourcePeriodicRule rule) {
     withModule {
       if (validateData(rule)) {
         // save feed id to params for redirect

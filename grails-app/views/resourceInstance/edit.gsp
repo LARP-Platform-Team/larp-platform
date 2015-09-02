@@ -4,7 +4,7 @@
 <head>
   <meta name="layout" content="mainWithActions">
   <g:set var="subject" value="${resourceInstanceInstance as ResourceInstance}"/>
-  <g:set var="title" value="Редактирование ресурса типа ${subject.type.title}"/>
+  <g:set var="title" value="Редактирование ресурса ${subject.fullId}"/>
   <title>${title}</title>
 </head>
 
@@ -13,7 +13,7 @@
   <ingame:link class="item" action="show" resource="${subject.type}">
     <i class="cancel grey icon"></i> Отмена</ingame:link>
 
-  <ingame:link class="item" controller="PeriodicRule" action="create"
+  <ingame:link class="item" controller="ResourcePeriodicRule" action="create"
                params="['target.id': subject.id]">
     <i class="green wait icon"></i> Создать периодическое правило</ingame:link>
 </content>
@@ -28,12 +28,20 @@
 
   <section class="ui pilled segment">
     <div class="ui blue ribbon label">Правила периодического изменения</div>
+
+    <div class="ui hidden divider"></div>
     <g:if test="${!subject.periodicRules.size()}">
       <ui:message type="info">Список правил пуст.</ui:message>
     </g:if>
-    <g:each in="${subject.periodicRules}" var="rule">
-      <g:render template="/periodicRule/show" model="[item: rule]"/>
-    </g:each>
+    <div class="ui grid">
+      <div class="seven wide column">
+        <div class="ui middle aligned selection divided list">
+          <g:each in="${subject.periodicRules}" var="rule">
+            <g:render template="/resourcePeriodicRule/show" model="[item: rule]"/>
+          </g:each>
+        </div>
+      </div>
+    </div>
   </section>
 </content>
 </body>

@@ -1,9 +1,9 @@
-<%@ page import="ru.srms.larp.platform.game.resources.PeriodicRule" %>
+<%@ page import="ru.srms.larp.platform.game.resources.ResourcePeriodicRule" %>
 <!DOCTYPE html>
 <html>
 <head>
   <meta name="layout" content="mainWithActions">
-  <g:set var="subject" value="${periodicRuleInstance as PeriodicRule}"/>
+  <g:set var="subject" value="${resourcePeriodicRuleInstance as ResourcePeriodicRule}"/>
   <g:set var="title" value="Редактирование правила обновлнеия для ресурса ${subject.target.fullId}"/>
   <title>${title}</title>
 </head>

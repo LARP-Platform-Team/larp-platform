@@ -118,6 +118,26 @@ class ResourceService {
       logEntry.save(flush: true)
   }
 
+  @Transactional
+  def applyPeriodicRule(ResourcePeriodicRule rule) {
+    if (!rule.target)
+      throw new Exception("No rule apply target was found")
+
+    if (rule.source) {
+      rule.source.value -= rule.value
+      rule.source.save(flush: true)
+    }
+
+    rule.target.value += rule.value
+    rule.target.save(flush: true)
+
+    // save a log entry
+    TransferLogEntry logEntry = new TransferLogEntry(
+        value: rule.value, comment: rule.comment, source: rule.source, target: rule.target,
+        sourceName: rule.source ? rule.source.fullId : rule.sourceName, targetName: rule.target.fullId)
+    if (logEntry.validate())
+      logEntry.save(flush: true)
+  }
 
   @Transactional
   @PreAuthorize("hasPermission(#resource.extractGame(), admin)")
@@ -128,16 +148,16 @@ class ResourceService {
   @Transactional
   @PreAuthorize("hasPermission(#target.extractGame(), admin)")
   def createPeriodicRule(ResourceInstance target) {
-    new PeriodicRule(target: target)
+    new ResourcePeriodicRule(target: target)
   }
 
   @Transactional
   @PreAuthorize("hasPermission(#rule.extractGame(), admin)")
-  def editPeriodicRule(PeriodicRule rule) { rule }
+  def editPeriodicRule(ResourcePeriodicRule rule) { rule }
 
   @Transactional
   @PreAuthorize("hasPermission(#rule.extractGame(), admin)")
-  def savePeriodicRule(PeriodicRule rule) {
+  def savePeriodicRule(ResourcePeriodicRule rule) {
     boolean insert = rule.id == null
     rule.save(flush: true)
     addTriggerForRule(rule, insert)
@@ -145,14 +165,14 @@ class ResourceService {
 
   @Transactional
   @PreAuthorize("hasPermission(#rule.extractGame(), admin)")
-  def deletePeriodicRule(PeriodicRule rule) {
+  def deletePeriodicRule(ResourcePeriodicRule rule) {
+    removeTriggerForRule(rule)
     rule.delete()
   }
 
-  private def addTriggerForRule(PeriodicRule rule, boolean isNew)
-  {
+  private def addTriggerForRule(ResourcePeriodicRule rule, boolean isNew) {
     def days = rule.fireDays.collect { it.code }.toArray(new int[rule.fireDays.size()])
-    if(days.length == 0)
+    if (days.length == 0)
       throw new Exception("Days array is empty")
 
     def trigger = TriggerBuilder.newTrigger()
@@ -160,22 +180,18 @@ class ResourceService {
         .forJob(PeriodicResourceUpdateJob.jobKey)
         .usingJobData("ruleId", rule.id)
         .withSchedule(
-          CronScheduleBuilder
-          .atHourAndMinuteOnGivenDaysOfWeek(rule.fireHour, rule.fireMinute, days)
-//        .inTimeZone(TimeZone)
-    )
+        CronScheduleBuilder
+            .atHourAndMinuteOnGivenDaysOfWeek(rule.fireHour, rule.fireMinute, days))
         .startNow()
         .build()
 
-    if(isNew)
+    if (isNew)
       quartzScheduler.scheduleJob(trigger)
     else
       quartzScheduler.rescheduleJob(rule.triggerKey, trigger)
-
-    println "Next time: ${trigger.getNextFireTime()}"
   }
 
-  private def removeTriggerForRule(PeriodicRule rule) {
+  private def removeTriggerForRule(ResourcePeriodicRule rule) {
     quartzScheduler.unscheduleJob(rule.triggerKey)
   }
 
@@ -215,4 +231,5 @@ class ResourceService {
     if (oldResource.owner) deletePermissions(resource, oldResource)
     if (resource.owner) addPermissions(resource, oldResource)
   }
+
 }

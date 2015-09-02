@@ -26,7 +26,7 @@ class PeriodicResourceUpdateJob implements Job {
     }
 
     def id = jobCtx.trigger.jobDataMap.ruleId as Long
-    def rule = PeriodicRule.get(id)
+    def rule = ResourcePeriodicRule.get(id)
     if(!rule) {
       logger.error("There is no rule with id ${id}. In trigger ${jobCtx.trigger.key.name}.")
       return
@@ -36,17 +36,12 @@ class PeriodicResourceUpdateJob implements Job {
       logger.error("ResourceService is not initialized. In trigger ${jobCtx.trigger.key.name}.")
       return
     }
-/*
-// save a log entry
-    TransferLogEntry logEntry = new TransferLogEntry(
-        value: data.transferValue, comment: data.comment, source: source, target: target,
-        sourceName: source.fullId, targetName: target.fullId)
-    if (logEntry.validate())
-      logEntry.save(flush: true)
- */
 
-
-    println "Job [${jobCtx.jobDetail.key.name}] is done! With ${jobCtx.trigger.jobDataMap.ruleId}."
+    try {
+      resourceService.applyPeriodicRule(rule)
+    } catch (Exception e) {
+      logger.error("Applying of rule [${rule.id}] failed.", e)
+    }
   }
 
   private def resourceService() {

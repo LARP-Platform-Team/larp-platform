@@ -1,5 +1,5 @@
-<%@ page import="ru.srms.larp.platform.game.resources.PeriodicRule; ru.srms.larp.platform.game.resources.ResourceInstance" %>
-<g:set var="subject" value="${subject as PeriodicRule}"/>
+<%@ page import="ru.srms.larp.platform.game.resources.ResourcePeriodicRule; ru.srms.larp.platform.game.resources.PeriodicRule; ru.srms.larp.platform.game.resources.ResourceInstance" %>
+<g:set var="subject" value="${subject as ResourcePeriodicRule}"/>
 <div class="ui three fields">
   <div class="${hasErrors(bean: subject, field: 'value', 'error')} required field">
     <label for="value">Значение изменения</label>
@@ -32,7 +32,7 @@
   <label>Время изменения</label>
 </div>
 <div class="ui fields">
-  <g:each in="${PeriodicRule.WeekDays.values()}" var="day">
+  <g:each in="${ResourcePeriodicRule.WeekDays.values()}" var="day">
     <div class="ui field">
       <label for="${day}">${day.title}</label>
       <g:checkBox class="ui checkbox" name="${day.toString()}" value="${subject.fireDays?.contains(day)}"/>
@@ -41,11 +41,11 @@
 
   <div class="${hasErrors(bean: subject, field: 'fireHour', 'error')} field">
     <label for="fireHour">Часов</label>
-    <g:field type="text" name="fireHour" value="${subject?.fireHour}"/>
+    <g:field type="text" name="fireHour" value="${String.format("%02d", subject?.fireHour)}"/>
   </div>
   <div class="${hasErrors(bean: subject, field: 'fireMinute', 'error')} field">
     <label for="fireMinute">Минут</label>
-    <g:field type="text" name="fireMinute" value="${subject?.fireMinute}"/>
+    <g:field type="text" name="fireMinute" value="${String.format("%02d", subject?.fireMinute)}"/>
   </div>
 </div>
 

@@ -1,5 +1,5 @@
 <g:set var="outcome" value="${log.source == parent}"/>
-<g:set var="target" value="${outcome ? log.target : log.source}"/>
+<g:set var="relatedResourceName" value="${outcome ? log.targetName : log.sourceName}"/>
 
 <div class="item" title="${outcome ? "Исходящий" : "Входящий"}">
   <g:if test="${outcome}">
@@ -15,7 +15,7 @@
     </div>
 
     <div class="description"><g:render template="/shared/date" model="[date: log.date]"/></div>
-    ${outcome ? "Получатель" : "Отправитель"}: ${log.targetName}
+    ${outcome ? "Получатель" : "Отправитель"}: ${relatedResourceName}
 
     <g:if test="${log.comment}">
       <div class="comment">Комментарий: ${log.comment}</div>

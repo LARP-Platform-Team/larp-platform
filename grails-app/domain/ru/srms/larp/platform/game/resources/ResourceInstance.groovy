@@ -36,7 +36,7 @@ class ResourceInstance implements InGameStuff, Titled {
   }
 
   public def getPeriodicRules() {
-    PeriodicRule.findAllByTarget(this)
+    ResourcePeriodicRule.findAllByTarget(this)
   }
 
   public static def groupByType(List<ResourceInstance> list) {
