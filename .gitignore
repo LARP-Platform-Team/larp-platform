@@ -119,3 +119,6 @@ hs_err_pid*
 
 # NPM
 /node_modules
+
+# Semantic UI src
+/semantic/dist/

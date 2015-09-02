@@ -35,6 +35,10 @@ class ResourceInstance implements InGameStuff, Titled {
     TransferLogEntry.findAllBySourceOrTarget(this, this);
   }
 
+  public def getPeriodicRules() {
+    ResourcePeriodicRule.findAllByTarget(this)
+  }
+
   public static def groupByType(List<ResourceInstance> list) {
     Map<GameResource, List<ResourceInstance>> result = [:]
     list.each {

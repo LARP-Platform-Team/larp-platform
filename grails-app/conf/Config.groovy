@@ -34,9 +34,6 @@ grails.mime.types = [ // the first one is the default format
     xml:           ['text/xml', 'application/xml']
 ]
 
-// URL Mapping Cache Max Size, defaults to 5000
-//grails.urlmapping.cache.maxsize = 1000
-
 // Legacy setting for codec used to encode data with ${}
 grails.views.default.codec = "html"
 
@@ -99,14 +96,17 @@ grails.hibernate.osiv.readonly = false
 //    myShared(blank: false)
 //}
 
+
+// Environmental
 environments {
-    development {
-        grails.logging.jul.usebridge = true
-    }
-    production {
-        grails.logging.jul.usebridge = false
-        // TODO: grails.serverURL = "http://www.changeme.com"
-    }
+  development {
+    grails.logging.jul.usebridge = true
+  }
+
+  production {
+    grails.logging.jul.usebridge = false
+    grails.serverURL = "http://city-rpg.srms.club"
+  }
 }
 
 // TODO is it working?
@@ -169,3 +169,49 @@ grails.plugin.springsecurity.acl.authority.changeAclDetails = 'ROLE_ACL_CHANGE_D
 
 // Asset pipeline settings
 grails.assets.excludes = ["semantic/**"]
+
+// Quartz config
+grails.plugin.quartz2.autoStartup = true
+// -- dataSource
+org.quartz.dataSource.larpDS.jndiURL = 'java:comp/env/jdbc/larp_platform_db'
+// -- options
+org {
+  quartz {
+    //anything here will get merged into the quartz.properties so you don't need another file
+    scheduler.instanceName = 'LarpPlatformScheduler'
+    scheduler.idleWaitTime = 1000
+
+    threadPool.class = 'org.quartz.simpl.SimpleThreadPool'
+    threadPool.threadCount = 10
+    threadPool.threadsInheritContextClassLoaderOfInitializingThread = true
+
+    jobStore.class = 'org.quartz.impl.jdbcjobstore.JobStoreTX'
+    jobStore.driverDelegateClass = 'org.quartz.impl.jdbcjobstore.PostgreSQLDelegate'
+    jobStore.tablePrefix = 'QRTZ_'
+    jobStore.dataSource = 'larpDS'
+  }
+}
+
+// migrations
+grails.plugin.databasemigration.changelogFileName = 'root.xml'
+grails.plugin.databasemigration.databaseChangeLogTableName = 'database_changelog'
+grails.plugin.databasemigration.databaseChangeLogLockTableName = 'database_changelog_lock'
+grails.plugin.databasemigration.updateOnStart = false
+//grails.plugin.databasemigration.dropOnStart = true
+grails.plugin.databasemigration.updateOnStartFileNames = []
+// -- ignore quartz tables
+grails.plugin.databasemigration.ignoredObjects = ['qrtz_triggers','qrtz_simprop_triggers','qrtz_simple_triggers',
+                                                  'qrtz_scheduler_state','qrtz_paused_trigger_grps','qrtz_locks',
+                                                  'qrtz_job_details','qrtz_fired_triggers','qrtz_cron_triggers',
+                                                  'qrtz_calendars','qrtz_blob_triggers','idx_qrtz_t_state',
+                                                  'idx_qrtz_t_nft_st_misfire_grp','idx_qrtz_t_nft_st_misfire','idx_qrtz_t_nft_st',
+                                                  'idx_qrtz_t_nft_misfire','idx_qrtz_t_next_fire_time','idx_qrtz_t_n_state',
+                                                  'idx_qrtz_t_n_g_state','idx_qrtz_t_jg','idx_qrtz_t_g',
+                                                  'idx_qrtz_t_c','idx_qrtz_j_req_recovery','idx_qrtz_j_grp',
+                                                  'idx_qrtz_ft_trig_inst_name','idx_qrtz_ft_tg','idx_qrtz_ft_t_g',
+                                                  'idx_qrtz_ft_jg','idx_qrtz_ft_j_g','idx_qrtz_ft_inst_job_req_rcvry',
+                                                  'qrtz_triggers_sched_name_fkey','qrtz_simprop_triggers_sched_name_fkey','qrtz_simple_triggers_sched_name_fkey',
+                                                  'qrtz_cron_triggers_sched_name_fkey','qrtz_blob_triggers_sched_name_fkey','',
+                                                  '','','',
+                                                  '','',''
+]

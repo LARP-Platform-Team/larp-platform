@@ -2,6 +2,8 @@ package ru.srms.larp.platform
 
 import grails.plugin.springsecurity.acl.AclUtilService
 import grails.transaction.Transactional
+import org.quartz.CronScheduleBuilder
+import org.quartz.TriggerBuilder
 import org.springframework.security.access.prepost.PostFilter
 import org.springframework.security.access.prepost.PreAuthorize
 import ru.srms.larp.platform.game.Game
@@ -14,6 +16,7 @@ class ResourceService {
 
   GameAclService gameAclService
   AclUtilService aclUtilService
+  def quartzScheduler
 
   @PreAuthorize("hasPermission(#game, admin)")
   def listResources(Game game, Map pagination) {
@@ -115,11 +118,81 @@ class ResourceService {
       logEntry.save(flush: true)
   }
 
+  @Transactional
+  def applyPeriodicRule(ResourcePeriodicRule rule) {
+    if (!rule.target)
+      throw new Exception("No rule apply target was found")
+
+    if (rule.source) {
+      rule.source.value -= rule.value
+      rule.source.save(flush: true)
+    }
+
+    rule.target.value += rule.value
+    rule.target.save(flush: true)
+
+    // save a log entry
+    TransferLogEntry logEntry = new TransferLogEntry(
+        value: rule.value, comment: rule.comment, source: rule.source, target: rule.target,
+        sourceName: rule.source ? rule.source.fullId : rule.sourceName, targetName: rule.target.fullId)
+    if (logEntry.validate())
+      logEntry.save(flush: true)
+  }
 
   @Transactional
   @PreAuthorize("hasPermission(#resource.extractGame(), admin)")
   def deleteResourceInstance(ResourceInstance resource) {
     resource.delete()
+  }
+
+  @Transactional
+  @PreAuthorize("hasPermission(#target.extractGame(), admin)")
+  def createPeriodicRule(ResourceInstance target) {
+    new ResourcePeriodicRule(target: target)
+  }
+
+  @Transactional
+  @PreAuthorize("hasPermission(#rule.extractGame(), admin)")
+  def editPeriodicRule(ResourcePeriodicRule rule) { rule }
+
+  @Transactional
+  @PreAuthorize("hasPermission(#rule.extractGame(), admin)")
+  def savePeriodicRule(ResourcePeriodicRule rule) {
+    boolean insert = rule.id == null
+    rule.save(flush: true)
+    addTriggerForRule(rule, insert)
+  }
+
+  @Transactional
+  @PreAuthorize("hasPermission(#rule.extractGame(), admin)")
+  def deletePeriodicRule(ResourcePeriodicRule rule) {
+    removeTriggerForRule(rule)
+    rule.delete()
+  }
+
+  private def addTriggerForRule(ResourcePeriodicRule rule, boolean isNew) {
+    def days = rule.fireDays.collect { it.code }.toArray(new int[rule.fireDays.size()])
+    if (days.length == 0)
+      throw new Exception("Days array is empty")
+
+    def trigger = TriggerBuilder.newTrigger()
+        .withIdentity(rule.triggerKey)
+        .forJob(PeriodicResourceUpdateJob.jobKey)
+        .usingJobData("ruleId", rule.id)
+        .withSchedule(
+        CronScheduleBuilder
+            .atHourAndMinuteOnGivenDaysOfWeek(rule.fireHour, rule.fireMinute, days))
+        .startNow()
+        .build()
+
+    if (isNew)
+      quartzScheduler.scheduleJob(trigger)
+    else
+      quartzScheduler.rescheduleJob(rule.triggerKey, trigger)
+  }
+
+  private def removeTriggerForRule(ResourcePeriodicRule rule) {
+    quartzScheduler.unscheduleJob(rule.triggerKey)
   }
 
   private def deletePermissions(ResourceInstance resource, Map oldResource) {
@@ -158,4 +231,5 @@ class ResourceService {
     if (oldResource.owner) deletePermissions(resource, oldResource)
     if (resource.owner) addPermissions(resource, oldResource)
   }
+
 }
