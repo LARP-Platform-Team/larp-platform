@@ -22,10 +22,17 @@ environments {
 
   // for database migrations
   dbmigr {
+    // disable native GORM validation (fires before migration)
     dataSource {
       dbCreate = ""
     }
 
+    // workaround for quartz plugin - it starts before migrations and crashes the app
+    // if no database has been created yet
+    grails.plugin.quartz2.autoStartup = false
+    org.quartz = ['jobStore.class': 'org.quartz.simpl.RAMJobStore']
+
+    // workaround for database migration plugin
     grails.naming.entries = [
         "java:comp/env/jdbc/larp_platform_db": jndiDescriptor
     ]
@@ -33,7 +40,7 @@ environments {
 
   development {
     dataSource {
-      //dbCreate = "create-drop"
+//      dbCreate = "create-drop"
     }
     grails.naming.entries = [
         "jdbc/larp_platform_db": jndiDescriptor
