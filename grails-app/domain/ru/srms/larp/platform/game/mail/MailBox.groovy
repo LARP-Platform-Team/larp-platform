@@ -14,16 +14,15 @@ class MailBox implements InGameStuff, Titled {
   static hasMany = [letters: LetterRef]
 
   static constraints = {
-    address blank: false, email: true, validator: {val, obj ->
-      MailBox.findByGameAndAddressIlikeAndIdNotEqual(obj.game, val, obj.id) == null}
+    address maxSize: 64, blank: false, email: true, unique: 'game'
     owner nullable: true
-    name nullable: true, blank: true
+    name maxSize: 64, nullable: true, blank: true
     letters nullable: true
   }
 
   @Override
   String toString() {
-    (name ? "$name " : '') + "<$address>"
+    (name ?: '') + "<$address>"
   }
 
   @Override

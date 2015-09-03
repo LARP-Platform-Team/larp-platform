@@ -4,30 +4,29 @@ import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.InGameStuff
 import ru.srms.larp.platform.game.Titled
 
-class NewsItem implements InGameStuff, Titled
-{
+class NewsItem implements InGameStuff, Titled {
 
-    String title
-    String text
-    Date created = new Date()
+  String title
+  String text
+  Date created = new Date()
+  static belongsTo = [feed: NewsFeed]
 
-    static belongsTo = [feed: NewsFeed]
+  static mapping = {
+    sort created: 'desc'
+  }
 
-    static mapping = {
-        sort created: 'desc'
-    }
+  static constraints = {
+    title maxSize: 64
+    text maxSize: 9999
+  }
 
-    static constraints = {
-        text maxSize: 9999
-    }
+  @Override
+  Game extractGame() {
+    return feed.game
+  }
 
-    @Override
-    Game extractGame() {
-        return feed.game
-    }
-
-    @Override
-    String extractTitle() {
-        return title
-    }
+  @Override
+  String extractTitle() {
+    return title
+  }
 }
