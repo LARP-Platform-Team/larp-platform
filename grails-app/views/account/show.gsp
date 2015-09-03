@@ -9,75 +9,85 @@
 </head>
 
 <body>
-<div class="nav" role="navigation">
-  <ul>
-    <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
-    </li>
-  </ul>
-</div>
-<div class="message">Пока для отображения пользователя используется логин, но потом будет нормальное имя.</div>
+<content tag="content">
 
-<div class="content scaffold-create" role="main">
-  <h1>${title}</h1>
-  <g:if test="${flash.message}">
-    <div class="message" role="status">${flash.message}</div>
-  </g:if>
+  <ui:message
+      type="warning">Пока для отображения пользователя используется логин, но потом будет нормальное имя.</ui:message>
 
-  <div class="property-list">
-    <div><b>${subject.email}</b> - пока единственное, что можно показать - почта. Потом, конечно, она показываться не будет кому попало.</div>
 
-    <sec:access expression="isFullyAuthenticated() and (hasRole('ROLE_ADMIN') or principal.username == '${subject.username}')">
+  <ui:message type="info">
+    Тут будет какая-то публичная информация.
+  </ui:message>
 
-      <section>
-        <h1>Изменить личные данные</h1>
-        <g:render template="/shared/fromErrors" bean="${subject}" var="subject"/>
-        <ingame:form url="[id: subject.id, controller: 'account', action: 'update']" method="post">
-          <g:hiddenField name="version" value="${subject?.version}"/>
-          <fieldset class="form">
+  <div class="ui two column grid">
+
+    <sec:access
+        expression="isFullyAuthenticated() and (hasRole('ROLE_ADMIN') or principal.username == '${subject.username}')">
+
+      <div class="column">
+        <section class="ui pilled segment">
+          <div class="ui blue ribbon label">Изменить личные данные</div>
+
+          <div class="ui hidden divider"></div>
+          <g:render template="/shared/fromErrors" bean="${subject}" var="subject"/>
+          <ingame:form url="[id: subject.id, controller: 'account', action: 'update']"
+                       class="ui form"
+                       method="post">
+            <g:hiddenField name="version" value="${subject?.version}"/>
             <g:render template="form"/>
-          </fieldset>
-          <fieldset class="buttons">
-            <g:actionSubmit class="save" action="update" value="Сохранить"/>
-          </fieldset>
-        </ingame:form>
-      </section>
+            <ui:submit icon="checkmark">Сохранить</ui:submit>
+          </ingame:form>
+        </section>
+      </div>
 
-      <section>
-        <h1>Изменить пароль</h1>
-        <g:render template="/shared/fromErrors" bean="${changePassword}" var="subject"/>
-        <ingame:form url="[id: subject.id, controller: 'account', action: 'changePassword']"
-                     method="post">
-          <g:hiddenField name="version" value="${subject?.version}"/>
-          <fieldset class="form">
+      <div class="column">
+        <section class="ui pilled segment">
+          <div class="ui blue ribbon label">Изменить пароль</div>
+
+          <div class="ui hidden divider"></div>
+          <g:render template="/shared/fromErrors" bean="${changePassword}" var="subject"/>
+          <ingame:form url="[id: subject.id, controller: 'account', action: 'changePassword']"
+                       class="ui form"
+                       method="post">
+            <g:hiddenField name="version" value="${subject?.version}"/>
             <g:render template="changePasswordForm"/>
-          </fieldset>
-          <fieldset class="buttons">
-            <g:actionSubmit class="save" action="changePassword" value="Сохранить"/>
-          </fieldset>
-        </ingame:form>
-      </section>
-
+            <ui:submit icon="checkmark">Сохранить</ui:submit>
+          </ingame:form>
+        </section>
+      </div>
     </sec:access>
+    <div class="column">
+      <section class="ui pilled segment">
+        <div class="ui red ribbon label">Мастерит</div>
+        <g:if test="${masters}">
+          <ul class="ui list">
+            <g:each in="${masters}" var="game">
+              <li class="item"><g:link resource="${game}">${game.title}</g:link></li>
+            </g:each>
+          </ul>
+        </g:if>
+        <g:else>
+          <ui:message type="info">Этот пользователь не является мастером игр</ui:message>
+        </g:else>
+      </section>
+    </div>
+
+    <div class="column">
+      <section class="ui pilled segment">
+        <div class="ui green ribbon label">Играет</div>
+        <g:if test="${plays}">
+          <ul class="ui list">
+            <g:each in="${plays}" var="game">
+              <li class="item"><g:link resource="${game}">${game.title}</g:link></li>
+            </g:each>
+          </ul>
+        </g:if>
+        <g:else>
+          <ui:message type="info">Этот пользователь не участвует ни в одной игре</ui:message>
+        </g:else>
+      </section>
+    </div>
   </div>
-
-  <section>
-    <h1>Мастерит</h1>
-    <ul class="property-list">
-      <g:each in="${masters}" var="game">
-        <li><g:link resource="${game}">${game.title}</g:link> </li>
-      </g:each>
-    </ul>
-  </section>
-
-  <section>
-    <h1>Играет</h1>
-    <ul class="property-list">
-      <g:each in="${plays}" var="game">
-        <li><g:link resource="${game}">${game.title}</g:link> </li>
-      </g:each>
-    </ul>
-  </section>
-
-</div>
+</content>
 </body>
 </html>
