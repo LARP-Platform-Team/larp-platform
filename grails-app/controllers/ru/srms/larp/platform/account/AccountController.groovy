@@ -32,7 +32,7 @@ class AccountController extends BaseController {
     user.validate()
     if (validateData(user, 'show')) {
       userService.save(user)
-      respondChange('default.updated.message', OK, user)
+      respondChange('Данные успешно обновлены', OK, user)
     }
   }
 
