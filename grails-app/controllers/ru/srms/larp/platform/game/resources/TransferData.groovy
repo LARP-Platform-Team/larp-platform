@@ -16,4 +16,8 @@ class TransferData {
     transferTargetId blank: false,
         validator: {val, obj -> obj.source && ResourceInstance.countByIdentifierAndType(val, obj.source.type) == 1}
   }
+
+  def beforeValidate() {
+    this.transferValue = Math.round(this.transferValue * 100) / 100
+  }
 }
