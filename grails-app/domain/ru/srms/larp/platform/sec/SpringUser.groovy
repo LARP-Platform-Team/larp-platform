@@ -4,50 +4,52 @@ import ru.srms.larp.platform.game.character.GameCharacter
 
 class SpringUser {
 
-	transient springSecurityService
+  transient springSecurityService
 
-	String username
-	String password
-	String email
-	boolean enabled = true
-	boolean accountExpired
-	boolean accountLocked
-	boolean passwordExpired
+  String username
+  String password
+  String email
+  String name
+  boolean enabled = true
+  boolean accountExpired
+  boolean accountLocked
+  boolean passwordExpired
 
-    static hasMany = [characters: GameCharacter]
+  static hasMany = [characters: GameCharacter]
 
-	static transients = ['springSecurityService']
+  static transients = ['springSecurityService']
 
-	static constraints = {
-		username blank: false, unique: true
-		email blank: false, unique: true, email: true
-		password blank: false
-	}
+  static constraints = {
+    username blank: false, unique: true, matches: /^[A-Za-z0-9\-\.]+$/
+    email blank: false, unique: true, email: true
+    password blank: false
+    name maxSize: 64, blank: false, unique: true, matches: /^[A-Za-zА-Яа-я0-9\-\.,]+$/
+  }
 
-	static mapping = {
-		password column: '`password`'
-	}
+  static mapping = {
+    password column: '`password`'
+  }
 
-	Set<SpringRole> getAuthorities() {
-		SpringUserSpringRole.findAllBySpringUser(this).collect { it.springRole }
-	}
+  Set<SpringRole> getAuthorities() {
+    SpringUserSpringRole.findAllBySpringUser(this).collect { it.springRole }
+  }
 
-	def beforeInsert() {
-		encodePassword()
-	}
+  def beforeInsert() {
+    encodePassword()
+  }
 
-	def beforeUpdate() {
-		if (isDirty('password')) {
-			encodePassword()
-		}
-	}
-
-	protected void encodePassword() {
-		password = springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password) : password
-	}
-
-    @Override
-    String toString() {
-        return username
+  def beforeUpdate() {
+    if (isDirty('password')) {
+      encodePassword()
     }
+  }
+
+  protected void encodePassword() {
+    password = springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password) : password
+  }
+
+  @Override
+  String toString() {
+    return name
+  }
 }

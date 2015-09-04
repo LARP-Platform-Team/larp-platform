@@ -27,8 +27,7 @@ class AccountController extends BaseController {
   @Transactional
   def update() {
     def user = SpringUser.get(params.id)
-    // TODO check if null
-    user.properties['email'] = params
+    user.properties['email', 'name'] = params
     user.validate()
     if (validateData(user, 'show')) {
       userService.save(user)
