@@ -48,6 +48,10 @@ class ResourceInstance implements InGameStuff, Titled {
     result
   }
 
+  def beforeValidate() {
+    this.value = Math.round(this.value * 100) / 100
+  }
+
   String getFullId() {
     def result = this.identifier
     if(this.type.identifierTitle)

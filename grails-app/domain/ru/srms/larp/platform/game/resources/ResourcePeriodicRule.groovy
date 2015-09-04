@@ -41,6 +41,10 @@ class ResourcePeriodicRule implements InGameStuff {
     String.format("%02d", fireHour) + ":" + String.format("%02d", fireMinute)
   }
 
+  def beforeValidate() {
+    this.value = Math.round(this.value * 100) / 100
+  }
+
 
   static enum WeekDays {
     // TODO find some constants
