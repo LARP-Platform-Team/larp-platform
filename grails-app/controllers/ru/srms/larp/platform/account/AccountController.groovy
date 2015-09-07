@@ -17,6 +17,7 @@ class AccountController extends BaseController {
   static allowedMethods = [update: "POST"]
 
   UserService userService
+  def springSecurityService
 
   def show(SpringUser user) {
     def masters = Game.where {masters { id == user.id }}
@@ -27,11 +28,11 @@ class AccountController extends BaseController {
   @Transactional
   def update() {
     def user = SpringUser.get(params.id)
-    // TODO check if null
-    user.properties['email'] = params
+    user.properties['email', 'name'] = params
     user.validate()
     if (validateData(user, 'show')) {
       userService.save(user)
+      springSecurityService.reauthenticate user.username
       respondChange('Данные успешно обновлены', OK, user)
     }
   }
@@ -49,6 +50,7 @@ class AccountController extends BaseController {
 
     user.password = passwordCommand.newPassword
     userService.save(user)
+    springSecurityService.reauthenticate user.username
     respondChange('Пароль успешно изменен', OK, user)
   }
 

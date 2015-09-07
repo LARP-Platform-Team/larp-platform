@@ -1,6 +1,7 @@
 import org.springframework.web.servlet.i18n.SessionLocaleResolver
 import ru.srms.larp.platform.DoubleValueConverter
 import ru.srms.larp.platform.db.migrations.MigrationCallbacksHandler
+import ru.srms.larp.platform.sec.LarpUserDetailService
 import ru.srms.larp.platform.sec.permissions.GamePermissionsEvaluator
 
 // Place your Spring DSL code here
@@ -19,6 +20,8 @@ beans = {
     sidRetrievalStrategy = ref('sidRetrievalStrategy')
     permissionFactory = ref('aclPermissionFactory')
   }
+
+  userDetailsService(LarpUserDetailService)
 
   // TODO does not work. find out why
   migrationCallbacks(MigrationCallbacksHandler)

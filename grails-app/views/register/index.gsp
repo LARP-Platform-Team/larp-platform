@@ -20,8 +20,13 @@
     <g:form action='register' name='registerForm' class="ui form">
 
       <div class="${hasErrors(bean: command, field: 'username', 'error')} inline required field">
-        <label for="username">Логин</label>
+        <label for="username">Логин (не отображается)</label>
         <g:textField name="username" required="required" value="${command?.username}"/>
+      </div>
+
+      <div class="${hasErrors(bean: command, field: 'name', 'error')} inline required field">
+        <label for="username">Имя</label>
+        <g:textField name="name" required="required" value="${command?.name}"/>
       </div>
 
       <div class="${hasErrors(bean: command, field: 'email', 'error')} inline required field">

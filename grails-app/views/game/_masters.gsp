@@ -11,7 +11,7 @@
             <img class="ui avatar image" src="${assetPath(src: 'dummy.png')}">
 
             <div class="content">
-                <div class="header">${master.username}</div>
+                <div class="header">${master.name}</div>
             </div>
         </div>
     </g:each>

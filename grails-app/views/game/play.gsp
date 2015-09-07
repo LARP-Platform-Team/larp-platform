@@ -54,6 +54,7 @@
                             </div>
                             <div class="extra content">
                                 <div class="right floated">
+                                    <!-- TODO integrate with real mail -->
                                 0 <i class="outline mail icon"></i>
                                 </div>
                             </div>
@@ -70,7 +71,7 @@
                 <div class="ui selection list">
                     <g:each in="${subject.masters}" var="m">
                         <g:link class="labeled icon item" controller="account" id="${m.id}">
-                            <div class="header"><i class="user icon"></i> ${m.username}</div>
+                            <div class="header"><i class="user icon"></i> ${m.name}</div>
                         </g:link>
                     </g:each>
                 </div>

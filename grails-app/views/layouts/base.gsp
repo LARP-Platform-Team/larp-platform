@@ -9,9 +9,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="${assetPath(src: 'favicon.ico')}" type="image/x-icon">
-  <link rel="apple-touch-icon" href="${assetPath(src: 'apple-touch-icon.png')}">
-  <link rel="apple-touch-icon" sizes="114x114"
-        href="${assetPath(src: 'apple-touch-icon-retina.png')}">
+  <link rel="icon" type="image/png" href="${assetPath(src: 'favicon-32x32.png')}" sizes="32x32">
+  <link rel="icon" type="image/png" href="${assetPath(src: 'favicon-96x96.png')}" sizes="96x96">
+  <link rel="icon" type="image/png" href="${assetPath(src: 'favicon-16x16.png')}" sizes="16x16">
+
 
   <asset:stylesheet src="application.css"/>
   <asset:javascript src="application.js"/>
@@ -36,7 +37,7 @@
         <div class="ui card">
           <div class="content">
             <img class="right floated mini ui image" src="${assetPath(src: 'dummy.png')}">
-            <div class="header"><sec:loggedInUserInfo field="username"/></div>
+            <div class="header"><sec:loggedInUserInfo field="name"/></div>
         <div class="meta">Some info...</div>
         </div>
         <div class="extra content">

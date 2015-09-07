@@ -2,7 +2,6 @@ package ru.srms.larp.platform.sec.ui
 
 import grails.plugin.springsecurity.SpringSecurityUtils
 import grails.plugin.springsecurity.authentication.dao.NullSaltSource
-import grails.plugin.springsecurity.ui.RegisterCommand
 import grails.plugin.springsecurity.ui.RegistrationCode
 
 /**
@@ -11,7 +10,18 @@ import grails.plugin.springsecurity.ui.RegistrationCode
 class RegisterController extends grails.plugin.springsecurity.ui.RegisterController {
 
   @Override
-  def register(RegisterCommand command) {
+  def index() {
+    def copy = [:] + (flash.chainedParams ?: [:])
+    copy.remove 'controller'
+    copy.remove 'action'
+    [command: new RegisterCommand(copy)]
+  }
+
+  @Override
+  def register(grails.plugin.springsecurity.ui.RegisterCommand oldCommand) {
+
+    RegisterCommand command = new RegisterCommand()
+    bindData(command, params)
 
     if(!params.containsKey('doRegister')) {
       render view: 'index', model: [command: new RegisterCommand()]
@@ -26,7 +36,7 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
     String salt = saltSource instanceof NullSaltSource ? null : command.username
     // TODO makle enabled: true only for dev enviroment
     def user = lookupUserClass().newInstance(email: command.email, username: command.username,
-        accountLocked: false, enabled: true)
+        name: command.name, accountLocked: false, enabled: true)
 
     RegistrationCode registrationCode = springSecurityUiService.register(user, command.password, salt)
     if (registrationCode == null || registrationCode.hasErrors()) {
@@ -52,5 +62,35 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
     }
 
     render view: 'index', model: [emailSent: true]
+  }
+}
+
+class RegisterCommand extends grails.plugin.springsecurity.ui.RegisterCommand {
+
+  String name
+
+  // TODO вынести и использовать валидатор тут и в SpringUser
+  static constraints = {
+    username blank: false, matches: /^[A-Za-z0-9\-\.]+$/, validator: { value, command ->
+      if (value) {
+        def User = command.grailsApplication.getDomainClass(
+            SpringSecurityUtils.securityConfig.userLookup.userDomainClassName).clazz
+        if (User.findByUsername(value)) {
+          return 'registerCommand.username.unique'
+        }
+      }
+    }
+    name blank: false, matches: /^[A-Za-zА-Яа-я0-9\-\.\s,]+$/, validator: { value, command ->
+      if (value) {
+        def User = command.grailsApplication.getDomainClass(
+            SpringSecurityUtils.securityConfig.userLookup.userDomainClassName).clazz
+        if (User.findByName(value)) {
+          return 'registerCommand.username.unique'
+        }
+      }
+    }
+    email blank: false, email: true
+    password blank: false, validator: RegisterController.passwordValidator
+    password2 validator: RegisterController.password2Validator
   }
 }

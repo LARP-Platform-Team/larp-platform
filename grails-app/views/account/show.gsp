@@ -4,16 +4,12 @@
 <head>
   <meta name="layout" content="main">
   <g:set var="subject" value="${springUserInstance as SpringUser}"/>
-  <g:set var="title" value="${subject.username}"/>
+  <g:set var="title" value="${subject.name}"/>
   <title>${title}</title>
 </head>
 
 <body>
 <content tag="content">
-
-  <ui:message
-      type="warning">Пока для отображения пользователя используется логин, но потом будет нормальное имя.</ui:message>
-
 
   <ui:message type="info">
     Тут будет какая-то публичная информация.
@@ -62,7 +58,7 @@
         <g:if test="${masters}">
           <ul class="ui list">
             <g:each in="${masters}" var="game">
-              <li class="item"><g:link resource="${game}">${game.title}</g:link></li>
+              <li class="item"><link:game gameAlias="${game.alias}">${game.title}</link:game></li>
             </g:each>
           </ul>
         </g:if>
@@ -78,7 +74,7 @@
         <g:if test="${plays}">
           <ul class="ui list">
             <g:each in="${plays}" var="game">
-              <li class="item"><g:link resource="${game}">${game.title}</g:link></li>
+              <li class="item"><link:game gameAlias="${game.alias}">${game.title}</link:game></li>
             </g:each>
           </ul>
         </g:if>

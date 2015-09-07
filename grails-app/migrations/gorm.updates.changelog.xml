@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    <changeSet author="Treble Snake" id="1441374284283-1">
+        <addColumn tableName="spring_user">
+            <column name="name" type="varchar(64)">
+                <constraints unique="true"/>
+            </column>
+        </addColumn>
+
+        <sql>
+            update spring_user set name = username
+        </sql>
+
+        <addNotNullConstraint columnName="name"
+                              schemaName="public"
+                              tableName="spring_user"/>
+
+        <createIndex indexName="name_uniq_1441374283328" tableName="spring_user" unique="true">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>
