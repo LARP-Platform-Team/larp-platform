@@ -59,7 +59,7 @@ class BootStrap {
     if (SpringUser.countByUsername('admin') == 0) {
       def roleAdmin = SpringRole.findByAuthority('ROLE_ADMIN')
       def roleAclChanger = SpringRole.findByAuthority('ROLE_ACL_CHANGE_DETAILS')
-      def admin = new SpringUser(username: 'admin',
+      def admin = new SpringUser(username: 'admin', name: 'Admin',
           password: grailsApplication.config.grails.larp.platform.adminInitialPassword,
           email: 'admin@larp.srms.ru')
           .save()
@@ -77,15 +77,15 @@ class BootStrap {
     def roleGm = SpringRole.findByAuthority('ROLE_GM')
     def roleAclChanger = SpringRole.findByAuthority('ROLE_ACL_CHANGE_DETAILS')
 
-    def gm1 = new SpringUser(username: "gm1", password: "a", email: 'gm1@larp.srms.ru').save()
+    def gm1 = new SpringUser(username: "gm1", name: "Game Master 1", password: "a", email: 'gm1@larp.srms.ru').save()
     SpringUserSpringRole.create(gm1, roleGm)
     SpringUserSpringRole.create(gm1, roleAclChanger)
-    def gm2 = new SpringUser(username: "gm2", password: "a", email: 'gm2@larp.srms.ru').save()
+    def gm2 = new SpringUser(username: "gm2", name: "Game Master 2", password: "a", email: 'gm2@larp.srms.ru').save()
     SpringUserSpringRole.create(gm2, roleGm)
     SpringUserSpringRole.create(gm2, roleAclChanger)
 
-    def usr1 = new SpringUser(username: "usr1", password: "a", email: 'usr1@larp.srms.ru').save()
-    def usr2 = new SpringUser(username: "usr2", password: "a", email: 'usr2@larp.srms.ru').save()
+    def usr1 = new SpringUser(username: "usr1", name: "User 1", password: "a", email: 'usr1@larp.srms.ru').save()
+    def usr2 = new SpringUser(username: "usr2", name: "User 2", password: "a", email: 'usr2@larp.srms.ru').save()
 
     Game game1 = new Game(title: "Красная шапочка", alias: "the-red-hat",
         overview: "Игра по знаменитой сказке.")
