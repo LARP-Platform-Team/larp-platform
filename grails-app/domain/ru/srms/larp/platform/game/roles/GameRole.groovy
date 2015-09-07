@@ -21,7 +21,12 @@ class GameRole implements InGameStuff, Titled, GrantedAuthority {
 
   static constraints = {
     title maxSize: 64
-    parent nullable: true, validator: { val, obj -> val == null || val.game == obj.game }
+    parent nullable: true, validator: { val, obj ->
+      if (!(val == null || val.game == obj.game))
+        return 'gameRole.parent.wrongGame'
+      if (val != null && obj.id != null && val.id == obj.id)
+        return 'gameRole.parent.selfParent'
+    }
   }
 
   Set<GameCharacter> getCharacters() {

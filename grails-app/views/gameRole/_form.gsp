@@ -9,7 +9,7 @@
 
   <div class="${hasErrors(bean: subject, field: 'parent', 'error')} field">
     <label for="parent.id">Родительская роль</label>
-    <g:select name="parent.id" from="${GameRole.findAllByGame(params.game)}"
+    <g:select name="parent.id" from="${GameRole.findAllByGame(params.game).findAll { it.id != gameRoleInstance.id }}"
               value="${gameRoleInstance?.parent?.id}"
               class="dropdown"
               optionKey="id" optionValue="title" noSelection="${['null': 'нет']}"/>
