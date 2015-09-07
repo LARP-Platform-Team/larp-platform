@@ -80,7 +80,7 @@ class RegisterCommand extends grails.plugin.springsecurity.ui.RegisterCommand {
         }
       }
     }
-    name blank: false, matches: /^[A-Za-zА-Яа-я0-9\-\.,]+$/, validator: { value, command ->
+    name blank: false, matches: /^[A-Za-zА-Яа-я0-9\-\.\s,]+$/, validator: { value, command ->
       if (value) {
         def User = command.grailsApplication.getDomainClass(
             SpringSecurityUtils.securityConfig.userLookup.userDomainClassName).clazz
