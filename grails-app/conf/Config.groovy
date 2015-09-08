@@ -211,9 +211,7 @@ grails.plugin.databasemigration.ignoredObjects = ['qrtz_triggers','qrtz_simprop_
                                                   'idx_qrtz_ft_trig_inst_name','idx_qrtz_ft_tg','idx_qrtz_ft_t_g',
                                                   'idx_qrtz_ft_jg','idx_qrtz_ft_j_g','idx_qrtz_ft_inst_job_req_rcvry',
                                                   'qrtz_triggers_sched_name_fkey','qrtz_simprop_triggers_sched_name_fkey','qrtz_simple_triggers_sched_name_fkey',
-                                                  'qrtz_cron_triggers_sched_name_fkey','qrtz_blob_triggers_sched_name_fkey','',
-                                                  '','','',
-                                                  '','',''
+                                                  'qrtz_cron_triggers_sched_name_fkey','qrtz_blob_triggers_sched_name_fkey'
 ]
 
 // WYSIWYG editor
