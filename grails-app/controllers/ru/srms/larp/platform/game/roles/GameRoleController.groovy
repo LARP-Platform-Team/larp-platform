@@ -59,9 +59,6 @@ class GameRoleController extends BaseController {
   }
 
   def config(GameRole role) {
-//    render(view: "config", model: [
-//        acls: gameAclService.getAclMatrix(role)
-//    ])
     respond role, model: [
         acls: gameAclService.getAclMatrix(role)
     ]
