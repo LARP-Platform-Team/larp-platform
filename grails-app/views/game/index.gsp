@@ -30,7 +30,7 @@
                 <td>
                     <link:game gameAlias="${game.alias}">${game.title}</link:game>
                 </td>
-                <td>${game.overview}</td>
+                <td><hc:cleanHtml unsafe="${game.overview}" whitelist="rich-text"/></td>
             </tr>
         </g:each>
         </tbody>

@@ -215,3 +215,38 @@ grails.plugin.databasemigration.ignoredObjects = ['qrtz_triggers','qrtz_simprop_
                                                   '','','',
                                                   '','',''
 ]
+
+// WYSIWYG editor
+htmlcleaner {
+  whitelists = {
+    whitelist("rich-text") {
+      startwith "relaxed"
+
+      allow "s", "figcaption", "hr"
+
+      allow("figure") {
+        attributes "class", "style"
+      }
+
+      allow("code") {
+        attributes "class", "style"
+      }
+      allow("span") {
+        attributes "class", "style"
+      }
+      allow("p") {
+        attributes "class", "style"
+      }
+      allow("div") {
+        attributes "class", "style"
+      }
+
+      allow("table") {
+        attributes "border", "cellpadding", "cellspacing", "style"
+      }
+      allow("th") {
+        attributes "scope"
+      }
+    }
+  }
+}

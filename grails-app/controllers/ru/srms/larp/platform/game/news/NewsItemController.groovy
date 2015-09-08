@@ -34,6 +34,7 @@ class NewsItemController extends BaseModuleController {
   @Transactional
   def save(NewsItem newsItem) {
     withModule {
+      newsItem.text = cleanHtml(newsItem.text, 'rich-text')
       if (validateData(newsItem, 'create')) {
         newsService.saveNews(newsItem)
         respondChange('Новость успешно добавлена', CREATED, newsItem)
@@ -44,6 +45,7 @@ class NewsItemController extends BaseModuleController {
   @Transactional
   def update(NewsItem newsItem) {
     withModule {
+      newsItem.text = cleanHtml(newsItem.text, 'rich-text')
       if (validateData(newsItem, 'edit')) {
         newsService.updateNews(newsItem)
         respondChange('Новость обновлена', OK, newsItem)
