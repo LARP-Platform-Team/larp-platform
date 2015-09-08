@@ -1,4 +1,5 @@
-<%@ page import="ru.srms.larp.platform.game.character.GameCharacter" %>
+<%@ page import="ru.srms.larp.platform.game.resources.ResourceInstance; ru.srms.larp.platform.game.character.GameCharacter" %>
+<g:set var="subject" value="${subject as ResourceInstance}"/>
 
 <div class="ui three fields">
   <div class="${hasErrors(bean: subject, field: 'title', 'error')} required field">
@@ -14,6 +15,18 @@
   <div class="${hasErrors(bean: subject, field: 'value', 'error')} required field">
     <label for="value">Количество ресурса</label>
     <g:field type="text" name="value" required="" value="${subject?.value}"/>
+  </div>
+</div>
+
+<div class="ui three fields">
+  <div class="${hasErrors(bean: subject, field: 'minValue', 'error')} field">
+    <label for="minValue">Минимальное значение</label>
+    <g:field type="text" name="minValue" value="${subject?.minValue != null ? subject.minValue : subject?.type?.minValue}"/>
+  </div>
+
+  <div class="${hasErrors(bean: subject, field: 'maxValue', 'error')} field">
+    <label for="maxValue">Максимальное значение</label>
+    <g:textField name="maxValue" value="${subject?.maxValue != null ? subject.maxValue : subject?.type?.maxValue}"/>
   </div>
 </div>
 

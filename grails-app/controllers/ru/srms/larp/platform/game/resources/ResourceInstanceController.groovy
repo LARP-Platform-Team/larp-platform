@@ -60,7 +60,6 @@ class ResourceInstanceController extends BaseModuleController {
         return
       }
 
-
       resourceService.transfer(data)
 
       params.redirectToParent = false

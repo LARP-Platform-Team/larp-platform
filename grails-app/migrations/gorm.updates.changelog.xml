@@ -19,4 +19,26 @@
             <column name="name"/>
         </createIndex>
     </changeSet>
+
+
+    <!-- https://bitbucket.org/TrebleSnake/larp-platform/issues/45/ -->
+    <changeSet author="Treble Snake" id="1441722643931-issue-45">
+        <addColumn tableName="game_resource">
+            <column name="max_value" type="float8"/>
+        </addColumn>
+
+        <addColumn tableName="game_resource">
+            <column name="min_value" type="float8"/>
+        </addColumn>
+
+        <addColumn tableName="resource_instance">
+            <column name="max_value" type="float8"/>
+        </addColumn>
+
+        <addColumn tableName="resource_instance">
+            <column name="min_value" type="float8"/>
+        </addColumn>
+    </changeSet>
+
+
 </databaseChangeLog>
