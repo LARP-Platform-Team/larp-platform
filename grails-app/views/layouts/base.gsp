@@ -28,8 +28,10 @@
   <header id="mainHeader" class="ui attached two column stackable grid segment">
 
     <div class="left floated column">
-      <a target="_blank" class="ui violet button"
-         href="https://bitbucket.org/TrebleSnake/larp-platform/wiki/Home">Платформа городских ролевочек</a>
+      <a target="_blank" class="ui blue compact button"
+         href="https://vk.com/larp_platform">Группа ВКонтакте</a><br/><br/>
+      <a target="_blank" class="ui violet compact button"
+         href="https://bitbucket.org/TrebleSnake/larp-platform/wiki/Home">Репозиторий BitBucket</a>
     </div>
 
     <div class="right four wide floated column">
