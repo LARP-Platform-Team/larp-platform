@@ -12,6 +12,8 @@ class GameResource implements InGameStuff, Titled {
   String title
   String measure = ""
   String identifierTitle = "Номер счета"
+  Double minValue
+  Double maxValue
 
   static hasMany = [instances: ResourceInstance, origins: ResourceOrigin]
   static belongsTo = [game: Game]
@@ -20,6 +22,8 @@ class GameResource implements InGameStuff, Titled {
     measure maxSize: 16, nullable: true
     identifierTitle maxSize: 64
     title maxSize: 64, unique: 'game'
+    minValue nullable: true
+    maxValue nullable: true
   }
 
   @Override

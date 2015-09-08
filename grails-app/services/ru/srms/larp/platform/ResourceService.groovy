@@ -120,21 +120,33 @@ class ResourceService {
 
   @Transactional
   def applyPeriodicRule(ResourcePeriodicRule rule) {
-    if (!rule.target)
+    def target = rule.target
+    if (!target)
       throw new Exception("No rule apply target was found")
 
-    if (rule.source) {
-      rule.source.value -= rule.value
-      rule.source.save(flush: true)
-    }
+    target.value += rule.value
+    target.validate()
+    // TODO notify masters
+    if(target.hasErrors())
+      return;
 
-    rule.target.value += rule.value
-    rule.target.save(flush: true)
+    target.save(flush: true)
+
+
+    def source = rule.source
+    if (source) {
+      source.value -= rule.value
+      source.validate()
+      if(source.hasErrors())
+        return;
+
+      source.save(flush: true)
+    }
 
     // save a log entry
     TransferLogEntry logEntry = new TransferLogEntry(
-        value: rule.value, comment: rule.comment, source: rule.source, target: rule.target,
-        sourceName: rule.source ? rule.source.fullId : rule.sourceName, targetName: rule.target.fullId)
+        value: rule.value, comment: rule.comment, source: source, target: target,
+        sourceName: source ? source.fullId : rule.sourceName, targetName: target.fullId)
     if (logEntry.validate())
       logEntry.save(flush: true)
   }

@@ -40,6 +40,7 @@ abstract class BaseController {
       return false
     }
 
+    object.validate()
     if (view && object.hasErrors()) {
       respond object.getErrors(), view: view
       return false

@@ -18,6 +18,9 @@ class ResourceInstance implements InGameStuff, Titled {
   GameCharacter owner
   Double value = 0
 
+  Double minValue
+  Double maxValue
+
   static belongsTo = [type: GameResource]
 
   static constraints = {
@@ -25,6 +28,14 @@ class ResourceInstance implements InGameStuff, Titled {
     origin nullable: true
     title maxSize: 64, unique: 'type'
     identifier maxSize: 64, unique: 'type'
+    minValue nullable: true
+    maxValue nullable: true
+    value validator: { val, obj ->
+      if(obj.minValue != null && val < obj.minValue)
+        return 'resourceInstance.value.ltMinValue'
+      if(obj.maxValue != null && val > obj.maxValue)
+        return 'resourceInstance.value.gtMaxValue'
+    }
   }
 
   public static def getAllByGame(Game game) {

@@ -41,6 +41,12 @@
             <g:if test="${subject.type.measure}">${subject.type.measure}</g:if>
           </strong>
         </sec:notPermitted>
+        <g:if test="${subject.minValue != null}">
+          <div>Минимальное значение: <strong>${subject.minValue}</strong></div>
+        </g:if>
+        <g:if test="${subject.maxValue != null}">
+          <div>Максимальное значение: <strong>${subject.maxValue}</strong></div>
+        </g:if>
       </section>
     </div>
 
