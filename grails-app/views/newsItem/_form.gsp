@@ -14,7 +14,7 @@
 
 <div class="${hasErrors(bean: newsItemInstance, field: 'text', 'error')} required field">
   <label for="text">Текст</label>
-  <g:textArea name="text" cols="40" rows="5" maxlength="9999" required=""
+  <g:textArea name="text" cols="40" rows="5" maxlength="9999" required="" class="rich"
               value="${newsItemInstance?.text}"/>
 
 </div>

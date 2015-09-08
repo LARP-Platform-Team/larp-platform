@@ -77,8 +77,8 @@ grails.project.dependency.resolution = {
     compile ':cache:1.1.8'
 
     compile ':asset-pipeline:1.9.9'
-    // Warning! Comment it before initial Migration update!
     compile ':quartz2:2.1.6.2'
+    compile ":html-cleaner:0.3"
 
     // TODO c RC4 или RC5 вылезают ошибки на серваке. надо бы разобраться
     compile ':spring-security-core:2.0-RC3'

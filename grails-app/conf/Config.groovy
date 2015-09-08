@@ -211,7 +211,40 @@ grails.plugin.databasemigration.ignoredObjects = ['qrtz_triggers','qrtz_simprop_
                                                   'idx_qrtz_ft_trig_inst_name','idx_qrtz_ft_tg','idx_qrtz_ft_t_g',
                                                   'idx_qrtz_ft_jg','idx_qrtz_ft_j_g','idx_qrtz_ft_inst_job_req_rcvry',
                                                   'qrtz_triggers_sched_name_fkey','qrtz_simprop_triggers_sched_name_fkey','qrtz_simple_triggers_sched_name_fkey',
-                                                  'qrtz_cron_triggers_sched_name_fkey','qrtz_blob_triggers_sched_name_fkey','',
-                                                  '','','',
-                                                  '','',''
+                                                  'qrtz_cron_triggers_sched_name_fkey','qrtz_blob_triggers_sched_name_fkey'
 ]
+
+// WYSIWYG editor
+htmlcleaner {
+  whitelists = {
+    whitelist("rich-text") {
+      startwith "relaxed"
+
+      allow "s", "figcaption", "hr"
+
+      allow("figure") {
+        attributes "class", "style"
+      }
+
+      allow("code") {
+        attributes "class", "style"
+      }
+      allow("span") {
+        attributes "class", "style"
+      }
+      allow("p") {
+        attributes "class", "style"
+      }
+      allow("div") {
+        attributes "class", "style"
+      }
+
+      allow("table") {
+        attributes "border", "cellpadding", "cellspacing", "style"
+      }
+      allow("th") {
+        attributes "scope"
+      }
+    }
+  }
+}

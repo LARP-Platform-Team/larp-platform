@@ -50,6 +50,7 @@ class LetterController extends BaseModuleController {
       letter.type = params.containsKey('send') ? LetterType.OUTGOING : LetterType.DRAFT
       letter.content.sender = letter.mailbox
 
+      letter.content.text = cleanHtml(letter.content.text, 'rich-text')
       if (validateData(letter, 'create')) {
         mailboxService.saveLetter(letter)
         respondChange('Письмо сохранено', CREATED, letter)
@@ -64,7 +65,7 @@ class LetterController extends BaseModuleController {
         throw new Exception("Можно отправить только из черновиков")
 
       letter.type = params.containsKey('send') ? LetterType.OUTGOING : LetterType.DRAFT
-
+      letter.content.text = cleanHtml(letter.content.text, 'rich-text')
       if (validateData(letter, 'create')) {
         mailboxService.saveLetter(letter)
         respondChange('Письмо обновлено', CREATED, letter)
@@ -79,7 +80,7 @@ class LetterController extends BaseModuleController {
         throw new Exception("Можно отправить только из черновиков")
 
       letter.type = LetterType.OUTGOING
-
+      letter.content.text = cleanHtml(letter.content.text, 'rich-text')
       if (validateData(letter, 'create')) {
         mailboxService.saveLetter(letter)
         respondChange('Письмо успешно отправлено', CREATED, letter)

@@ -8,7 +8,7 @@
       <g:render template="/shared/date" model="[date: item.created]"/>
     </div>
 
-    <div class="description">${item.text}</div>
+    <div class="description"><hc:cleanHtml unsafe="${item.text}" whitelist="rich-text"/></div>
 
     <div class="extra">
       <div class="ui buttons">

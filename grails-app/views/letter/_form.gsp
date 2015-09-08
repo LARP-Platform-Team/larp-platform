@@ -17,7 +17,7 @@
 
 <div class="${hasErrors(bean: letter, field: 'content.text', 'error')} required field">
   <label for="content.text">Текст</label>
-  <g:textArea name="content.text" required="" value="${letter?.content?.text}"/>
+  <g:textArea name="content.text" required="" class="rich" value="${letter?.content?.text}"/>
 </div>
 
 <g:hiddenField name="mailbox.id" value="${params.mailboxId ?: letter.mailbox.id}"/>

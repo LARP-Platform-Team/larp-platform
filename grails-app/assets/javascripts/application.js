@@ -8,6 +8,8 @@
 //= require jquery
 //= require_tree .
 //= require ../semantic/semantic
+//= require ../ckeditor/ckeditor
+//= require ../ckeditor/adapters/jquery
 //= require_self
 
 if (typeof jQuery !== 'undefined') {
@@ -32,5 +34,9 @@ if (typeof jQuery !== 'undefined') {
 		$('.ui.accordion').accordion({exclusive: false})
 
 		$('.ui.tabular.menu .item').tab();
+
+		$('textarea.rich').ckeditor({
+			language: 'ru'
+		});
 	});
 }

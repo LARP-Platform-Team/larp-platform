@@ -30,7 +30,7 @@
       </div>
 
       <div class="description">
-        ${subject.content.text}
+        <hc:cleanHtml unsafe="${subject.content.text}" whitelist="rich-text"/>
       </div>
     </div>
 

@@ -16,7 +16,7 @@
 
 <div class="${hasErrors(bean: gameInstance, field: 'overview', 'error')} required field">
     <label for="overview">Описание:</label>
-    <g:textArea name="overview" cols="40" rows="5" maxlength="9999" required="" placeholder="Описание"
+    <g:textArea name="overview" cols="40" rows="5" class="rich" maxlength="9999" required="" placeholder="Описание"
                 value="${gameInstance?.overview}"/>
 </div>
 
