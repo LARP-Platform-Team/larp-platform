@@ -25,7 +25,9 @@
           <thead><tr>
             <th>Элемент</th>
             <g:each in="${GamePermission.values()}" var="perm">
-              <th>${perm.toString()}</th>
+              <g:if test="${perm.isApplicableFor(aclGroup.clazz)}">
+                <th class="center aligned">${perm.getNameFor(aclGroup.clazz)}</th>
+              </g:if>
             </g:each>
           </tr></thead>
           <tbody>
@@ -33,19 +35,21 @@
             <tr>
               <td>${aclItem.id} -- ${aclItem.title}</td>
               <g:each in="${GamePermission.values()}" var="perm">
-                <td>
-                  <ingame:remoteLink
-                      elementId="permisson-cell-${aclItem.id}-${perm.toString()}"
-                      url="[action: 'setPermission', id: params.id, params: [
-                          itemId    : aclItem.id,
-                          clazz     : aclGroup.clazz.name,
-                          permission: perm.toString()
-                      ]]"
-                      update="[success: 'permisson-cell-' + aclItem.id + '-' + perm.toString(), failure: 'setPermissionError']">
+                <g:if test="${perm.isApplicableFor(aclGroup.clazz)}">
+                  <td class="center aligned">
+                    <ingame:remoteLink
+                        elementId="permisson-cell-${aclItem.id}-${perm.toString()}"
+                        url="[action: 'setPermission', id: params.id, params: [
+                            itemId    : aclItem.id,
+                            clazz     : aclGroup.clazz.name,
+                            permission: perm.toString()
+                        ]]"
+                        update="[success: 'permisson-cell-' + aclItem.id + '-' + perm.toString(), failure: 'setPermissionError']">
 
-                    <tmpl:permission value="${aclItem.permissions.contains(perm)}"/>
-                  </ingame:remoteLink>
-                </td>
+                      <tmpl:permission value="${aclItem.permissions.contains(perm)}"/>
+                    </ingame:remoteLink>
+                  </td>
+                </g:if>
               </g:each>
             </tr>
           </g:each>
