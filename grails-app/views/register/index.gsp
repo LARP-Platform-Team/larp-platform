@@ -22,11 +22,13 @@
       <div class="${hasErrors(bean: command, field: 'username', 'error')} inline required field">
         <label for="username">Логин (не отображается)</label>
         <g:textField name="username" required="required" value="${command?.username}"/>
+        <div class="ui pointing label">Максимум 64 символа. Можно использовать латинские буквы, цифры, тире, точку и нижнее подчеркивание.</div>
       </div>
 
       <div class="${hasErrors(bean: command, field: 'name', 'error')} inline required field">
         <label for="username">Имя</label>
         <g:textField name="name" required="required" value="${command?.name}"/>
+        <div class="ui pointing label">Максимум 64 символа. Можно использовать латинские и русские буквы, пробел, цифры, тире, точку, запятую и нижнее подчеркивание.</div>
       </div>
 
       <div class="${hasErrors(bean: command, field: 'email', 'error')} inline required field">

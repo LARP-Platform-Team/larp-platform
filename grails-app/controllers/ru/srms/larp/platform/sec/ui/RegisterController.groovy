@@ -71,7 +71,7 @@ class RegisterCommand extends grails.plugin.springsecurity.ui.RegisterCommand {
 
   // TODO вынести и использовать валидатор тут и в SpringUser
   static constraints = {
-    username blank: false, matches: /^[A-Za-z0-9\-\.]+$/, validator: { value, command ->
+    username maxSize: 64, blank: false, matches: /^[A-Za-z0-9\-\._]+$/, validator: { value, command ->
       if (value) {
         def User = command.grailsApplication.getDomainClass(
             SpringSecurityUtils.securityConfig.userLookup.userDomainClassName).clazz
@@ -80,7 +80,7 @@ class RegisterCommand extends grails.plugin.springsecurity.ui.RegisterCommand {
         }
       }
     }
-    name blank: false, matches: /^[A-Za-zА-Яа-я0-9\-\.\s,]+$/, validator: { value, command ->
+    name maxSize: 64, blank: false, matches: /^[A-Za-zА-Яа-я0-9\-\.\s,_]+$/, validator: { value, command ->
       if (value) {
         def User = command.grailsApplication.getDomainClass(
             SpringSecurityUtils.securityConfig.userLookup.userDomainClassName).clazz

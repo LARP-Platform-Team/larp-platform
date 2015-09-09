@@ -6,6 +6,7 @@
   <div class="${hasErrors(bean: letter, field: 'content.subject', 'error')} required field">
     <label for="content.subject">Тема</label>
     <g:textField name="content.subject" required="" value="${letter?.content?.subject}"/>
+    <div class="ui pointing label">Максимум 64 символа.</div>
   </div>
 
   <div class="${hasErrors(bean: letter, field: 'content.recipients', 'error')} required field">

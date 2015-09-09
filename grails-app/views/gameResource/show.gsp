@@ -11,8 +11,9 @@
 <body>
 
 <content tag="actions">
-  <ingame:link class="item" controller="ResourceInstance" action="create" params="[typeId: subject.id]">
-      <i class="green plus icon"></i> Создать экземпляр</ingame:link>
+  <ingame:link class="item" controller="ResourceInstance" action="create"
+               params="[typeId: subject.id]">
+    <i class="green plus icon"></i> Создать экземпляр</ingame:link>
   <ingame:link class="item" action="index"><i class="arrow left grey icon"></i> Назад</ingame:link>
 </content>
 
@@ -76,11 +77,14 @@
       </div>
 
       <div class="ui grid">
-      <div class="eight wide column">
-        <div class="ui action input">
-          <g:textField name="originTitle" placeholder="Введите название" id="newOriginTitle" required="required"/>
-          <ui:submit class="right" icon="plus">Добавить</ui:submit>
-        </div>
+        <div class="eight wide column">
+          <div class="ui action input">
+            <g:textField name="originTitle" placeholder="Введите название" id="newOriginTitle"
+                         required="required"/>
+            <ui:submit class="right" icon="plus">Добавить</ui:submit>
+          </div>
+
+          <div class="ui pointing label">Максимум 64 символа. Уникальное в рамках ресурса.</div>
         </div>
       </div>
 
