@@ -14,6 +14,9 @@
   <link rel="icon" type="image/png" href="${assetPath(src: 'favicon-96x96.png')}" sizes="96x96">
   <link rel="icon" type="image/png" href="${assetPath(src: 'favicon-16x16.png')}" sizes="16x16">
 
+  <script>
+    var CKEDITOR_BASEPATH = '/assets/';
+  </script>
   <asset:stylesheet src="application.css"/>
   <asset:javascript src="application.js"/>
   <title><g:layoutTitle default="Платформа городских ролевок"/></title>

@@ -35,8 +35,8 @@ if (typeof jQuery !== 'undefined') {
 
 		$('.ui.tabular.menu .item').tab();
 
-		//$('textarea.rich').ckeditor({
-		//	language: 'ru'
-		//});
+		$('textarea.rich').ckeditor({
+			language: 'ru'
+		});
 	});
 }
