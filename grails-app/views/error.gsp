@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title><g:if env="development">Grails Runtime Exception</g:if><g:else>Error</g:else></title>
-		<meta name="layout" content="main">
-		<g:if env="development"><asset:stylesheet src="errors.css"/></g:if>
-	</head>
-	<body>
-		<g:if env="development">
-			<g:renderException exception="${exception}" />
-		</g:if>
-		<g:else>
-			<ul class="errors">
-				<li>An error has occurred</li>
-			</ul>
-		</g:else>
-	</body>
+<head>
+  <title><g:if env="development">Grails Runtime Exception</g:if><g:else>Произошла ошибка :(</g:else></title>
+  <meta name="layout" content="main">
+</head>
+
+<body>
+<content tag="content">
+  <g:if env="development">
+    <g:renderException exception="${exception}"/>
+  </g:if>
+  <g:else>
+    <ui:message type="error">К сожалению, что-то пошло не так. Пожалуйста, свяжитесь с нами и расскажите, как так вышло :)</ui:message>
+  </g:else>
+</content>
+</body>
 </html>

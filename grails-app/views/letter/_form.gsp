@@ -9,10 +9,10 @@
     <div class="ui pointing label">Максимум 64 символа.</div>
   </div>
 
-  <div class="${hasErrors(bean: letter, field: 'content.recipients', 'error')} required field">
-    <label for="content.recipients">Кому</label>
-    <g:select name="content.recipients" from="${MailBox.findAllByIdNotEqual(params.mailboxId)}"
-              value="${letter?.content?.recipients}" optionKey="id" multiple="true" class="ui dropdown"/>
+  <div class="${hasErrors(bean: letter, field: 'content.targetAddresses', 'error')} required field">
+    <label for="content.targetAddresses">Кому</label>
+    <g:textField name="content.targetAddresses" value="${letter?.content?.targetAddresses ?: letter?.content?.recipients?.collect { it.address } ?.join(', ')}"/>
+    <div class="ui pointing label">Вводите адреса через запятую.</div>
   </div>
 </div>
 

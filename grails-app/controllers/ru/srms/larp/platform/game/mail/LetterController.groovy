@@ -42,17 +42,21 @@ class LetterController extends BaseModuleController {
     }
   }
 
+  private def setupLetterContent(LetterRef letter, updateRecipients = false) {
+    def content = letter.content
+    content.sender = letter.mailbox
+    content.text = cleanHtml(content.text, 'rich-text')
+    content.time = new Date()
+    content.updateRecipients = updateRecipients
+  }
+
   @Transactional
   def save() {
     withModule {
       def letter = new LetterRef()
       letter.properties = params
-      def content = letter.content
-
       letter.type = params.containsKey('send') ? LetterType.OUTGOING : LetterType.DRAFT
-      content.sender = letter.mailbox
-      content.text = cleanHtml(content.text, 'rich-text')
-      content.time = new Date()
+      setupLetterContent(letter, true)
 
       if (validateData(letter, 'compose')) {
         mailboxService.saveLetter(letter)
@@ -65,10 +69,10 @@ class LetterController extends BaseModuleController {
   def update(LetterRef letter) {
     withModule {
       if (letter.type != LetterType.DRAFT)
-        throw new Exception("Можно отправить только из черновиков")
+        throw new Exception("Можно редактировать только из черновиков")
 
       letter.type = params.containsKey('send') ? LetterType.OUTGOING : LetterType.DRAFT
-      letter.content.text = cleanHtml(letter.content.text, 'rich-text')
+      setupLetterContent(letter, true)
       if (validateData(letter, 'edit')) {
         mailboxService.saveLetter(letter)
         respondChange('Письмо обновлено', CREATED, letter)
@@ -83,7 +87,7 @@ class LetterController extends BaseModuleController {
         throw new Exception("Можно отправить только из черновиков")
 
       letter.type = LetterType.OUTGOING
-      letter.content.text = cleanHtml(letter.content.text, 'rich-text')
+      setupLetterContent(letter)
       if (validateData(letter, letter.id ? 'edit': 'compose')) {
         mailboxService.saveLetter(letter)
         respondChange('Письмо успешно отправлено', CREATED, letter)

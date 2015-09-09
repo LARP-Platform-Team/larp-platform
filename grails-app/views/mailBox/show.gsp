@@ -43,7 +43,7 @@
             <table class="ui celled padded very basic table">
               <thead>
               <tr>
-                <th>От кого/Кому</th>
+                <th>${tab.targetName}</th>
                 <th>Тема</th>
               </tr>
               </thead>
