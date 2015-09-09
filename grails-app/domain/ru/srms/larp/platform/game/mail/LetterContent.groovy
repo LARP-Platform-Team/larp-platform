@@ -16,8 +16,13 @@ class LetterContent implements InGameStuff {
   static constraints = {
     subject maxSize: 64
     text maxSize: 9999
-    // all related characters must belong to the same game
-//        sender validator: {val, obj -> !obj.recipients || obj.recipients.any {val.game != it.game} }
+    recipients validator: { val, obj ->
+      if (!val)
+        return 'no.recipients'
+      // all recipients must belong to the same game
+      if(val.any {it.game != obj.extractGame()})
+        return 'wrong.game'
+    }
   }
 
   def beforeValidate() {
