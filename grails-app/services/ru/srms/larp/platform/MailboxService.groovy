@@ -1,5 +1,6 @@
 package ru.srms.larp.platform
 
+import grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.acl.AclUtilService
 import grails.transaction.Transactional
 import org.springframework.security.access.prepost.PostFilter
@@ -18,6 +19,7 @@ class MailboxService {
 
   GameAclService gameAclService
   AclUtilService aclUtilService
+  SpringSecurityService springSecurityService
 
   @PostFilter("hasPermission(filterObject, read)")
   def available(Game game) {
@@ -26,9 +28,11 @@ class MailboxService {
 
   @PreAuthorize("hasPermission(#box, read) or hasPermission(#box.game, admin)")
   def letters(MailBox box) {
-    // TODO exclude deleted letters, if user is not an admin
     Map<LetterType, List<LetterRef>> result = LetterType.values().collectEntries { [(it): []] }
-    box.letters.each { result.get(it.type).add(it) }
+    box.letters
+        // exclude deleted letters, if user is not an admin
+        .findAll { !it.deleted || aclUtilService.hasPermission(springSecurityService.authentication, it.extractGame(), ADMINISTRATION) }
+        .each { result.get(it.type).add(it) }
     result
   }
 
