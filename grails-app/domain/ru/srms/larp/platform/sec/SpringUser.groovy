@@ -20,10 +20,10 @@ class SpringUser {
   static transients = ['springSecurityService']
 
   static constraints = {
-    username blank: false, unique: true, matches: /^[A-Za-z0-9\-\.]+$/
+    username maxSize: 64, blank: false, unique: true, matches: /^[A-Za-z0-9\-\._]+$/
     email blank: false, unique: true, email: true
     password blank: false
-    name maxSize: 64, blank: false, unique: true, matches: /^[A-Za-zА-Яа-я0-9\-\.\s,]+$/
+    name maxSize: 64, blank: false, unique: true, matches: /^[A-Za-zА-Яа-я0-9\-\.\s,_]+$/
   }
 
   static mapping = {

@@ -4,11 +4,13 @@
   <div class="${hasErrors(bean: subject, field: 'value', 'error')} required field">
     <label for="value">Значение изменения</label>
     <g:field type="text" name="value" required="" value="${subject?.value}"/>
+    <div class="ui pointing label">Отличное от нуля число.</div>
   </div>
 
   <div class="${hasErrors(bean: subject, field: 'comment', 'error')} field">
     <label for="comment">Комментарий для лога перевода</label>
     <g:field type="text" name="comment" value="${subject?.comment}"/>
+    <div class="ui pointing label">Максимум 128 символов. Можно оставить пустым.</div>
   </div>
 </div>
 
@@ -18,12 +20,13 @@
     <label for="source.id">Источник перевода</label>
     <g:select name="source.id" from="${ResourceInstance.findAllByType(subject?.target?.type)}" class="dropdown"
               value="${subject?.source?.id}" optionValue="fullId" optionKey="id" noSelection="${['null': 'нет']}"/>
-
+    <div class="ui pointing label">Если выбрать ресурс-источник - его значение тоже будет меняться. Если не выбирать - надо ввести название в соседнем поле.</div>
   </div>
 
   <div class="${hasErrors(bean: subject, field: 'sourceName', 'error')} field">
     <label for="sourceName">Название источника перевода</label>
     <g:field type="text" name="sourceName" value="${subject?.sourceName}"/>
+    <div class="ui pointing label">Если настоящий источник не выбран, это название будет отображаться в логе.</div>
   </div>
 
 </div>

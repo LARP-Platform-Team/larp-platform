@@ -83,6 +83,7 @@
                           placeholder="Текст комментария"
                           value="${transferData?.comment}"/>
             </div>
+            <div class="ui pointing label">Максимум 128 символов. Можно оставить пустым.</div>
             <ui:submit name="send" icon="right arrow">Отправить</ui:submit>
           </ingame:form>
         </section>

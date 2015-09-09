@@ -22,3 +22,8 @@ a.deleted {
 .menu .item {
     cursor: pointer;
 }
+
+.ui.form .field .ui.label,
+.ui.wrap.label {
+    white-space: normal;
+}

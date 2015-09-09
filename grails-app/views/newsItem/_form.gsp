@@ -4,6 +4,7 @@
 <div class="${hasErrors(bean: newsItemInstance, field: 'title', 'error')} required field">
   <label for="title">Заголовок</label>
   <g:textField name="title" required="" value="${newsItemInstance?.title}"/>
+  <div class="ui pointing label">Максимум 64 символа.</div>
 </div>
 
 <div class="${hasErrors(bean: newsItemInstance, field: 'created', 'error')} required inline field">
