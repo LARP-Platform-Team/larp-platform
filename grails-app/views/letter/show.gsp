@@ -20,14 +20,13 @@
       <div class="header">${subject.content.subject}</div>
 
       <div class="meta">
-        <span>
-          От кого: ${subject.content.letterFrom}, Кому: ${subject.content.letterTo}
-        </span>
+        <span>От кого: ${subject.content.letterFrom}</span>
 
         <div class="right floated time">
           <g:render template="/shared/date" model="[date: subject.content.time]"/>
         </div>
       </div>
+      <div class="meta">Кому: ${subject.content.letterTo}</div>
 
       <div class="description">
         <hc:cleanHtml unsafe="${subject.content.text}" whitelist="rich-text"/>
