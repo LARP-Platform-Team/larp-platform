@@ -4,7 +4,7 @@
 <head>
   <meta name="layout" content="mainWithActions">
   <g:set var="subject" value="${mailBoxInstance as MailBox}"/>
-  <g:set var="title" value="${subject.address}"/>
+  <g:set var="title" value="${subject.toString()}"/>
   <title>${title}</title>
 </head>
 
@@ -45,15 +45,17 @@
               <tr>
                 <th>${tab.targetName}</th>
                 <th>Тема</th>
+                <th>Дата</th>
               </tr>
               </thead>
               <tbody>
               <g:each in="${letters.get(tab)}" var="letter">
                 <tr>
-                <td>${tab.getAddress(letter.content)}</td>
-                <td><ingame:link controller="letter" class="${letter.deleted ? 'deleted' : ''}"
-                             action="show"
-                             id="${letter.id}">${letter.content.subject}</ingame:link></td>
+                  <td>${tab.getAddress(letter.content)}</td>
+                  <td><ingame:link controller="letter" class="${letter.deleted ? 'deleted' : ''}"
+                                   action="show"
+                                   id="${letter.id}">${letter.content.subject}</ingame:link></td>
+                  <td><g:render template="/shared/date" model="[date: letter.content.time]"/></td>
                 </tr>
               </g:each>
               </tbody>

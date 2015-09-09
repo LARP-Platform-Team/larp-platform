@@ -26,32 +26,42 @@
           <g:render template="/shared/date" model="[date: subject.content.time]"/>
         </div>
       </div>
+
       <div class="meta">Кому: ${subject.content.letterTo}</div>
 
-      <div class="description">
+      <div class="description letter-text">
         <hc:cleanHtml unsafe="${subject.content.text}" whitelist="rich-text"/>
       </div>
     </div>
 
     <div class="extra content">
 
-        <g:if test="${subject.type.equals(LetterType.DRAFT)}">
-          <sec:permitted object="${subject.mailbox}" permission="create">
-            <ingame:link controller="letter" class="ui yellow basic icon labeled button"
-                         action="edit"
-                         id="${subject.id}">
-              <i class="edit yellow icon"></i>Редактировать</ingame:link>
-            <ingame:link controller="letter" class="ui blue basic icon labeled button" action="send"
-                         id="${subject.id}"
-                         onclick="return confirm('Вы уверены, что хотите отправить письмо?');">
-              <i class="send blue icon"></i> Отправить</ingame:link>
-          </sec:permitted>
-        </g:if>
+      <g:if test="${subject.type.equals(LetterType.DRAFT)}">
+        <sec:permitted object="${subject.mailbox}" permission="create">
+          <ingame:link controller="letter" class="ui yellow basic icon labeled button"
+                       action="edit"
+                       id="${subject.id}">
+            <i class="edit yellow icon"></i>Редактировать</ingame:link>
+          <ingame:link controller="letter" class="ui blue basic icon labeled button" action="send"
+                       id="${subject.id}"
+                       onclick="return confirm('Вы уверены, что хотите отправить письмо?');">
+            <i class="send blue icon"></i> Отправить</ingame:link>
+        </sec:permitted>
+      </g:if>
+
+      <g:if test="${LetterType.INBOX.equals(subject.type)}">
+        <sec:permitted object="${subject.mailbox}" permission="create">
+          <ingame:link controller="letter" class="ui blue basic icon labeled button" action="compose"
+                       params="['reply.id': subject.id, mailboxId: subject.mailboxId]">
+            <i class="reply blue icon"></i> Ответить</ingame:link>
+        </sec:permitted>
+      </g:if>
 
       <g:if test="${!subject.deleted}">
         <sec:permitted object="${subject.mailbox}" permission="delete">
           <ingame:link controller="letter" class="ui red basic icon labeled button" action="delete"
-                       id="${subject.id}" onclick="return confirm('Вы уверены, что хотите удалить письмо?');">
+                       id="${subject.id}"
+                       onclick="return confirm('Вы уверены, что хотите удалить письмо?');">
             <i class="delete red icon"></i> Удалить</ingame:link>
         </sec:permitted>
       </g:if>
