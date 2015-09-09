@@ -8,6 +8,14 @@ class LetterRef implements InGameStuff {
   Boolean deleted = false
   static belongsTo = [mailbox: MailBox, content: LetterContent]
 
+  static constraints = {
+    content validator: {val, obj ->
+      val.validate()
+    }
+  }
+
+
+
   @Override
   Game extractGame() {
     return mailbox.game

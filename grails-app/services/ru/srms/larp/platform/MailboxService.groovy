@@ -43,9 +43,7 @@ class MailboxService {
   @PreAuthorize("hasPermission(#letter.mailbox, create) or hasPermission(#letter.mailbox.game, admin)")
   @Transactional
   def saveLetter(LetterRef letter) {
-    letter.content.time = new Date()
     letter.content.save()
-
     letter.save()
 
     if(letter.type.equals(LetterType.OUTGOING)) {

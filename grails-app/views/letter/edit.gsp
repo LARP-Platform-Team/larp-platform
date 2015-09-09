@@ -16,6 +16,7 @@
 
 <content tag="content">
   <g:render template="/shared/fromErrors" bean="${subject}" var="subject"/>
+  <g:render template="/shared/fromErrors" bean="${subject?.content}" var="subject"/>
   <ingame:form class="ui form" controller="letter" url="[id: subject.id, action: 'update']">
     <g:render template="form"/>
     <ui:submit name="draft" icon="checkmark">Сохранить в черновики</ui:submit>

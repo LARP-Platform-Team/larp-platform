@@ -3,7 +3,7 @@
 <html>
 <head>
   <meta name="layout" content="mainWithActions">
-  <g:set var="subject" value="${newsFeedInstance as GameResource}"/>
+  <g:set var="subject" value="${gameResourceInstance as GameResource}"/>
   <g:set var="title" value="Создание ресурса"/>
   <title>${title}</title>
 </head>

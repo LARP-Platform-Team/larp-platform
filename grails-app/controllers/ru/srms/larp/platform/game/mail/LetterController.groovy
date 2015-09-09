@@ -47,11 +47,14 @@ class LetterController extends BaseModuleController {
     withModule {
       def letter = new LetterRef()
       letter.properties = params
-      letter.type = params.containsKey('send') ? LetterType.OUTGOING : LetterType.DRAFT
-      letter.content.sender = letter.mailbox
+      def content = letter.content
 
-      letter.content.text = cleanHtml(letter.content.text, 'rich-text')
-      if (validateData(letter, 'create')) {
+      letter.type = params.containsKey('send') ? LetterType.OUTGOING : LetterType.DRAFT
+      content.sender = letter.mailbox
+      content.text = cleanHtml(content.text, 'rich-text')
+      content.time = new Date()
+
+      if (validateData(letter, 'compose')) {
         mailboxService.saveLetter(letter)
         respondChange('Письмо сохранено', CREATED, letter)
       }
@@ -66,7 +69,7 @@ class LetterController extends BaseModuleController {
 
       letter.type = params.containsKey('send') ? LetterType.OUTGOING : LetterType.DRAFT
       letter.content.text = cleanHtml(letter.content.text, 'rich-text')
-      if (validateData(letter, 'create')) {
+      if (validateData(letter, 'edit')) {
         mailboxService.saveLetter(letter)
         respondChange('Письмо обновлено', CREATED, letter)
       }
@@ -81,7 +84,7 @@ class LetterController extends BaseModuleController {
 
       letter.type = LetterType.OUTGOING
       letter.content.text = cleanHtml(letter.content.text, 'rich-text')
-      if (validateData(letter, 'create')) {
+      if (validateData(letter, letter.id ? 'edit': 'compose')) {
         mailboxService.saveLetter(letter)
         respondChange('Письмо успешно отправлено', CREATED, letter)
       }
