@@ -22,7 +22,7 @@ class MailBox implements InGameStuff, Titled {
 
   @Override
   String toString() {
-    (name ?: '') + "<$address>"
+    (name ? "$name " : '') + "<$address>"
   }
 
   @Override

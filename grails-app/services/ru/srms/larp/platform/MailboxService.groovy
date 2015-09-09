@@ -30,6 +30,7 @@ class MailboxService {
   def letters(MailBox box) {
     Map<LetterType, List<LetterRef>> result = LetterType.values().collectEntries { [(it): []] }
     box.letters
+        .sort { a,b -> -1 * (a.content.time <=> b.content.time) }
         // exclude deleted letters, if user is not an admin
         .findAll { !it.deleted || aclUtilService.hasPermission(springSecurityService.authentication, it.extractGame(), ADMINISTRATION) }
         .each { result.get(it.type).add(it) }
@@ -37,8 +38,14 @@ class MailboxService {
   }
 
   @PreAuthorize("hasPermission(#box, create) or hasPermission(#box.game, admin)")
-  def writeLetter(MailBox box) {
-    new LetterRef(mailbox: box, type: LetterType.DRAFT, content: new LetterContent(sender: box))
+  def writeLetter(MailBox box, LetterRef reply = null) {
+    def content = new LetterContent(sender: box)
+    if(reply) {
+      content.targetAddresses = reply.content.sender?.address
+      content.subject = "Re: ${reply.content.subject}"
+      content.text = "<p></p><blockquote>${reply.content.text}</blockquote>"
+    }
+    new LetterRef(mailbox: box, type: LetterType.DRAFT, content: content)
   }
 
   @PreAuthorize("hasPermission(#letter.mailbox, create) or hasPermission(#letter.mailbox.game, admin)")
