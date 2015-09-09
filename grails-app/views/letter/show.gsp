@@ -43,17 +43,18 @@
               <i class="edit yellow icon"></i>Редактировать</ingame:link>
             <ingame:link controller="letter" class="ui blue basic icon labeled button" action="send"
                          id="${subject.id}"
-                         onclick="return confirm('Вы уверены?');">
+                         onclick="return confirm('Вы уверены, что хотите отправить письмо?');">
               <i class="send blue icon"></i> Отправить</ingame:link>
           </sec:permitted>
         </g:if>
 
+      <g:if test="${!subject.deleted}">
         <sec:permitted object="${subject.mailbox}" permission="delete">
-          <ingame:link controller="letter" class="ui red basic icon labeled button" action="delete" id="${subject.id}"
-                       onclick="return confirm('Вы уверены?');">
+          <ingame:link controller="letter" class="ui red basic icon labeled button" action="delete"
+                       id="${subject.id}" onclick="return confirm('Вы уверены, что хотите удалить письмо?');">
             <i class="delete red icon"></i> Удалить</ingame:link>
         </sec:permitted>
-
+      </g:if>
     </div>
   </div>
 
