@@ -3,7 +3,7 @@ package ru.srms.larp.platform
 import org.springframework.http.HttpStatus
 import ru.srms.larp.platform.exceptions.AjaxException
 
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
+import static org.springframework.http.HttpStatus.BAD_REQUEST
 
 abstract class BaseController {
 
@@ -138,7 +138,7 @@ abstract class BaseController {
    * @param message message it is
    */
   public def renderAjaxError(String message) {
-    response.status = INTERNAL_SERVER_ERROR.value()
+    response.status = BAD_REQUEST.value()
     render message
   }
 }
