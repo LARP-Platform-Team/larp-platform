@@ -37,7 +37,8 @@ class NewsItemController extends BaseModuleController {
       newsItem.text = cleanHtml(newsItem.text, 'rich-text')
       if (validateData(newsItem, 'create')) {
         newsService.saveNews(newsItem)
-        respondChange('Новость успешно добавлена', CREATED, newsItem)
+        respondChange('Новость успешно добавлена', CREATED,
+            [controller: 'NewsFeed', action: 'show', id: newsItem.feed.id])
       }
     }
   }
@@ -48,7 +49,8 @@ class NewsItemController extends BaseModuleController {
       newsItem.text = cleanHtml(newsItem.text, 'rich-text')
       if (validateData(newsItem, 'edit')) {
         newsService.updateNews(newsItem)
-        respondChange('Новость обновлена', OK, newsItem)
+        respondChange('Новость обновлена', OK,
+            [controller: 'NewsFeed', action: 'show', id: newsItem.feed.id])
       }
     }
   }
@@ -58,21 +60,10 @@ class NewsItemController extends BaseModuleController {
     withModule {
       if (validateData(newsItem)) {
         newsService.deleteNews(newsItem)
-        // save feed id to params for redirect
-        params.feed = [:]
-        params.feed.id = newsItem.feed.id
-        respondChange('Новость удалена', NO_CONTENT, null, newsItem.id)
+        respondChange('Новость удалена', NO_CONTENT,
+            [controller: 'NewsFeed', action: 'show', id: newsItem.feed.id])
       }
     }
-  }
-
-  @Override
-  protected Map redirectParams() {
-    def attrs = super.redirectParams()
-    attrs.controller = 'NewsFeed'
-    attrs.action = 'show'
-    attrs.id = params.feed.id
-    return attrs
   }
 
   @Override

@@ -20,6 +20,7 @@
     <div class="seven wide column">
       <section class="ui pilled segment">
         <div class="ui blue ribbon label">${subject.fullId}</div>
+        <div class="ui hidden divider"></div>
 
         <sec:permitted object="${subject}" permission="write">
           <g:render template="/shared/fromErrors" bean="${subject}" var="subject"/>
@@ -82,8 +83,9 @@
               <g:textField name="comment"
                           placeholder="Текст комментария"
                           value="${transferData?.comment}"/>
+              <div class="ui pointing label">Максимум 128 символов. Можно оставить пустым.</div>
             </div>
-            <div class="ui pointing label">Максимум 128 символов. Можно оставить пустым.</div>
+
             <ui:submit name="send" icon="right arrow">Отправить</ui:submit>
           </ingame:form>
         </section>

@@ -29,7 +29,6 @@ abstract class BaseController {
   /**
    * Validates input data for domain object and make redirects if instance is not found or
    * contains errors
-   * TODO find common base class for domain objects
    * @param object domain instance object
    * @param view view to redirect to
    * @return {@code true} if validation is successful, {@code false} otherwise
@@ -71,22 +70,17 @@ abstract class BaseController {
   }
 
   /**
-   * TODO accept text instead of message
    * Make appropriate respond after instance was somehow changed
    * @param message code for information message relevant to performed action
    * @param status http status code
-   * @param object domain class instance
-   * @param id domain class instance id
-   * @return The result of the "request.withFormat" closure call
+   * @param route information with whereabouts of target redirect; map can contain [action, controller, id, method, params]
+   *
+   * @return The result of the "request.withFormat" closure call -- not true yet
    */
   // TODO remove object and id args
-  protected def respondChange(String message, HttpStatus status,
-                              def object, def id = null, def route = null) {
-
+  protected def respondChange(String message, HttpStatus status, Map route = null) {
     flash.success = message;
-    def map = route ?
-        redirectParams(route.action, route.id, route.controller)
-        : redirectParams()
+    def map = redirectParams(route)
     map.status = status
     redirect map
 
@@ -105,18 +99,16 @@ abstract class BaseController {
 //        }
   }
 
-  protected Map redirectParams() {
-    return redirectParams('index', null, null)
-  }
   /**
    * May be overriden for custom redirect rules
+   * @param route - map with navigation rules; can contain [action, controller, id, method, params]
    * @return map of redirect params
    */
-  protected Map redirectParams(String action, def id, String controller) {
-    // TODO retrieve defaultAction somehow instead of just "index"
-    def defaults = [action: action, params: [:], method: "GET"]
-    if (id) defaults.id = id
-    if (controller) defaults.controller = controller
+  protected Map redirectParams(Map route = null) {
+    def defaults = [action: route?.action ?: 'index', params: [:], method: route?.method ?: "GET"]
+    if(route?.params) defaults.params += route.params
+    if (route?.id) defaults.id = route.id
+    if (route?.controller) defaults.controller = route.controller
     if (params.gameAlias) defaults.params.gameAlias = params.gameAlias
     if (params.charAlias) defaults.params.charAlias = params.charAlias
     return defaults

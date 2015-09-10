@@ -52,7 +52,7 @@ class NewsFeedController extends BaseModuleController {
     withModule {
       if (validateData(feed, 'create')) {
         newsService.saveFeed(feed)
-        respondChange('Новостная лента успешно создана', CREATED, feed)
+        respondChange('Новостная лента успешно создана', CREATED)
       }
     }
   }
@@ -62,7 +62,7 @@ class NewsFeedController extends BaseModuleController {
     withModule {
       if (validateData(feed, 'edit')) {
         newsService.saveFeed(feed)
-        respondChange('Новостная лента успешно обновлена', OK, feed)
+        respondChange('Новостная лента успешно обновлена', OK)
       }
     }
   }
@@ -72,7 +72,7 @@ class NewsFeedController extends BaseModuleController {
     withModule {
       if (validateData(feed)) {
         newsService.deleteFeed(feed)
-        respondChange('Новостная лента удалена', NO_CONTENT, null, feed.id)
+        respondChange('Новостная лента удалена', NO_CONTENT)
       }
     }
   }

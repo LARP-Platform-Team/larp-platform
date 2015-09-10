@@ -41,8 +41,8 @@ class GameController extends BaseController {
     game.overview = cleanHtml(game.overview, 'rich-text')
     if (validateData(game, 'create')) {
       gameService.save(game)
-      // TODO redirect to new game
-      respondChange("Новая игра ${game.title} успешно создана", CREATED, game)
+      respondChange("Новая игра ${game.title} успешно создана", CREATED,
+          [action: 'play', params: [gameAlias: game.alias]])
     }
   }
 
@@ -54,7 +54,8 @@ class GameController extends BaseController {
     game.overview = cleanHtml(game.overview, 'rich-text')
     if (validateData(game, 'edit')) {
       gameService.update(game)
-      respondChange('Параметры игры изменены', OK, game)
+      respondChange('Параметры игры изменены', OK,
+          [action: 'play', params: [gameAlias: game.alias]])
     }
   }
 
@@ -63,7 +64,7 @@ class GameController extends BaseController {
   def delete(Game game) {
     if (validateData(game)) {
       game.delete flush: true
-      respondChange('Игра успешно удалена', NO_CONTENT, null, game.id)
+      respondChange('Игра успешно удалена', NO_CONTENT)
     }
   }
 

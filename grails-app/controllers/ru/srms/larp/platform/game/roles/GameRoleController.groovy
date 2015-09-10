@@ -38,7 +38,7 @@ class GameRoleController extends BaseController {
   def save(GameRole role) {
     if (validateData(role, 'create')) {
       gameRoleService.save(role)
-      respondChange('Роль успешно добавлена', CREATED, role)
+      respondChange('Роль успешно добавлена', CREATED)
     }
   }
 
@@ -46,7 +46,7 @@ class GameRoleController extends BaseController {
   def update(GameRole role) {
     if (validateData(role, 'edit')) {
       gameRoleService.save(role)
-      respondChange('Роль обновлена', OK, role)
+      respondChange('Роль обновлена', OK)
     }
   }
 
@@ -54,7 +54,7 @@ class GameRoleController extends BaseController {
   def delete(GameRole role) {
     if (validateData(role)) {
       gameRoleService.delete(role)
-      respondChange('Роль удалена', NO_CONTENT, null, role.id)
+      respondChange('Роль удалена', NO_CONTENT)
     }
   }
 

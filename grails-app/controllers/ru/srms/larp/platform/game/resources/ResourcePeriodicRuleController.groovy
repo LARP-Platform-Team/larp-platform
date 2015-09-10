@@ -38,7 +38,8 @@ class ResourcePeriodicRuleController extends BaseModuleController {
       rule.validate()
       if (validateData(rule, 'create')) {
         resourceService.savePeriodicRule(rule)
-        respondChange('Правило периодического изменения успешно создано', CREATED, rule)
+        respondChange('Правило периодического изменения успешно создано', CREATED,
+            [controller: 'ResourceInstance', action: 'edit', id: rule.target.id])
       }
     }
   }
@@ -50,7 +51,8 @@ class ResourcePeriodicRuleController extends BaseModuleController {
       rule.validate()
       if (validateData(rule, 'edit')) {
         resourceService.savePeriodicRule(rule)
-        respondChange('Правило периодического изменения обновлено', OK, rule)
+        respondChange('Правило периодического изменения обновлено', OK,
+            [controller: 'ResourceInstance', action: 'edit', id: rule.target.id])
       }
     }
   }
@@ -64,23 +66,11 @@ class ResourcePeriodicRuleController extends BaseModuleController {
   def delete(ResourcePeriodicRule rule) {
     withModule {
       if (validateData(rule)) {
-        // save feed id to params for redirect
-        params.target = [:]
-        params.target.id = rule.target.id
-
         resourceService.deletePeriodicRule(rule)
-        respondChange('Правило периодического изменения удалено', NO_CONTENT, null, rule.id)
+        respondChange('Правило периодического изменения удалено', NO_CONTENT,
+            [controller: 'ResourceInstance', action: 'edit', id: rule.target.id])
       }
     }
-  }
-
-  @Override
-  protected Map redirectParams() {
-    def attrs = super.redirectParams()
-    attrs.controller = 'ResourceInstance'
-    attrs.action = 'edit'
-    attrs.id = params.target.id
-    return attrs
   }
 
   @Override
