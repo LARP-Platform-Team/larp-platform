@@ -14,7 +14,7 @@ import static org.springframework.http.HttpStatus.*
 @Transactional(readOnly = true)
 class GameCharacterController extends BaseController {
 
-    static allowedMethods = []
+    static allowedMethods = [save: "POST", update: "POST", addRole: "POST", removeRole: "POST"]
     CharacterService characterService
     GameRoleService gameRoleService
 

@@ -20,7 +20,7 @@ class AccountController extends BaseController {
   def springSecurityService
 
   def show(SpringUser user) {
-    def masters = Game.where {masters { id == user.id }}
+    def masters = Game.where { masters { id == user.id } }
     def plays = Game.where { characters { player.id == user.id } }
     respond user, model: [masters: masters, plays: plays]
   }
@@ -29,19 +29,16 @@ class AccountController extends BaseController {
   def update() {
     def user = SpringUser.get(params.id)
     user.properties['email', 'name'] = params
-    user.validate()
     if (validateData(user, 'show')) {
       userService.save(user)
       springSecurityService.reauthenticate user.username
-      respondChange('Данные успешно обновлены', OK, user)
+      respondChange('Данные успешно обновлены', OK, [action: defaultAction, id: user.id])
     }
   }
 
   @Transactional
   def changePassword(ChangePasswordCommand passwordCommand) {
     def user = SpringUser.get(params.id)
-    // TODO check if null
-
     passwordCommand.username = user.username
     if(!passwordCommand.validate()) {
       respond user, model: [changePassword: passwordCommand], view: 'show'
@@ -51,15 +48,7 @@ class AccountController extends BaseController {
     user.password = passwordCommand.newPassword
     userService.save(user)
     springSecurityService.reauthenticate user.username
-    respondChange('Пароль успешно изменен', OK, user)
-  }
-
-  @Override
-  protected Map redirectParams() {
-    def attrs = super.redirectParams()
-    attrs.action = defaultAction
-    attrs.id = params.id
-    return attrs
+    respondChange('Пароль успешно изменен', OK, [action: defaultAction, id: user.id])
   }
 
 }
