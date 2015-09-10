@@ -21,8 +21,8 @@ class GameCharacterController extends BaseController {
     def playAs(String charAlias) {
         def character = characterService.find(charAlias)
         if(character == null) {
-            flash.message = message(code: 'default.not.found.message', args: ['Character', charAlias])
-            redirect(controller: 'game', action: 'play', params: [alias: params.gameAlias])
+            flash.warning = "Персонаж не найден."
+            redirect(controller: 'game', action: 'play', params: [gameAlias: params.gameAlias])
             return
         }
 
@@ -47,7 +47,7 @@ class GameCharacterController extends BaseController {
     def save(GameCharacter character) {
         if(validateData(character, 'create')) {
             characterService.save(character)
-            respondChange('Персонаж успешно добавлен', CREATED, character)
+            respondChange('Персонаж успешно добавлен', CREATED)
         }
     }
 
@@ -58,7 +58,7 @@ class GameCharacterController extends BaseController {
         character.properties = params
         if(validateData(character, 'edit')) {
             characterService.save(character, oldPlayer)
-            respondChange('Персонаж обновлен', OK, character)
+            respondChange('Персонаж обновлен', OK)
         }
     }
 
@@ -66,7 +66,7 @@ class GameCharacterController extends BaseController {
     def delete(GameCharacter character) {
         if(validateData(character)) {
             characterService.delete(character)
-            respondChange('Персонаж удален', NO_CONTENT, null, character.id)
+            respondChange('Персонаж удален', NO_CONTENT)
         }
     }
 

@@ -67,7 +67,8 @@ class LetterController extends BaseModuleController {
 
       if (validateData(letter, 'compose')) {
         mailboxService.saveLetter(letter)
-        respondChange('Письмо сохранено', CREATED, letter)
+        respondChange('Письмо сохранено', CREATED,
+            [controller: 'MailBox', action: 'show', id: letter.mailbox.id])
       }
     }
   }
@@ -82,7 +83,8 @@ class LetterController extends BaseModuleController {
       setupLetterContent(letter, true)
       if (validateData(letter, 'edit')) {
         mailboxService.saveLetter(letter)
-        respondChange('Письмо обновлено', CREATED, letter)
+        respondChange('Письмо обновлено', CREATED,
+            [controller: 'MailBox', action: 'show', id: letter.mailbox.id])
       }
     }
   }
@@ -97,7 +99,8 @@ class LetterController extends BaseModuleController {
       setupLetterContent(letter)
       if (validateData(letter, letter.id ? 'edit': 'compose')) {
         mailboxService.saveLetter(letter)
-        respondChange('Письмо успешно отправлено', CREATED, letter)
+        respondChange('Письмо успешно отправлено', CREATED,
+            [controller: 'MailBox', action: 'show', id: letter.mailbox.id])
       }
     }
   }
@@ -107,19 +110,20 @@ class LetterController extends BaseModuleController {
     withModule {
       if (validateData(letter)) {
         mailboxService.deleteLetter(letter)
-        respondChange('Письмо удалено', NO_CONTENT, null, letter.id)
+        respondChange('Письмо удалено', NO_CONTENT,
+            [controller: 'MailBox', action: 'show', id: letter.mailbox.id])
       }
     }
   }
 
-  @Override
-  protected Map redirectParams() {
-    def result = super.redirectParams()
-    result.action = 'show'
-    result.controller = 'MailBox'
-    result.params.id = params?.mailbox?.id ?: LetterRef.get(params.id).mailbox.id
-    return result
-  }
+//  @Override
+//  protected Map redirectParams() {
+//    def result = super.redirectParams()
+//    result.action = 'show'
+//    result.controller = 'MailBox'
+//    result.params.id = params?.mailbox?.id ?: LetterRef.get(params.id).mailbox.id
+//    return result
+//  }
 
   @Override
   protected Game.GameModule module() {

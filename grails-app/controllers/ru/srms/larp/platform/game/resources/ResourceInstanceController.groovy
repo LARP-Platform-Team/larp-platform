@@ -42,10 +42,10 @@ class ResourceInstanceController extends BaseModuleController {
     withModule {
       def resource = ResourceInstance.get(params.id)
       resource.properties['value'] = params
-      params.redirectToParent = false
       if (validateData(resource, 'show')) {
         resourceService.updateResourceValue(resource)
-        respondChange('Вы успешно изменили значение', OK, resource)
+        respondChange('Вы успешно изменили значение', OK,
+            [action: 'show', id: resource.id])
       }
     }
   }
@@ -59,11 +59,9 @@ class ResourceInstanceController extends BaseModuleController {
         respond source, model: [transferData: data], view: 'show'
         return
       }
-
       resourceService.transfer(data)
-
-      params.redirectToParent = false
-      respondChange('Перевод успешно осуществлен', OK, source)
+      respondChange('Перевод успешно осуществлен', OK,
+          [action: 'show', id: source.id])
     }
   }
 
@@ -71,9 +69,9 @@ class ResourceInstanceController extends BaseModuleController {
   def save(ResourceInstance resource) {
     withModule {
       if (validateData(resource, 'create')) {
-        params.redirectToParent = true
         resourceService.saveResourceInstance(resource)
-        respondChange('Экземпляр ресурса успешно создан', CREATED, resource)
+        respondChange('Экземпляр ресурса успешно создан', CREATED,
+            [controller: 'GameResource', action: 'show', id: resource.type.id])
       }
     }
   }
@@ -81,7 +79,6 @@ class ResourceInstanceController extends BaseModuleController {
   @Transactional
   def update() {
     withModule {
-      params.redirectToParent = true
       // saving old params to change permission correctly
       def resource = ResourceInstance.get(params.id)
       def oldResource = new HashMap<>(resource.properties)
@@ -89,7 +86,8 @@ class ResourceInstanceController extends BaseModuleController {
 
       if (validateData(resource, 'edit')) {
         resourceService.saveResourceInstance(resource, oldResource)
-        respondChange('Экземпляр ресурса обновлен', OK, resource)
+        respondChange('Экземпляр ресурса обновлен', OK,
+            [controller: 'GameResource', action: 'show', id: resource.type.id])
       }
     }
   }
@@ -98,29 +96,11 @@ class ResourceInstanceController extends BaseModuleController {
   def delete(ResourceInstance resource) {
     withModule {
       if (validateData(resource)) {
-        // save feed id to params for redirect
-        params.redirectToParent = true
-        params.type = [:]
-        params.type.id = resource.type.id
-
         resourceService.deleteResourceInstance(resource)
-        respondChange('Экземпляр ресурса удален', NO_CONTENT, null, resource.id)
+        respondChange('Экземпляр ресурса удален', NO_CONTENT,
+            [controller: 'GameResource', action: 'show', id: resource.type.id])
       }
     }
-  }
-
-  @Override
-  protected Map redirectParams() {
-    def attrs = super.redirectParams()
-    if (params.redirectToParent) {
-      attrs.controller = 'GameResource'
-      attrs.action = 'show'
-      attrs.id = params.type.id
-    } else {
-      attrs.action = 'show'
-      attrs.id = params.id
-    }
-    return attrs
   }
 
   @Override

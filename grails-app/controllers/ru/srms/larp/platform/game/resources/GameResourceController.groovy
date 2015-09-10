@@ -48,7 +48,7 @@ class GameResourceController extends BaseModuleController {
     withModule {
       if (validateData(resource, 'create')) {
         resourceService.saveResource(resource)
-        respondChange('Игровой ресурс успешно добавлен', CREATED, resource)
+        respondChange('Игровой ресурс успешно добавлен', CREATED)
       }
     }
   }
@@ -58,7 +58,7 @@ class GameResourceController extends BaseModuleController {
     withModule {
       if (validateData(resource, 'edit')) {
         resourceService.saveResource(resource)
-        respondChange('Игровой ресурс обновлен', OK, resource)
+        respondChange('Игровой ресурс обновлен', OK)
       }
     }
   }
@@ -68,7 +68,7 @@ class GameResourceController extends BaseModuleController {
     withModule {
       if (validateData(resource)) {
         resourceService.deleteResource(resource)
-        respondChange('Игровой ресурс удален', NO_CONTENT, null, resource.id)
+        respondChange('Игровой ресурс удален', NO_CONTENT)
       }
     }
   }

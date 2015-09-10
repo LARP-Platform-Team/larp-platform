@@ -54,7 +54,7 @@ class MailBoxController extends BaseModuleController {
     withModule {
       if (validateData(instance, 'create')) {
         mailboxService.save(instance)
-        respondChange('Почтовый ящик успешно создан', CREATED, instance)
+        respondChange('Почтовый ящик успешно создан', CREATED)
       }
     }
   }
@@ -67,7 +67,7 @@ class MailBoxController extends BaseModuleController {
       instance.properties = params
       if (validateData(instance, 'edit')) {
         mailboxService.save(instance, oldOwner)
-        respondChange('Почтовый ящик обновлен', OK, instance)
+        respondChange('Почтовый ящик обновлен', OK)
       }
     }
   }
@@ -77,7 +77,7 @@ class MailBoxController extends BaseModuleController {
     withModule {
       if (validateData(instance)) {
         mailboxService.delete(instance)
-        respondChange('Почтовый ящик удален', NO_CONTENT, null, instance.id)
+        respondChange('Почтовый ящик удален', NO_CONTENT)
       }
     }
   }
@@ -100,7 +100,7 @@ class MailBoxController extends BaseModuleController {
       def instance = params.entry.id ? AddressBookEntry.get(params.entry.id) : null
       if (validateData(instance, 'addressBook')) {
         mailboxService.deleteSavedAddress(instance)
-        respondChange('Запись из адресной книги удалена', NO_CONTENT, null, null, [action: 'addressBook', id: box.id])
+        respondChange('Запись из адресной книги удалена', NO_CONTENT, [action: 'addressBook', id: box.id])
       }
     }
   }
@@ -117,7 +117,7 @@ class MailBoxController extends BaseModuleController {
       }
 
       mailboxService.addAddress(box, MailBox.findByGameAndAddress(command.game, command.newAddress))
-      respondChange('Адрес добавлен в адресную книгу', OK, null, null, [action: 'addressBook', id: box.id])
+      respondChange('Адрес добавлен в адресную книгу', OK, [action: 'addressBook', id: box.id])
     }
   }
 
