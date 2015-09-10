@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
     <changeSet author="Treble Snake" id="1441374284283-1">
         <addColumn tableName="spring_user">
             <column name="name" type="varchar(64)">
@@ -40,5 +42,50 @@
         </addColumn>
     </changeSet>
 
+    <!--  https://bitbucket.org/TrebleSnake/larp-platform/issues/34/  -->
+    <!-- Mailbox address book -->
+    <changeSet author="Treble Snake" id="1441873309257-issue-34-1">
+        <renameTable
+                newTableName="letter_content_recipients"
+                oldTableName="letter_content_mail_box"/>
+    </changeSet>
+
+    <changeSet author="Treble Snake" id="1441876284140-issue-34-2">
+        <createTable tableName="address_book_entry">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="address_book_entry_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mail_box_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="entry_id" type="int8"/>
+            <column name="entry_address" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="mail_box_id" baseTableName="address_book_entry"
+                                 constraintName="FK_73q9ec9e09tj3wykq8fa9rcu3" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id"
+                                 referencedTableName="mail_box" referencesUniqueColumn="false"/>
+
+        <addForeignKeyConstraint baseColumnNames="entry_id" baseTableName="address_book_entry"
+                                 constraintName="FK_76283t1c6ebh5q6ai63dxwuc4" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id"
+                                 referencedTableName="mail_box" referencesUniqueColumn="false"/>
+
+    </changeSet>
+
+    <changeSet author="Treble Snake" id="1441876284140-issue-34-3">
+        <createIndex indexName="unique_address_book_entry_id" tableName="address_book_entry"
+                     unique="true">
+            <column name="mail_box_id"/>
+            <column name="entry_id"/>
+        </createIndex>
+    </changeSet>
 
 </databaseChangeLog>

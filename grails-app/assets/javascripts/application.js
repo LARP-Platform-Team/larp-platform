@@ -14,12 +14,60 @@
 
 if (typeof jQuery !== 'undefined') {
 	$(function () {
-		$('#spinner').ajaxStart(function () {
-			$(this).fadeIn();
-		}).ajaxStop(function () {
-			$(this).fadeOut();
-		});
+        initSemanticUI();
+        initRichTextEditor();
+        initAjax()
+    });
 
+    function initAjax() {
+        function showError(text) {
+            alert(text + ' Пожалуйста, свяжитесь с нами (разработчиками) и расскажите, как так вышло :)');
+        }
+
+        $.ajaxSetup({
+            dataType: 'json',
+            method: 'POST'
+        });
+
+        $(document)
+            .ajaxError(function (event, jqxhr, settings, thrownError) {
+                showError('Произошла ошибка во время выполнения запроса.')
+                console.error(event, jqxhr, settings, thrownError)
+            })
+            .ajaxSend(function (event, jqxhr, settings) {
+                if(event.target.activeElement) {
+                    $(event.target.activeElement)
+                        .find('.ui.loader').addClass('active')
+                }
+            })
+            .ajaxComplete(function (event, jqxhr, settings) {
+                if(event.target.activeElement) {
+                    $(event.target.activeElement)
+                        .find('.ui.loader').removeClass('active')
+                }
+            });
+
+        $('a.addAddressBookEntry').click(function (event) {
+            var link = $(this);
+            $.ajax({
+                url: link.attr('href')
+            })
+                .done(function (data) {
+                    if (data.success) {
+                        link.parents('.lettersList')
+                            .find('a.addAddressBookEntry[rel=\''+link.attr('rel')+'\']')
+                            .popup('destroy')
+                            .remove();
+                        link.popup('destroy').remove()
+                    } else
+                        showError("Ошибка. Не удалось добавить запись.")
+                });
+
+            event.preventDefault()
+        })
+    }
+
+    function initSemanticUI() {
 		$('.ui.message .close').on('click', function () {
 			$(this)
 				.closest('.message')
@@ -34,9 +82,11 @@ if (typeof jQuery !== 'undefined') {
 		$('.ui.accordion').accordion({exclusive: false})
 
 		$('.ui.tabular.menu .item').tab();
+    }
 
+    function initRichTextEditor() {
 		$('textarea.rich').ckeditor({
 			language: 'ru'
 		});
-	});
+    }
 }

@@ -20,7 +20,10 @@
       <div class="header">${subject.content.subject}</div>
 
       <div class="meta">
-        <span>От кого: ${subject.content.letterFrom}</span>
+        <span>
+          От кого: ${subject.content.letterFrom}
+          <g:render template="/mailBox/addAddress" model="[letter: subject]"/>
+        </span>
 
         <div class="right floated time">
           <g:render template="/shared/date" model="[date: subject.content.time]"/>

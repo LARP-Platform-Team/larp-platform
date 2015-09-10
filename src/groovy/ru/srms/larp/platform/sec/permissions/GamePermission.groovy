@@ -14,8 +14,9 @@ enum GamePermission {
       (MailBox.class)         : 'Чтение писем',
       (ResourceInstance.class): 'Просмотр баланса и лога'
   ]),
-  WRITE(BasePermission.WRITE, [NewsFeed.class, ResourceInstance.class],[
+  WRITE(BasePermission.WRITE, [NewsFeed.class, ResourceInstance.class, MailBox.class],[
       (NewsFeed.class)        : 'Редактирование новостей',
+      (MailBox.class)         : 'Редактирование адресной книги',
       (ResourceInstance.class): 'Изменение баланса'
   ]),
   CREATE(BasePermission.CREATE, [NewsFeed.class, MailBox.class, ResourceInstance.class],[

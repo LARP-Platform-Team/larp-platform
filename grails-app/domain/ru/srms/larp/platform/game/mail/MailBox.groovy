@@ -11,13 +11,17 @@ class MailBox implements InGameStuff, Titled {
   String name
   GameCharacter owner
   static belongsTo = [game: Game]
-  static hasMany = [letters: LetterRef]
+  static hasMany = [letters: LetterRef, savedAddresses: AddressBookEntry]
 
   static constraints = {
     address maxSize: 64, blank: false, email: true, unique: 'game'
     owner nullable: true
     name maxSize: 64, nullable: true, blank: true
     letters nullable: true
+  }
+
+  boolean hasInBook(MailBox address) {
+    savedAddresses.any {it.entry == address}
   }
 
   @Override

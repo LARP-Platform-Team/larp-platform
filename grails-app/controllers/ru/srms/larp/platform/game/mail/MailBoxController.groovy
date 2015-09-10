@@ -1,5 +1,6 @@
 package ru.srms.larp.platform.game.mail
 
+import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseModuleController
@@ -12,7 +13,7 @@ import static org.springframework.http.HttpStatus.*
 @Transactional(readOnly = true)
 class MailBoxController extends BaseModuleController {
 
-  static allowedMethods = [save: "POST", update: "POST"]
+  static allowedMethods = [save: "POST", update: "POST", addAddressBookEntry: "POST"]
   MailboxService mailboxService
 
   def index() {
@@ -39,6 +40,12 @@ class MailBoxController extends BaseModuleController {
   def edit(MailBox instance) {
     withModule {
       respond mailboxService.edit(instance)
+    }
+  }
+
+  def addressBook(MailBox box) {
+    withModule {
+      respond mailboxService.readAddressBook(box)
     }
   }
 
@@ -72,6 +79,45 @@ class MailBoxController extends BaseModuleController {
         mailboxService.delete(instance)
         respondChange('Почтовый ящик удален', NO_CONTENT, null, instance.id)
       }
+    }
+  }
+
+  @Transactional
+  def addAddressBookEntry(MailBox box) {
+    withModule {
+      def result = [success: false]
+
+      if(params.target.id && MailBox.exists(params.target.id)) {
+        result = [success: mailboxService.addAddress(box, MailBox.get(params.target.id))]
+      }
+      render result as JSON
+    }
+  }
+
+  @Transactional
+  def deleteSavedAddress(MailBox box) {
+    withModule {
+      def instance = params.entry.id ? AddressBookEntry.get(params.entry.id) : null
+      if (validateData(instance, 'addressBook')) {
+        mailboxService.deleteSavedAddress(instance)
+        respondChange('Запись из адресной книги удалена', NO_CONTENT, null, null, [action: 'addressBook', id: box.id])
+      }
+    }
+  }
+
+  @Transactional
+  def addSavedAddress(MailBox box) {
+    withModule {
+      def command = new AddAddressCommand(newAddress: params.newAddress, game: params.game, currentBox: box)
+      command.validate()
+      if(command.hasErrors())
+      {
+        respond box, view: 'addressBook', model: [addAddressCommand: command]
+        return
+      }
+
+      mailboxService.addAddress(box, MailBox.findByGameAndAddress(command.game, command.newAddress))
+      respondChange('Адрес добавлен в адресную книгу', OK, null, null, [action: 'addressBook', id: box.id])
     }
   }
 
