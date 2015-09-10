@@ -31,8 +31,11 @@ if (typeof jQuery !== 'undefined') {
 
         $(document)
             .ajaxError(function (event, jqxhr, settings, thrownError) {
-                showError('Произошла ошибка во время выполнения запроса.')
-                console.error(event, jqxhr, settings, thrownError)
+                // TODO delete after custom ajax implemented
+                if(jqxhr.status != 400) {
+                    showError('Произошла ошибка во время выполнения запроса.')
+                    console.error(event, jqxhr, settings, thrownError)
+                }
             })
             .ajaxSend(function (event, jqxhr, settings) {
                 if(event.target.activeElement) {
