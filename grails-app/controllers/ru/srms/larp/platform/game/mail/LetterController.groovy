@@ -116,15 +116,6 @@ class LetterController extends BaseModuleController {
     }
   }
 
-//  @Override
-//  protected Map redirectParams() {
-//    def result = super.redirectParams()
-//    result.action = 'show'
-//    result.controller = 'MailBox'
-//    result.params.id = params?.mailbox?.id ?: LetterRef.get(params.id).mailbox.id
-//    return result
-//  }
-
   @Override
   protected Game.GameModule module() {
     return Game.GameModule.MAIL

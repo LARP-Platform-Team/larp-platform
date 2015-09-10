@@ -99,15 +99,12 @@ abstract class BaseController {
 //        }
   }
 
-  protected Map redirectParams() {
-    return redirectParams(null)
-  }
   /**
    * May be overriden for custom redirect rules
    * @param route - map with navigation rules; can contain [action, controller, id, method, params]
    * @return map of redirect params
    */
-  protected Map redirectParams(Map route) {
+  protected Map redirectParams(Map route = null) {
     def defaults = [action: route?.action ?: 'index', params: [:], method: route?.method ?: "GET"]
     if(route?.params) defaults.params += route.params
     if (route?.id) defaults.id = route.id
