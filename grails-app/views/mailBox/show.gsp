@@ -16,6 +16,11 @@
       <i class="write blue icon"></i> Написать письмо</ingame:link>
   </sec:permitted>
 
+  <sec:permitted object="${subject}" permission="write">
+    <ingame:link class="item" action="addressBook" resource="${subject}">
+      <i class="green book icon"></i> Адресная книга</ingame:link>
+  </sec:permitted>
+
   <g:link mapping="playAs" params="[gameAlias: params.gameAlias, charAlias: params.charAlias]"
           class="item"><i
       class="arrow left grey icon"></i> Назад</g:link>
@@ -40,7 +45,7 @@
       <div class="ui segment">
         <g:each in="${LetterType.values()}" var="tab" status="i">
           <div class="ui tab ${i == 0 ? "active" : ""}" data-tab="tab-${tab.toString()}">
-            <table class="ui celled padded very basic table">
+            <table class="ui celled padded very basic table lettersList">
               <thead>
               <tr>
                 <th>${tab.targetName}</th>
@@ -51,7 +56,10 @@
               <tbody>
               <g:each in="${letters.get(tab)}" var="letter">
                 <tr>
-                  <td>${tab.getAddress(letter.content)}</td>
+                  <td>
+                    ${tab.getAddress(letter.content)}
+                    <tmpl:addAddress letter="${letter}"/>
+                  </td>
                   <td><ingame:link controller="letter" class="${letter.deleted ? 'deleted' : ''}"
                                    action="show"
                                    id="${letter.id}">${letter.content.subject}</ingame:link></td>

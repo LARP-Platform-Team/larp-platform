@@ -35,6 +35,10 @@ class LetterContent implements InGameStuff {
     }
   }
 
+  static mapping = {
+    recipients joinTable: 'letter_content_recipients'
+  }
+
   def beforeValidate() {
     if(updateRecipients) convertAddresses()
     letterFrom = sender.toString()

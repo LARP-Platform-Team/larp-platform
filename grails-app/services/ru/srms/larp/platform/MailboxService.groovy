@@ -7,10 +7,7 @@ import org.springframework.security.access.prepost.PostFilter
 import org.springframework.security.access.prepost.PreAuthorize
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.character.GameCharacter
-import ru.srms.larp.platform.game.mail.LetterContent
-import ru.srms.larp.platform.game.mail.LetterRef
-import ru.srms.larp.platform.game.mail.LetterType
-import ru.srms.larp.platform.game.mail.MailBox
+import ru.srms.larp.platform.game.mail.*
 
 import static org.springframework.security.acls.domain.BasePermission.*
 
@@ -105,6 +102,23 @@ class MailboxService {
     changePermissions(mailbox, oldOwner, mailbox.owner)
   }
 
+  @PreAuthorize("hasPermission(#box, write) or hasPermission(#box.game, admin)")
+  def readAddressBook(MailBox box) { box }
+
+  @PreAuthorize("hasPermission(#parent, write) or hasPermission(#parent.game, admin)")
+  @Transactional
+  def addAddress(MailBox parent, MailBox address) {
+    def entry = new AddressBookEntry(entry: address)
+    parent.addToSavedAddresses(entry)
+    entry.save()
+  }
+
+  @PreAuthorize("hasPermission(#entry.mailBox, write) or hasPermission(#entry.extractGame(), admin)")
+  @Transactional
+  def deleteSavedAddress(AddressBookEntry entry) {
+    entry.delete()
+  }
+
   private def changePermissions(MailBox mailbox, GameCharacter oldOwner, GameCharacter newOwner) {
     if (oldOwner == newOwner)
       return
@@ -130,6 +144,4 @@ class MailboxService {
     aclUtilService.deleteAcl(mailbox)
     mailbox.delete()
   }
-
-
 }

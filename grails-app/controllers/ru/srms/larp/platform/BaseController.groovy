@@ -79,11 +79,14 @@ abstract class BaseController {
    * @param id domain class instance id
    * @return The result of the "request.withFormat" closure call
    */
-  protected def respondChange(String message, HttpStatus status, def object, def id = null) {
+  // TODO remove object and id args
+  protected def respondChange(String message, HttpStatus status,
+                              def object, def id = null, def route = null) {
 
     flash.success = message;
-    //message(code: message, default: message, args: [message(code: labelCode()), id ?: object?.id])
-    def map = redirectParams()
+    def map = route ?
+        redirectParams(route.action, route.id, route.controller)
+        : redirectParams()
     map.status = status
     redirect map
 
@@ -102,17 +105,20 @@ abstract class BaseController {
 //        }
   }
 
+  protected Map redirectParams() {
+    return redirectParams('index', null, null)
+  }
   /**
    * May be overriden for custom redirect rules
    * @return map of redirect params
    */
-  protected Map redirectParams() {
+  protected Map redirectParams(String action, def id, String controller) {
     // TODO retrieve defaultAction somehow instead of just "index"
-    def defaults = [action: 'index', params: [:], method: "GET"]
-    if (params.gameAlias)
-      defaults.params.gameAlias = params.gameAlias
-    if (params.charAlias)
-      defaults.params.charAlias = params.charAlias
+    def defaults = [action: action, params: [:], method: "GET"]
+    if (id) defaults.id = id
+    if (controller) defaults.controller = controller
+    if (params.gameAlias) defaults.params.gameAlias = params.gameAlias
+    if (params.charAlias) defaults.params.charAlias = params.charAlias
     return defaults
   }
 
