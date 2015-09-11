@@ -223,24 +223,24 @@ htmlcleaner {
       allow "s", "figcaption", "hr"
 
       allow("figure") {
-        attributes "class", "style"
+        attributes "class"
       }
 
       allow("code") {
-        attributes "class", "style"
+        attributes "class"
       }
       allow("span") {
-        attributes "class", "style"
+        attributes "class"
       }
       allow("p") {
-        attributes "class", "style"
+        attributes "class"
       }
       allow("div") {
-        attributes "class", "style"
+        attributes "class"
       }
 
       allow("table") {
-        attributes "border", "cellpadding", "cellspacing", "style"
+        attributes "border", "cellpadding", "cellspacing"
       }
       allow("th") {
         attributes "scope"

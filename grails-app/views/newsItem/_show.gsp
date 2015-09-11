@@ -1,6 +1,6 @@
 <%@ page import="ru.srms.larp.platform.game.news.NewsItem" %>
 
-<article class="item">
+<article class="item newsItem">
   <div class="content">
     <h2 class="header">${item.title}</h2>
 
@@ -8,7 +8,7 @@
       <g:render template="/shared/date" model="[date: item.created]"/>
     </div>
 
-    <div class="description"><hc:cleanHtml unsafe="${item.text}" whitelist="rich-text"/></div>
+    <div class="description richText"><hc:cleanHtml unsafe="${item.text}" whitelist="rich-text"/></div>
 
     <div class="extra">
       <div class="ui buttons">

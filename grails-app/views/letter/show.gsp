@@ -32,7 +32,7 @@
 
       <div class="meta">Кому: ${subject.content.letterTo}</div>
 
-      <div class="description letter-text">
+      <div class="description letterText richText">
         <hc:cleanHtml unsafe="${subject.content.text}" whitelist="rich-text"/>
       </div>
     </div>
