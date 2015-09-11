@@ -30,7 +30,7 @@
             <section class="ui pilled segment">
                 <div class="ui green ribbon label">Об игре</div>
                 <div class="ui small hidden divider"></div>
-                <div class="content"><hc:cleanHtml unsafe="${subject.overview}" whitelist="rich-text"/></div>
+                <div class="content richText"><hc:cleanHtml unsafe="${subject.overview}" whitelist="rich-text"/></div>
             </section>
         </div>
 
