@@ -24,10 +24,11 @@ if (typeof jQuery !== 'undefined') {
             alert(text + ' Пожалуйста, свяжитесь с нами (разработчиками) и расскажите, как так вышло :)');
         }
 
-        $.ajaxSetup({
-            dataType: 'json',
-            method: 'POST'
-        });
+        // TODO Set it up after custom ajax implemented
+        //$.ajaxSetup({
+        //    dataType: 'json',
+        //    method: 'POST'
+        //});
 
         $(document)
             .ajaxError(function (event, jqxhr, settings, thrownError) {
@@ -53,6 +54,8 @@ if (typeof jQuery !== 'undefined') {
         $('a.addAddressBookEntry').click(function (event) {
             var link = $(this);
             $.ajax({
+                dataType: 'json',
+                method: 'POST',
                 url: link.attr('href')
             })
                 .done(function (data) {

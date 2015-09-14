@@ -24,7 +24,7 @@
 </content>B
 
 <content tag="content">
-    <div class="ui two columns grid">
+    <div class="ui two columns stackable grid">
 
         <div class="ten wide column">
             <section class="ui pilled segment">
