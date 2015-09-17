@@ -16,8 +16,16 @@
   </div>
 </div>
 
+<div class="${hasErrors(bean: gameInstance, field: 'preview', 'error')} required field">
+  <label for="preview">Краткое описание (512 символов):</label>
+  <g:textArea name="preview" cols="40" rows="5" class="simple rich" maxlength="1000" required=""
+              placeholder="Краткое описание" value="${gameInstance?.preview}"/>
+  <div class="ui pointing label">Отображается на главной странице, в списке игр.
+  Максимум 512 символов.</div>
+</div>
+
 <div class="${hasErrors(bean: gameInstance, field: 'overview', 'error')} required field">
-  <label for="overview">Описание:</label>
+  <label for="overview">Полное описание:</label>
   <g:textArea name="overview" cols="40" rows="5" class="rich" maxlength="9999" required=""
               placeholder="Описание" value="${gameInstance?.overview}"/>
 </div>

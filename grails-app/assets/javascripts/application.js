@@ -91,8 +91,17 @@ if (typeof jQuery !== 'undefined') {
     }
 
     function initRichTextEditor() {
-		$('textarea.rich').ckeditor({
-			language: 'ru'
+		$('textarea.rich:not(.simple)').ckeditor({
+			language: 'ru',
+            removePlugins: 'justify,indentblock,indentlist'
 		});
+
+        $('textarea.simple.rich').ckeditor({
+            language: 'ru',
+            removePlugins: 'justify,indentlist,identblock,blockquote,image,indentblock,indentlist,' +
+            'link,list,liststyle,pagebreak,pastefromword,smiley,stylescombo,' +
+            'table,tableresize,tabletools,specialchar,format,horizontalrule'
+        });
     }
+
 }

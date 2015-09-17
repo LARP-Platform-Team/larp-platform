@@ -38,7 +38,7 @@ class GameController extends BaseController {
 
   @Transactional
   def save(Game game) {
-    game.overview = cleanHtml(game.overview, 'rich-text')
+    updateRichText(game)
     if (validateData(game, 'create')) {
       gameService.save(game)
       respondChange("Новая игра ${game.title} успешно создана", CREATED,
@@ -51,12 +51,18 @@ class GameController extends BaseController {
     if (!params.modules)
       game.modules.clear()
 
-    game.overview = cleanHtml(game.overview, 'rich-text')
+    updateRichText(game)
     if (validateData(game, 'edit')) {
       gameService.update(game)
       respondChange('Параметры игры изменены', OK,
           [action: 'play', params: [gameAlias: game.alias]])
     }
+  }
+
+  private void updateRichText(Game game) {
+    game.overview = cleanHtml(game.overview, 'rich-text')
+    game.preview = cleanHtml(game.preview, 'rich-text')
+    game.previewPureLength = cleanHtml(game.preview, 'none').length()
   }
 
   @Secured(['ROLE_ADMIN'])

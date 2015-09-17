@@ -88,4 +88,20 @@
         </createIndex>
     </changeSet>
 
+    <!-- https://bitbucket.org/TrebleSnake/larp-platform/issues/69/ -->
+    <!-- Game preview -->
+    <changeSet author="Treble Snake" id="1442515714122-issue-69">
+        <addColumn tableName="game">
+            <column name="preview" type="varchar(1000)" />
+        </addColumn>
+
+        <sql>
+            update game set preview = 'Краткое описание не задано'
+        </sql>
+
+        <addNotNullConstraint columnName="preview"
+                              schemaName="public"
+                              tableName="game"/>
+    </changeSet>
+
 </databaseChangeLog>

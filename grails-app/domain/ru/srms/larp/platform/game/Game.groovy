@@ -7,13 +7,19 @@ class Game implements Titled {
 
   String title
   String alias
+  String preview
   String overview
+  transient int previewPureLength
   static hasMany = [masters: SpringUser, characters: GameCharacter, modules: GameModule]
+
+  static transients = ['previewPureLength']
 
   static constraints = {
     title maxSize: 32, unique: true
     alias maxSize: 32, matches: /^[A-Za-z0-9\-]+$/, unique: true
     overview maxSize: 9999
+    preview maxSize: 1000
+    previewPureLength bindable: true, max: 512
   }
 
   static mapping = {
