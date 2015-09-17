@@ -217,6 +217,12 @@ grails.plugin.databasemigration.ignoredObjects = ['qrtz_triggers','qrtz_simprop_
 // WYSIWYG editor
 htmlcleaner {
   whitelists = {
+
+    whitelist("simple-rich-text") {
+        startwith "simpleText"
+        allow "s", "sub", "sup"
+    }
+
     whitelist("rich-text") {
       startwith "relaxed"
 

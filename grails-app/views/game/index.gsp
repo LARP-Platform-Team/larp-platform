@@ -32,7 +32,7 @@
         </td>
         <td>
           <div class="richText">
-            <hc:cleanHtml unsafe="${game.overview}" whitelist="rich-text"/>
+            <hc:cleanHtml unsafe="${game.preview}" whitelist="rich-text"/>
           </div>
         </td>
       </tr>
