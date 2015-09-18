@@ -38,14 +38,15 @@
 <div class="${hasErrors(bean: subject, field: 'origin', 'error')} field">
   <label for="origin.id">Источник</label>
   <g:select name="origin.id" from="${subject.type.origins}" value="${subject.origin?.id}"
-            class="dropdown"
-            optionKey="id" optionValue="title" noSelection="${['null': 'нет']}"/>
+            class="dropdown" data-placeholder="Выберите источник"
+            optionKey="id" optionValue="title" noSelection="${['null': '']}"/>
 </div>
 
 <div class="${hasErrors(bean: subject, field: 'owner', 'error')} field">
   <label for="owner.id">Владелец</label>
   <g:select name="owner.id" from="${GameCharacter.findAllByGame(params.game)}" class="dropdown"
-            value="${subject.owner?.id}" optionKey="id" noSelection="${['null': 'нет']}"/>
+            data-placeholder="Выберите владельца"
+            value="${subject.owner?.id}" optionKey="id" noSelection="${['null': '']}"/>
   <div class="ui pointing label">Игрок, управляющий ресурсом. Можно оставить пустым - это будет мастерский ресурс.</div>
 </div>
 </div>

@@ -8,6 +8,10 @@
 * compiled file, but it's generally better to create a new file per style scope.
 *
 *= require ../semantic/semantic
+*= require ../chosen/chosen.min
+*= require ../jquery-ui/jquery-ui.min
+*= require ../jquery-ui/jquery-ui.structure.min
+*= require ../jquery-ui/jquery-ui.theme.min
 *= require_self
 */
 a.deleted {
@@ -42,4 +46,33 @@ a.deleted {
 /* Remove if resolved */
 .ui.items .item > .content {
     width: 100%;
+}
+
+/* TODO move to the Semantic UI build */
+.dropdown.chosen-container a.chosen-single {
+    border-radius: 0 !important;
+    border-color: rgba(34, 36, 38, 0.15) !important;
+    height: auto !important;
+    background: none #fff !important;
+}
+
+.dropdown.chosen-container .chosen-drop {
+    border-color: rgba(34, 36, 38, 0.15) !important;
+}
+
+.dropdown.chosen-container a  {
+    padding-top: 0.4em !important;
+    padding-bottom: 0.4em !important;
+}
+
+.dropdown.chosen-container-single .chosen-single div b {
+    background-position: 0 7px !important;
+}
+
+.dropdown.chosen-container-active.chosen-with-drop .chosen-single div b {
+    background-position: -18px 7px !important;
+}
+
+.dropdown.chosen-container-single .chosen-single abbr {
+    top: 11px !important;
 }
