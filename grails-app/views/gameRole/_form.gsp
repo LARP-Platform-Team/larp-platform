@@ -11,6 +11,6 @@
     <label for="parent.id">Родительская роль</label>
     <g:select name="parent.id" value="${gameRoleInstance?.parent?.id}" class="dropdown"
               from="${GameRole.findAllByGame(params.game).findAll { it.id != gameRoleInstance.id }}"
-              optionKey="id" optionValue="title" noSelection="${['null': 'нет']}"/>
+              optionKey="id" optionValue="title" data-placeholder="Выберите роль" noSelection="${['null': '']}"/>
   </div>
 </div>

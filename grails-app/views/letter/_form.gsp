@@ -11,7 +11,10 @@
 
   <div class="${hasErrors(bean: letter, field: 'content.targetAddresses', 'error')} required field">
     <label for="content.targetAddresses">Кому</label>
-    <g:textField name="content.targetAddresses" value="${letter?.content?.targetAddresses ?: letter?.content?.recipients?.collect { it.address } ?.join(', ')}"/>
+    <g:textField name="content.targetAddresses" class="autocompleteMulti"
+                 value="${letter?.content?.targetAddresses ?: letter?.content?.recipients?.collect { it.address } ?.join(', ')}"
+                data-options="${letter.mailbox.savedAddresses.collect { it.entry?.address ?: it.entryAddress } as grails.converters.JSON}"
+    />
     <div class="ui pointing label">Вводите адреса через запятую.</div>
   </div>
 </div>

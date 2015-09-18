@@ -17,6 +17,6 @@
   <label for="owner">Владелец</label>
   <g:select id="owner" name="owner.id" from="${GameCharacter.findAllByGame(params.game)}"
             optionKey="id" value="${mailBoxInstance?.owner?.id}" class="dropdown"
-            noSelection="['null': 'нет']"/>
+            data-placeholder="Выберите владельца" noSelection="['null': '']"/>
   <div class="ui pointing label">Игрок, управляющий ящиком. Оставьте пустым, чтобы сделать "мастерский" ящик.</div>
 </div>

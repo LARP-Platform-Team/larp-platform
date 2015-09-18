@@ -19,7 +19,8 @@
   <div class="${hasErrors(bean: subject, field: 'source', 'error')} field">
     <label for="source.id">Источник перевода</label>
     <g:select name="source.id" from="${ResourceInstance.findAllByType(subject?.target?.type)}" class="dropdown"
-              value="${subject?.source?.id}" optionValue="fullId" optionKey="id" noSelection="${['null': 'нет']}"/>
+              value="${subject?.source?.id}" optionValue="fullId" optionKey="id"
+              data-placeholder="Выберите источник" noSelection="${['null': '']}"/>
     <div class="ui pointing label">Если выбрать ресурс-источник - его значение тоже будет меняться. Если не выбирать - надо ввести название в соседнем поле.</div>
   </div>
 
