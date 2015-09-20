@@ -31,14 +31,16 @@
                            url="[resource: subject, action: 'addToChar']"
                            update="[success: 'charactersContainer', failure: 'addCharError']">
 
-          <div id="charactersContainer">
+          <div id="charactersContainer" class="ui middle aligned selection list larp-ajax-container">
             <g:render template="characters" model="[characters: subject.characters]"/>
           </div>
+          <div class="errors" id="addCharError"></div>
+          <div class="ui divider"></div>
 
           <div class="ui action input">
             <g:select name="character.id" from="${GameCharacter.findAllByGame(params.game)}"
                       optionKey="id" class="ui dropdown"/>
-            <ui:submit class="right icon" icon="add user" title="Выбрать персонажа"/>
+            <ui:submit remote="true" class="right icon" icon="add user" title="Выбрать персонажа"/>
           </div>
         </ingame:formRemote>
       </section>

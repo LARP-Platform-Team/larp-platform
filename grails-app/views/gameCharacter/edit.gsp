@@ -32,14 +32,16 @@
         <ingame:formRemote name="roles" url="[resource: subject, action: 'addRole']" method="POST"
                            update="[success: 'rolesContainer', failure: 'addRoleError']">
 
-          <div id="rolesContainer">
+          <div id="rolesContainer" class="ui middle aligned selection list larp-ajax-container">
             <g:render template="roles" model="[items: subject.roles]"/>
           </div>
+          <div id="addRoleError"></div>
+          <div class="ui divider"></div>
 
           <div class="ui action input">
             <g:select name="role.id" from="${GameRole.findAllByGame(params.game)}"
                       optionKey="id" class="ui dropdown"/>
-            <ui:submit class="right icon" icon="check circle outline" title="Назначить"/>
+            <ui:submit remote="true" class="right icon" icon="check circle outline" title="Назначить"/>
           </div>
         </ingame:formRemote>
       </section>

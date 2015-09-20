@@ -72,16 +72,18 @@
                        url="[resource: subject, action: 'addOrigin']" method="POST"
                        update="[success: 'itemsContainer', failure: 'addOriginError']">
 
-      <div id="itemsContainer">
+      <div id="itemsContainer" class="ui middle aligned horizontal relaxed divided selection list larp-ajax-container">
         <g:render template="origins" model="[items: subject.origins]"/>
       </div>
+      <div id="addOriginError"></div>
+      <div class="ui divider"></div>
 
       <div class="ui grid">
         <div class="eight wide column">
           <div class="ui action input">
             <g:textField name="originTitle" placeholder="Введите название" id="newOriginTitle"
                          required="required"/>
-            <ui:submit class="right" icon="plus">Добавить</ui:submit>
+            <ui:submit remote="true" class="right" icon="plus">Добавить</ui:submit>
           </div>
 
           <div class="ui pointing label">Максимум 64 символа. Уникальное в рамках ресурса.</div>

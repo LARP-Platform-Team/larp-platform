@@ -98,18 +98,14 @@ class GameTagLib {
      */
     def formRemote = { attrs, body ->
         attrs.url = composeAttrs(attrs.url)
-        out << g.formRemote(attrs, body)
+        out << g.form(modifyRemoteAttrs(attrs), body)
     }
 
     /**
      * Attention! Use "url" attr to set action, controller, id, params, etc
      * Creates a link to a remote uri that can be invoked via ajax.
      *
-     * @attr update Either a map containing the elements to update for 'success' or 'failure' states, or a string with the element to update in which cause failure events would be ignored
-     * @attr before The javascript function to call before the remote function call
-     * @attr after The javascript function to call after the remote function call
-     * @attr asynchronous Whether to do the call asynchronously or not (defaults to true)
-     * @attr method The method to use the execute the call (defaults to "post")
+     * @attr update a map containing the elements to update for 'success' or 'failure' states
      * @attr controller The name of the controller to use in the link, if not specified the current controller will be linked
      * @attr action The name of the action to use in the link, if not specified the default action will be linked
      * @attr uri relative URI
@@ -121,13 +117,18 @@ class GameTagLib {
      * @attr params A map containing URL query parameters
      * @attr mapping The named URL mapping to use to rewrite the link
      * @attr elementId the DOM element id
+     * @attr gameAlias by default is extracted from params
+     * @attr charAlias by default is extracted from params
      */
     def remoteLink = {attrs, body ->
-        if(!attrs.url)
-            attrs.url = [:]
+        def newBody = new GroovyPage.ConstantClosure(body() +
+                "<div class=\"ui mini inline loader\"></div>")
+        if (attrs.url)
+            attrs.url = composeAttrs(determineMapping(attrs.url))
+        else
+            attrs = composeAttrs(determineMapping(attrs), true)
 
-        attrs.url = composeAttrs(determineMapping(attrs.url))
-        out << g.remoteLink(attrs, body)
+        out << g.link(modifyRemoteAttrs(attrs), newBody)
     }
 
     /**
@@ -336,6 +337,24 @@ class GameTagLib {
             attrs.params.charAlias = attrs.charAlias
         else if (!attrs.params.charAlias && params.charAlias)
             attrs.params.charAlias = params.charAlias
+
+        return attrs
+    }
+
+    private Map modifyRemoteAttrs(Map attrs) {
+        if (!attrs.params)
+            attrs.params = [:]
+
+        attrs.class = (attrs.class ?: "") + " larp-ajax"
+
+        if (attrs.update) {
+            if (attrs.update.success)
+                attrs['data-output-success'] = attrs.update.success
+            if (attrs.update.failure)
+                attrs['data-output-failure'] = attrs.update.failure
+
+            attrs.remove('update')
+        }
 
         return attrs
     }
