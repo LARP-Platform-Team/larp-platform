@@ -8,7 +8,7 @@ function initAjax() {
 }
 
 function alertAjaxError(text) {
-    alert(text + ' Пожалуйста, свяжитесь с нами (разработчиками) и расскажите, как так вышло :)');
+    alert(text + ' РџРѕР¶Р°Р»СѓР№СЃС‚Р°, СЃРІСЏР¶РёС‚РµСЃСЊ СЃ РЅР°РјРё (СЂР°Р·СЂР°Р±РѕС‚С‡РёРєР°РјРё) Рё СЂР°СЃСЃРєР°Р¶РёС‚Рµ, РєР°Рє С‚Р°Рє РІС‹С€Р»Рѕ :)');
 }
 
 function basicAjaxSetup() {
@@ -22,7 +22,7 @@ function initGlobalAjaxHandlers() {
     $(document)
         .ajaxError(function (event, jqxhr, settings, thrownError) {
             if (jqxhr.status != 400) {
-                alertAjaxError('Произошла ошибка во время выполнения запроса.');
+                alertAjaxError('РџСЂРѕРёР·РѕС€Р»Р° РѕС€РёР±РєР° РІРѕ РІСЂРµРјСЏ РІС‹РїРѕР»РЅРµРЅРёСЏ Р·Р°РїСЂРѕСЃР°.');
                 console.error(event, jqxhr, settings, thrownError)
             }
         })
@@ -48,10 +48,10 @@ function initGlobalAjaxHandlers() {
 function initDefaultAjaxHandlers() {
 
     /**
-     * Вызывается перед вставкой полученных через Ajax данных в DOM
-     * @param activeItem элемент, вызвавший ajax-запрос
-     * @param data полученные в ответ на запрос данные
-     * @param targetParent элемент, куда будут вставленны данные
+     * Р’С‹Р·С‹РІР°РµС‚СЃСЏ РїРµСЂРµРґ РІСЃС‚Р°РІРєРѕР№ РїРѕР»СѓС‡РµРЅРЅС‹С… С‡РµСЂРµР· Ajax РґР°РЅРЅС‹С… РІ DOM
+     * @param activeItem СЌР»РµРјРµРЅС‚, РІС‹Р·РІР°РІС€РёР№ ajax-Р·Р°РїСЂРѕСЃ
+     * @param data РїРѕР»СѓС‡РµРЅРЅС‹Рµ РІ РѕС‚РІРµС‚ РЅР° Р·Р°РїСЂРѕСЃ РґР°РЅРЅС‹Рµ
+     * @param targetParent СЌР»РµРјРµРЅС‚, РєСѓРґР° Р±СѓРґСѓС‚ РІСЃС‚Р°РІР»РµРЅРЅС‹ РґР°РЅРЅС‹Рµ
      */
     function beforeInsertData(activeItem, data, targetParent) {
         if (activeItem.hasClass('larp-ajax-self-delete')) {
@@ -61,17 +61,17 @@ function initDefaultAjaxHandlers() {
     }
 
     /**
-     * Вызывается после вставки полученных через Ajax данных в DOM
-     * @param targetParent элемент, куда будут вставленны данные
+     * Р’С‹Р·С‹РІР°РµС‚СЃСЏ РїРѕСЃР»Рµ РІСЃС‚Р°РІРєРё РїРѕР»СѓС‡РµРЅРЅС‹С… С‡РµСЂРµР· Ajax РґР°РЅРЅС‹С… РІ DOM
+     * @param targetParent СЌР»РµРјРµРЅС‚, РєСѓРґР° Р±СѓРґСѓС‚ РІСЃС‚Р°РІР»РµРЅРЅС‹ РґР°РЅРЅС‹Рµ
      */
     function afterInsertData(targetParent) {
         targetParent.find('.ui[title]').popup();
     }
 
     /**
-     * Добавляет к запросу дефолтные обработчики результата
-     * @param request ajax-запрос (promise)
-     * @param element элемент, инициировавший запрос
+     * Р”РѕР±Р°РІР»СЏРµС‚ Рє Р·Р°РїСЂРѕСЃСѓ РґРµС„РѕР»С‚РЅС‹Рµ РѕР±СЂР°Р±РѕС‚С‡РёРєРё СЂРµР·СѓР»СЊС‚Р°С‚Р°
+     * @param request ajax-Р·Р°РїСЂРѕСЃ (promise)
+     * @param element СЌР»РµРјРµРЅС‚, РёРЅРёС†РёРёСЂРѕРІР°РІС€РёР№ Р·Р°РїСЂРѕСЃ
      */
     function withResultHandlers(request, element) {
         var successBlock = $("#" + element.attr('data-output-success'));
@@ -92,7 +92,7 @@ function initDefaultAjaxHandlers() {
                     if (data.responseText != undefined)
                         errorBlock.html(data.responseText);
                     else {
-                        alertAjaxError("Произошла неизвестная ошибка.");
+                        alertAjaxError("РџСЂРѕРёР·РѕС€Р»Р° РЅРµРёР·РІРµСЃС‚РЅР°СЏ РѕС€РёР±РєР°.");
                         console.error(data)
                     }
                 }

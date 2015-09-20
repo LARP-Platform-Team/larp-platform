@@ -19,10 +19,10 @@ function initAddressBookAjax() {
                             .remove();
                         link.popup('destroy').remove()
                     } else
-                        alertAjaxError("Ошибка. Не удалось добавить запись.")
+                        alertAjaxError("РћС€РёР±РєР°. РќРµ СѓРґР°Р»РѕСЃСЊ РґРѕР±Р°РІРёС‚СЊ Р·Р°РїРёСЃСЊ.")
                 })
                 .fail(function (data) {
-                    alertAjaxError("Ошибка. Не удалось выполнить запрос.")
+                    alertAjaxError("РћС€РёР±РєР°. РќРµ СѓРґР°Р»РѕСЃСЊ РІС‹РїРѕР»РЅРёС‚СЊ Р·Р°РїСЂРѕСЃ.")
                 });
 
             event.preventDefault()
