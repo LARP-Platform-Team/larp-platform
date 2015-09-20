@@ -1,4 +1,3 @@
-if (typeof jQuery !== 'undefined') {
 // This is a manifest file that'll be compiled into application.js.
 //
 // Any JavaScript file within this directory can be referenced here using a relative path.
@@ -14,6 +13,8 @@ if (typeof jQuery !== 'undefined') {
 //= require ../jquery-ui/jquery-ui.min
 //= require_tree .
 //= require_self
+
+if (typeof jQuery !== 'undefined') {
 
     $(function () {
         initSemanticUI();
