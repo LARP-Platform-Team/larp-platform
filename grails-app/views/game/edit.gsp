@@ -26,13 +26,16 @@
                 <div class="ui red ribbon label">Мастера</div>
                 <ingame:formRemote name="masters" class="ui form" url="[resource: subject, action: 'addMaster']"
                                    update="[success: 'gameMasters', failure: 'gameMastersError']" method="POST">
-                    <div id="gameMasters">
+                    <div id="gameMasters" class="ui middle aligned selection list larp-ajax-container">
                         <g:render template="masters" model="[masters: subject.masters]"/>
                     </div>
+                    <div id="gameMastersError"></div>
+                    <div class="ui divider"></div>
 
                     <div class="ui action input">
-                        <g:select name="masterId" class="ui dropdown" from="${SpringUser.list()}" optionKey="id"/>
-                        <ui:submit class="right labeled" icon="add user">Добавить</ui:submit>
+                        <g:select name="masterId" class="ui dropdown" from="${SpringUser.list()}"
+                                  optionKey="id"/>
+                        <ui:submit remote="true" class="right labeled" icon="add user">Добавить</ui:submit>
                     </div>
                 </ingame:formRemote>
             </section>
