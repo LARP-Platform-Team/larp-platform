@@ -1,4 +1,4 @@
-# README #
+# LARP-Platform [![Build Status](https://travis-ci.org/LARP-Platform-Team/larp-platform.svg?branch=devel)](https://travis-ci.org/LARP-Platform-Team/larp-platform) #
 
 Here is a little manual:
 
