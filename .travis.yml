@@ -5,5 +5,5 @@ branches:
   only: devel
 after_success:
   - touch ~/.ssh/id_rsa
-  - cat $DEPLOY_KEY > ~/.ssh/id_rsa
+  - echo $DEPLOY_KEY > ~/.ssh/id_rsa
   - scp target/ROOT.war update.dagobah.ru@dagobah.ru:~/public_html/ROOT-devel.war
