@@ -10,5 +10,5 @@ after_success:
   - echo "Host dagobah.ru" > ~/.ssh/config
   - echo "  IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
   - echo "  User update.dagobah.ru" >> ~/.ssh/config
-  - echo "  StrictHostKeyChecking no"
+  - echo "  StrictHostKeyChecking no" >> ~/.ssh/config
   - scp target/ROOT.war dagobah.ru:~/public_html/ROOT-devel.war
