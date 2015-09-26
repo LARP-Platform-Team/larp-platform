@@ -3,3 +3,7 @@ jdk: oraclejdk8
 script: ./grailsw prod war target/ROOT.war
 branches:
   only: devel
+after_success:
+  - touch ~/.ssh/id_rsa
+  - cat $DEPLOY_KEY > ~/.ssh/id_rsa
+  - scp target/ROOT.war update.dagobah.ru@dagobah.ru:~/public_html/ROOT-devel.war
