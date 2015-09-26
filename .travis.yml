@@ -5,5 +5,10 @@ branches:
   only: devel
 after_success:
   - touch ~/.ssh/id_rsa
-  - echo $DEPLOY_KEY > ~/.ssh/id_rsa
-  - scp target/ROOT.war update.dagobah.ru@dagobah.ru:~/public_html/ROOT-devel.war
+  - echo "$DEPLOY_KEY" > ~/.ssh/id_rsa
+  - touch ~/.ssh/config
+  - echo "Host dagobah.ru" > ~/.ssh/config
+  - echo "  IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
+  - echo "  User update.dagobah.ru" >> ~/.ssh/config
+  - echo "  StrictHostKeyChecking no"
+  - scp target/ROOT.war dagobah.ru:~/public_html/ROOT-devel.war
