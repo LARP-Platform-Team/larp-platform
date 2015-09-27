@@ -10,7 +10,6 @@ after_success:
   - echo "-----BEGIN RSA PRIVATE KEY-----" > ~/.ssh/deploy_rsa
   - for line in $DEPLOY_KEY; do echo $line >> ~/.ssh/deploy_rsa; done
   - echo "-----END RSA PRIVATE KEY-----" >> ~/.ssh/deploy_rsa
-  - cat ~/.ssh/deploy_rsa
   - touch ~/.ssh/config
   - echo "Host dagobah.ru" > ~/.ssh/config
   - echo "  IdentityFile ~/.ssh/deploy_rsa" >> ~/.ssh/config
