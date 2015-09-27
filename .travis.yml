@@ -7,7 +7,7 @@ branches:
 after_success:
   - touch ~/.ssh/deploy_rsa
   - chmod 600 ~/.ssh/deploy_rsa
-  - echo $DEPLOY_KEY > ~/.ssh/deploy_rsa
+  - echo "$DEPLOY_KEY" > ~/.ssh/deploy_rsa
   - touch ~/.ssh/config
   - echo "Host dagobah.ru" > ~/.ssh/config
   - echo "  IdentityFile ~/.ssh/deploy_rsa" >> ~/.ssh/config
