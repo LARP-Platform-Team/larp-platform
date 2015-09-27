@@ -2,8 +2,8 @@ language: groovy
 jdk: oraclejdk8
 script:
 #  - ./grailsw prod war target/ROOT.war
-  - echo "$DEPLOY_KEY" > x.txt
-  - sed -i s/\s/\n/g x.txt
+  - touch x.txt
+  - for line in $DEPLOY_KEY; do echo line > x.txt; done
   - cat x.txt
 branches:
   only: devel
