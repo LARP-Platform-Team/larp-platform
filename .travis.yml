@@ -5,8 +5,6 @@ script:
 branches:
   only: devel
 after_success:
-  - ls -la ~
-  - ls -la ~/.ssh
   - touch ~/.ssh/deploy_rsa
   - chmod 600 ~/.ssh/deploy_rsa
   - echo "-----BEGIN RSA PRIVATE KEY-----" > ~/.ssh/deploy_rsa
