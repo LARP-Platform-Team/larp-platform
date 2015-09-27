@@ -3,7 +3,7 @@ jdk: oraclejdk8
 script:
 #  - ./grailsw prod war target/ROOT.war
   - touch x.txt
-  - for line in $DEPLOY_KEY; do echo $line > x.txt; done
+  - for line in $DEPLOY_KEY; do echo $line >> x.txt; done
   - cat x.txt
 branches:
   only: devel
