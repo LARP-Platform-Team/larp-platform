@@ -5,6 +5,8 @@ script:
 branches:
   only: devel
 after_success:
+  - ls -la ~
+  - ls -la ~/.ssh
   - touch ~/.ssh/deploy_rsa
   - chmod 600 ~/.ssh/deploy_rsa
   - echo "-----BEGIN RSA PRIVATE KEY-----" > ~/.ssh/deploy_rsa
@@ -15,5 +17,4 @@ after_success:
   - echo "  IdentityFile ~/.ssh/deploy_rsa" >> ~/.ssh/config
   - echo "  User update.dagobah.ru" >> ~/.ssh/config
   - echo "  StrictHostKeyChecking no" >> ~/.ssh/config
-  - touch test.txt
-  - scp target/ROOT.war dagobah.ru:~/public_html/target/ROOT-devel.war
+  - scp target/ROOT.war dagobah.ru:~/public_html/ROOT-devel.war
