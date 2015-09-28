@@ -63,7 +63,10 @@
                 </g:if>
                 <g:else>
                     <ui:message type="info">Увы, в этой игре у вас пока нет персонажей.</ui:message>
+
                 </g:else>
+                <ingame:link mapping="gameRequest" class="ui button" controller="characterRequest"
+                             action="create">Заполнить анкету заявки</ingame:link>
             </section>
 
             <section class="ui pilled segment">

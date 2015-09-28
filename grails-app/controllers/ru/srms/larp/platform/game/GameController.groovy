@@ -61,7 +61,7 @@ class GameController extends BaseController {
 
   private void updateRichText(Game game) {
     game.overview = cleanHtml(game.overview, 'rich-text')
-    game.preview = cleanHtml(game.preview, 'rich-text')
+    game.preview = cleanHtml(game.preview, 'simple-rich-text')
     game.previewPureLength = cleanHtml(game.preview, 'none').length()
   }
 

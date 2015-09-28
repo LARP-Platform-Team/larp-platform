@@ -1,12 +1,13 @@
 package ru.srms.larp.platform.game.roles
 
 import org.springframework.security.core.GrantedAuthority
+import ru.srms.larp.platform.domain.Wrapped
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.InGameStuff
 import ru.srms.larp.platform.game.Titled
 import ru.srms.larp.platform.game.character.GameCharacter
 
-class GameRole implements InGameStuff, Titled, GrantedAuthority {
+class GameRole implements InGameStuff, Titled, GrantedAuthority, Wrapped<GameRole> {
 
   String title
 
@@ -29,12 +30,15 @@ class GameRole implements InGameStuff, Titled, GrantedAuthority {
     }
   }
 
+  static transients = ['wrapper']
+
   Set<GameCharacter> getCharacters() {
     CharacterRole.findAllByRole(this).collect({ it.character }).toSet()
   }
 
   def beforeDelete() {
     CharacterRole.removeAll(this)
+    deleteWrapper()
   }
 
   @Override

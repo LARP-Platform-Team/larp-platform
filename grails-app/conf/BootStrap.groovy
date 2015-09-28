@@ -88,7 +88,7 @@ class BootStrap {
     def usr2 = new SpringUser(username: "usr2", name: "User 2", password: "a", email: 'usr2@larp.srms.ru').save()
 
     Game game1 = new Game(title: "Красная шапочка", alias: "the-red-hat",
-        overview: "Игра по знаменитой сказке.")
+        overview: "Игра по знаменитой сказке.", preview: "Игра по знаменитой сказке.")
         .addToMasters(gm1)
         .addToModules(Game.GameModule.MAIL)
         .save()
@@ -118,12 +118,13 @@ class BootStrap {
 
     // game 2
     Game game2 = new Game(title: "Камелот", alias: "CamelotAge77",
-        overview: "Игра о славных ряцарях камелота.")
+        overview: "Игра о славных ряцарях камелота.", preview: "Игра о славных ряцарях камелота.")
     game2.addToMasters(gm1).addToMasters(gm2).save()
     game2
         .addToModules(Game.GameModule.MAIL)
         .addToModules(Game.GameModule.NEWS)
         .addToModules(Game.GameModule.RESOURCES)
+        .addToModules(Game.GameModule.REQUEST_FORM)
         .save()
 
     aclUtilService.addPermission(game2, gm2.username, ADMINISTRATION)

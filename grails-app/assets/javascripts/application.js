@@ -20,8 +20,23 @@ if (typeof jQuery !== 'undefined') {
         initSemanticUI();
         initRichTextEditor();
         initAjax();
-        initEmailAddressAutocomplete()
+        initEmailAddressAutocomplete();
+        initMiscGUI()
     });
+
+    function initMiscGUI() {
+        var SELECT_FIELD_TYPE = "SELECT";
+
+        $('#requestFieldType').change(function(event){
+            console.log('changed!');
+            console.info($(this).val());
+            if($(this).val() == SELECT_FIELD_TYPE)
+                $('#requestFieldDataWrapper').fadeIn();
+
+            else
+                $('#requestFieldDataWrapper').fadeOut()
+        })
+    }
 
     function initSemanticUI() {
 		$('.ui.message .close').on('click', function () {
