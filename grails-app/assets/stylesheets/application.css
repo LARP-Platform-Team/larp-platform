@@ -76,3 +76,7 @@ a.deleted {
 .dropdown.chosen-container-single .chosen-single abbr {
     top: 11px !important;
 }
+
+.larp-hidden {
+    display: none;
+}

@@ -1,0 +1,1 @@
+<hc:cleanHtml unsafe="${value}" whitelist="simple-rich-text"/>

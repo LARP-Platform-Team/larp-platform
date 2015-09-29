@@ -63,7 +63,27 @@
                 </g:if>
                 <g:else>
                     <ui:message type="info">Увы, в этой игре у вас пока нет персонажей.</ui:message>
+                    <ingame:link mapping="gameRequest" class="ui button"
+                                 controller="characterRequest"
+                                 action="create">Создать заявку на участие</ingame:link>
                 </g:else>
+            </section>
+
+            <section class="ui pilled segment">
+                <div class="ui olive ribbon label">Ваши заявки</div>
+                <g:if test="${requests}">
+                    <div class="ui middle aligned relaxed divided selection list">
+                        <g:each in="${requests}" var="item">
+                            <g:render template="request" model="[item: item]"/>
+                        </g:each>
+                    </div>
+                </g:if>
+                <g:else>
+                    <ui:message
+                        type="info">Вы еще не подавали заявок на участие в этой игре.</ui:message>
+                </g:else>
+                <ingame:link mapping="gameRequest" class="ui button" controller="characterRequest"
+                             action="create">Создать заявку на участие</ingame:link>
             </section>
 
             <section class="ui pilled segment">

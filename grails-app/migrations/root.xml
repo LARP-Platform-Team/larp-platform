@@ -6,5 +6,6 @@
 
     <include relativeToChangelogFile="true" file="gorm.initial.changelog.xml"/>
     <include relativeToChangelogFile="true" file="gorm.updates.changelog.xml"/>
+    <include relativeToChangelogFile="true" file="gorm.updates.1.changelog.xml"/>
 
 </databaseChangeLog>

@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus
 import ru.srms.larp.platform.exceptions.AjaxException
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST
+import static ru.srms.larp.platform.UrlHelper.composeAttrs
+import static ru.srms.larp.platform.UrlHelper.determineMapping
 
 abstract class BaseController {
 
@@ -109,8 +111,11 @@ abstract class BaseController {
     if(route?.params) defaults.params += route.params
     if (route?.id) defaults.id = route.id
     if (route?.controller) defaults.controller = route.controller
-    if (params.gameAlias) defaults.params.gameAlias = params.gameAlias
-    if (params.charAlias) defaults.params.charAlias = params.charAlias
+    if(route?.mapping) defaults.mapping = route.mapping
+
+    defaults = determineMapping(composeAttrs(defaults, params), params)
+//    if (params.gameAlias) defaults.params.gameAlias = params.gameAlias
+//    if (params.charAlias) defaults.params.charAlias = params.charAlias
     return defaults
   }
 

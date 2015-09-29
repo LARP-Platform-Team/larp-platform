@@ -6,6 +6,9 @@ import org.codehaus.groovy.grails.web.pages.TagLibraryLookup
 import org.codehaus.groovy.grails.web.util.TypeConvertingMap
 import org.springframework.web.servlet.support.RequestContextUtils
 
+import static ru.srms.larp.platform.UrlHelper.composeAttrs
+import static ru.srms.larp.platform.UrlHelper.determineMapping
+
 class GameTagLib {
     static namespace = "ingame"
 //    static defaultEncodeAs = [taglib: 'html']
@@ -31,7 +34,7 @@ class GameTagLib {
      * @attr charAlias by default is extracted from params
      */
     def link = { attrs, body ->
-        out << g.link(determineMapping(composeAttrs(attrs, true)), body)
+        out << g.link(determineMapping(composeAttrs(attrs, params, true), params), body)
     }
 
     /**
@@ -61,7 +64,7 @@ class GameTagLib {
      * @attr fragment The link fragment (often called anchor tag) to use
      */
     def paginate = { Map attrs ->
-        out << g.paginate(determineMapping(composeAttrs(attrs)))
+        out << g.paginate(determineMapping(composeAttrs(attrs, params), params))
     }
 
     /**
@@ -80,7 +83,7 @@ class GameTagLib {
      * @attr method the form method to use, either 'POST' or 'GET'; defaults to 'POST'
      */
     def form = { attrs, body ->
-        attrs.url = composeAttrs(attrs.url)
+        attrs.url = composeAttrs(attrs.url, params)
         out << g.form(attrs, body)
     }
 
@@ -97,7 +100,7 @@ class GameTagLib {
      * @attr method The method to use the execute the call (defaults to "post")
      */
     def formRemote = { attrs, body ->
-        attrs.url = composeAttrs(attrs.url)
+        attrs.url = composeAttrs(attrs.url, params)
         out << g.form(modifyRemoteAttrs(attrs), body)
     }
 
@@ -124,9 +127,9 @@ class GameTagLib {
         def newBody = new GroovyPage.ConstantClosure(body() +
                 "<div class=\"ui mini inline loader\"></div>")
         if (attrs.url)
-            attrs.url = composeAttrs(determineMapping(attrs.url))
+            attrs.url = composeAttrs(determineMapping(attrs.url, params), params)
         else
-            attrs = composeAttrs(determineMapping(attrs), true)
+            attrs = composeAttrs(determineMapping(attrs, params), params, true)
 
         out << g.link(modifyRemoteAttrs(attrs), newBody)
     }
@@ -175,7 +178,7 @@ class GameTagLib {
         if (!max) max = (attrs.int('max') ?: 10)
 
         Map linkParams = [:]
-        def gameParams = composeAttrs(determineMapping([:]))
+        def gameParams = composeAttrs(determineMapping([:], params), params)
         linkParams += gameParams.params
 
 
@@ -298,47 +301,6 @@ class GameTagLib {
     TagLibraryLookup gspTagLibraryLookup
     private callLink(Map attrs, Object body) {
         GroovyPage.captureTagOutput(gspTagLibraryLookup, 'g', 'link', attrs, body, webRequest)
-    }
-
-    /**
-     * Choose correct mapping for the current environment
-     * @param attrs tag attrs map
-     * @return modified attrs map
-     */
-    private Map determineMapping(Map attrs) {
-        if (!attrs.mapping) {
-            if (params.charAlias)
-                attrs.mapping = 'inGame'
-            else if (params.gameAlias)
-                attrs.mapping = 'gameAdmin'
-        }
-        return attrs
-    }
-
-    /**
-     * Add in-game info to the tag attrs
-     * @param attrs tag attrs map
-     * @param checkAttrs if {@code true} - look for in-game info in tag attrs
-     * @return modified attrs map
-     */
-    private Map composeAttrs(Map attrs, boolean checkAttrs = false) {
-        if (!attrs.params)
-            attrs.params = [:]
-
-        // take game alias from defined tag attr, if needed
-        if(checkAttrs && attrs.gameAlias)
-            attrs.params.gameAlias = attrs.gameAlias
-        // else from params scope, if it defined there and not explicitly defined in params tag attr
-        else if (!attrs.params.gameAlias && params.gameAlias)
-            attrs.params.gameAlias = params.gameAlias
-
-        // same for char alias
-        if(checkAttrs && attrs.charAlias)
-            attrs.params.charAlias = attrs.charAlias
-        else if (!attrs.params.charAlias && params.charAlias)
-            attrs.params.charAlias = params.charAlias
-
-        return attrs
     }
 
     private Map modifyRemoteAttrs(Map attrs) {

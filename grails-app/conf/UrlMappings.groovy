@@ -30,6 +30,9 @@ class UrlMappings {
         name gameAdmin: "/play/$gameAlias/admin/$controller/$action?/$id?" {
         }
 
+          // game administration
+          name gameRequest: "/play/$gameAlias/$controller/$action?/$id?"()
+
         // game character cabinet
         name playAs: "/play/$gameAlias/as/$charAlias"(controller: 'gameCharacter', action: 'playAs')
 
