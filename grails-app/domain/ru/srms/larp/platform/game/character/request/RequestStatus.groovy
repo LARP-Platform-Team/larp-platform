@@ -5,19 +5,21 @@ package ru.srms.larp.platform.game.character.request
  */
 enum RequestStatus {
 
-  DRAFT('Черновик', true),
-  SENT('Отправлена на рассмотрение', true),
-  REVIEW('На рассмотрении'),
-  REOPEN('Требуются уточнения', true),
-  ACCEPTED('Принята, создается персонаж'),
-  DONE('Персонаж создан'),
-  DECLINED('Отклонена');
+  DRAFT,
+  SENT,
+  REVIEW,
+  REOPEN,
+  ACCEPTED,
+  DONE,
+  DECLINED;
 
-  private String title
-  private Boolean editable
+  private IRequestState data
 
-  RequestStatus(String title, Boolean editable = false) {
-    this.title = title
-    this.editable = editable
+  static {
+    values().each { it.data = RequestStateFactory.get(it) }
+  }
+
+  IRequestState getData() {
+    return data
   }
 }

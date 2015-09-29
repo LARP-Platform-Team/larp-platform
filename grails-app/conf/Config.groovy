@@ -220,7 +220,7 @@ htmlcleaner {
 
     whitelist("simple-rich-text") {
         startwith "simpleText"
-        allow "s", "sub", "sup"
+        allow "s", "sub", "sup", "p"
     }
 
     whitelist("rich-text") {

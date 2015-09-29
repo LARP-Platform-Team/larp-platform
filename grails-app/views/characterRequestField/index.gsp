@@ -11,6 +11,10 @@
 <body>
 
 <content tag="actions">
+
+  <ingame:link mapping="gameRequest" class="item" action="index" controller="characterRequest">
+    <i class="arrow left grey icon"></i> Назад</ingame:link>
+
   <ingame:link class="item" action="create"
                params="${params.role?.id ? ['role.id': params.role?.id] : [:]}"><i class="add green icon"></i> Добавить</ingame:link>
 </content>

@@ -3,6 +3,7 @@ package ru.srms.larp.platform.game
 import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseController
+import ru.srms.larp.platform.CharacterRequestService
 import ru.srms.larp.platform.GameService
 import ru.srms.larp.platform.exceptions.AjaxException
 import ru.srms.larp.platform.sec.SpringUser
@@ -15,6 +16,7 @@ class GameController extends BaseController {
 
   static allowedMethods = [save: "POST", update: "POST"]
   GameService gameService
+  CharacterRequestService characterRequestService
 
   @Secured(['permitAll'])
   def index(Integer max) {
@@ -25,7 +27,10 @@ class GameController extends BaseController {
   @Secured(['permitAll'])
   def play() {
     respond params.game,
-        model: [characters: gameService.getAvailableCharacters(params.game)]
+        model: [
+            characters: gameService.getAvailableCharacters(params.game),
+            requests: characterRequestService.findForCurrentUser(params.game)
+        ]
   }
 
   def create() {

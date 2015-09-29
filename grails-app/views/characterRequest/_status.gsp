@@ -1,0 +1,1 @@
+<div class="ui ${status.data.labelColor} label">${status.data.name}</div>

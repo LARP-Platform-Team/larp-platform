@@ -111,6 +111,7 @@ abstract class BaseController {
     if(route?.params) defaults.params += route.params
     if (route?.id) defaults.id = route.id
     if (route?.controller) defaults.controller = route.controller
+    if(route?.mapping) defaults.mapping = route.mapping
 
     defaults = determineMapping(composeAttrs(defaults, params), params)
 //    if (params.gameAlias) defaults.params.gameAlias = params.gameAlias

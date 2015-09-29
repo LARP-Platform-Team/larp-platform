@@ -5,8 +5,8 @@ import grails.transaction.Transactional
 import org.springframework.security.access.prepost.PreAuthorize
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.character.request.CharacterRequest
-import ru.srms.larp.platform.game.character.request.FormFieldValue
 import ru.srms.larp.platform.game.character.request.RequestFormField
+import ru.srms.larp.platform.game.character.request.RequestStatus
 
 @Transactional(readOnly = true)
 class CharacterRequestService {
@@ -46,8 +46,13 @@ class CharacterRequestService {
   }
 
 
-  def createRequest(Game game, Map params) {
-    composeRequest(game, params)
+  def createRequest(Game game) {
+    new CharacterRequest(game: game, user: springSecurityService.currentUser)
+  }
+
+  @PreAuthorize("isFullyAuthenticated() and principal.username == #request.user.username")
+  def editRequest(CharacterRequest request) {
+    request
   }
 
   @Transactional
@@ -55,17 +60,42 @@ class CharacterRequestService {
     request.save()
   }
 
-  CharacterRequest composeRequest(Game game, Map inputParams) {
-    def request = new CharacterRequest(game: game, user: springSecurityService.currentUser);
-    RequestFormField.findAllByParent(game.wrapper).each {
-      if(!it.type.isInput()) return;
-
-      def value = new FormFieldValue(field: it)
-      String fieldId = "request_from_field_${it.id}"
-      value.value = it.type.transform(inputParams[fieldId])
-      request.addToValues(value)
-    }
-
-    return request
+  @PreAuthorize("isFullyAuthenticated() and principal.username == #request.user.username")
+  @Transactional
+  def updateRequest(CharacterRequest request) {
+    request.save()
   }
+
+  def findForCurrentUser(Game game) {
+    CharacterRequest.findAllByGameAndUser(game, springSecurityService.currentUser)
+  }
+
+  @PreAuthorize("(isFullyAuthenticated() and principal.username == #request.user.username) \
+                        || hasPermission(#request.game, admin)")
+  def showRequest(CharacterRequest request) {
+    request
+  }
+
+  @Transactional
+  @PreAuthorize("hasPermission(#request.game, admin)")
+  def changeStatus(CharacterRequest request) {
+    request.save()
+  }
+
+  @PreAuthorize("hasPermission(#game, admin)")
+  def listRequests(Game game, Boolean all, Map paginator) {
+    CharacterRequest.findAllByGameAndStatusNotInList(game, excludeStatuses(all), paginator)
+  }
+
+  @PreAuthorize("hasPermission(#game, admin)")
+  def countRequests(Game game, Boolean all) {
+    CharacterRequest.countByGameAndStatusNotInList(game, excludeStatuses(all))
+  }
+
+  private def excludeStatuses(Boolean all) {
+    all ? [RequestStatus.DRAFT] :
+        [RequestStatus.DRAFT, RequestStatus.DONE, RequestStatus.DECLINED]
+  }
+
+
 }

@@ -1,6 +1,5 @@
 package ru.srms.larp.platform.game.character.request
 
-import grails.plugin.htmlcleaner.HtmlCleaner
 import org.apache.commons.lang.StringUtils
 
 /**
@@ -13,13 +12,13 @@ enum FieldType {
 
   TEXTAREA('Многострочный текст', { FormFieldValue value ->
     !(value.field.required && StringUtils.isBlank(value.value))
-  }, true, { String value ->
-    HtmlCleaner.cleanHtml(value, 'simple-rich-text')
+  }, true, { Map data ->
+    data?.value && data?.cleaner ? data.cleaner.cleanHtml(data.value, 'simple-rich-text') : null
   }),
 
   CHECKBOX('Да/Нет', { FormFieldValue value ->
     !value.field.required || Boolean.valueOf(value.value)
-  }, true, { String value -> value ? Boolean.TRUE.toString() : Boolean.FALSE.toString() }),
+  }, true, { Map data -> data?.value ? Boolean.TRUE.toString() : Boolean.FALSE.toString() }),
 
   SELECT('Поле выбора', { FormFieldValue value ->
     if (value.field.required && StringUtils.isBlank(value.value))
@@ -29,7 +28,8 @@ enum FieldType {
     return options.any { it.equals(value.value) }
   }),
 
-  LABEL('Надпись', { true }, false);
+  // TODO implement label
+//  LABEL('Надпись', { true }, false);
 
   private String title;
   private Boolean input;
@@ -37,7 +37,7 @@ enum FieldType {
   public Closure transform
 
   FieldType(String title, Closure<Boolean> validate = { FormFieldValue value -> true },
-            Boolean input = true, Closure transform = { String value -> value }) {
+            Boolean input = true, Closure transform = { Map data -> data?.value }) {
     this.title = title
     this.input = input
     this.validate = validate

@@ -14,10 +14,10 @@
     Максимум 32 символа, можно использовать латинские буквы, цифры и тире. Должен быть уникальным в рамках игры.</div>
 </div>
 
-  <div class="${hasErrors(bean: gameCharacterInstance, field: 'player', 'error')} required field">
+  <div class="${hasErrors(bean: gameCharacterInstance, field: 'player', 'error')} field">
     <label for="name">Игрок</label>
-    <g:select name="player" class="dropdown" from="${SpringUser.list()}"
-              optionKey="id" optionValue="username" noSelection="${['null': 'нет']}"
+    <g:select name="player" class="ui dropdown" from="${SpringUser.list()}"
+              optionKey="id" optionValue="username" noSelection="${['null': '']}"
               value="${gameCharacterInstance?.player?.id}"/>
     <div class="ui pointing label">Игрок, управляющий персонажем. Оставьте пустым,
   и тогда это будет NPC - мастерский персонаж.</div>

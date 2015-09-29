@@ -9,11 +9,11 @@
 <div class="${hasErrors(bean: subject, field: 'type', 'error')} required field">
   <label for="type">Тип:</label>
   <g:select name="type" id="requestFieldType" from="${FieldType.values()}" class="ui dropdown"
-            required="" optionValue="title" value="${subject?.title}"/>
+            required="" optionValue="title" value="${subject?.type}"/>
 </div>
 
 <div id="requestFieldDataWrapper" class="${hasErrors(bean: subject, field: 'data', 'error')}
-  ${FieldType.SELECT.equals(subject?.type) ? "" : "hidden"} field"
+  ${FieldType.SELECT.equals(subject?.type) ? "" : "larp-hidden"} field"
      id="requestFieldDataInput">
   <label for="data">Варианты ответа:</label>
   <g:textField name="data" value="${subject?.data}"/>

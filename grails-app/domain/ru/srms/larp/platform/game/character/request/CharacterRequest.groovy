@@ -9,6 +9,7 @@ class CharacterRequest {
   RequestStatus status
   GameCharacter character
   String comment
+  Date creationDate
 
   static belongsTo = [game: Game, user: SpringUser]
   static hasMany = [values: FormFieldValue]
@@ -18,7 +19,13 @@ class CharacterRequest {
     comment nullable: true, maxSize: 512
   }
 
+  static mapping = {
+    sort creationDate: 'asc'
+  }
+
   def beforeValidate() {
     values.each { it.validate() }
+    if(id == null)
+      creationDate = new Date()
   }
 }

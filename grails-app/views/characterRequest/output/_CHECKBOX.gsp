@@ -1,0 +1,1 @@
+${Boolean.valueOf(value) ? 'Да' : 'Нет'}

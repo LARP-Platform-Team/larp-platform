@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+
+    <changeSet author="Treble Snake" id="1443190643217-1">
+        <createTable tableName="character_request">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="character_request_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="character_id" type="int8"/>
+            <column name="comment" type="varchar(512)"/>
+            <column name="game_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Treble Snake" id="1443190643217-2">
+        <createTable tableName="character_request_form_field">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="character_request_form_field_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data" type="varchar(512)"/>
+            <column name="hint" type="varchar(128)"/>
+            <column name="parent_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="required" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sort_order" type="int4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Treble Snake" id="1443190643217-3">
+        <createTable tableName="character_request_form_field_value">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="character_request_form_field_value_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="field_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="request_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="varchar(1024)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Treble Snake" id="1443190643217-4">
+        <createTable tableName="entity_wrapper">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="entity_wrapper_PK"/>
+            </column>
+            <column name="entity_class" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="entity_id" type="bytea">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Treble Snake" id="1443190643217-24">
+        <createIndex indexName="unique_entity_class_and_id" tableName="entity_wrapper" unique="true">
+            <column name="entity_id"/>
+            <column name="entity_class"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="Treble Snake" id="1443190643217-18">
+        <addForeignKeyConstraint baseColumnNames="character_id" baseTableName="character_request"
+                                 constraintName="FK_ld059r95k94qkb7t7jhr5rr6f" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id"
+                                 referencedTableName="game_character"
+                                 referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1443190643217-19">
+        <addForeignKeyConstraint baseColumnNames="game_id" baseTableName="character_request"
+                                 constraintName="FK_rv17ri5kdalsxyc3mqg82gg1k" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id"
+                                 referencedTableName="game" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1443190643217-20">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="character_request"
+                                 constraintName="FK_fv6fnp2tkn2ypfyguv6k6t2hr" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id"
+                                 referencedTableName="spring_user" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1443190643217-21">
+        <addForeignKeyConstraint baseColumnNames="parent_id"
+                                 baseTableName="character_request_form_field"
+                                 constraintName="FK_8elemsgoxvwt3wjbeqdo30yqs" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id"
+                                 referencedTableName="entity_wrapper"
+                                 referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1443190643217-22">
+        <addForeignKeyConstraint baseColumnNames="field_id"
+                                 baseTableName="character_request_form_field_value"
+                                 constraintName="FK_qj9o7up8vlrhcm6pp574x4xwn" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id"
+                                 referencedTableName="character_request_form_field"
+                                 referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1443190643217-23">
+        <addForeignKeyConstraint baseColumnNames="request_id"
+                                 baseTableName="character_request_form_field_value"
+                                 constraintName="FK_36cgdc0yc14yixgpcf9mf8qrp" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id"
+                                 referencedTableName="character_request"
+                                 referencesUniqueColumn="false"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -8,6 +8,7 @@ class UITagLib {
    * @attr css class for icon
    * @attr css classes
    * @attr name name of the button
+   * @attr value value of the submit
    */
   def submit = { attrs, body ->
     def classes = 'ui submit button'
@@ -17,7 +18,7 @@ class UITagLib {
     if(attrs.class)
       classes += " ${attrs.class}"
 
-    if (text && text.toString().length() > 0)
+    if (text && text.toString().length() > 0 && attrs.icon)
       classes += ' labeled'
 
     if(attrs.icon) {
@@ -30,12 +31,16 @@ class UITagLib {
       name = " name=\"${attrs.name}\""
     }
 
+    def value = ''
+    if(attrs.value)
+      value = " value=\"${attrs.value}\""
+
     def loader = attrs.remote == "true" ? "<div class=\"ui mini inline loader\"></div>" : ""
 
 
     def title = attrs.title ? ' title="' + attrs.title + '"' : '';
 
-    out << '<button class="' + classes + '" type="submit"' + title + name + '>' + icon + loader + body() + '</button>'
+    out << '<button class="' + classes + '" type="submit"' + value + title + name + '>' + icon + loader + body() + '</button>'
   }
 
   def message = {attrs, body ->
