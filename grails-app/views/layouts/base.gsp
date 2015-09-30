@@ -34,7 +34,7 @@
       <a target="_blank" class="ui blue compact button"
          href="https://vk.com/larp_platform">Группа ВКонтакте</a><br/><br/>
       <a target="_blank" class="ui violet compact button"
-         href="https://bitbucket.org/TrebleSnake/larp-platform/wiki/Home">Репозиторий BitBucket</a>
+         href="https://github.com/LARP-Platform-Team/larp-platform/">Репозиторий GitHub</a>
     </div>
 
     <div class="right four wide floated column">
