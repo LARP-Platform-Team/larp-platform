@@ -57,6 +57,7 @@
 
       <sec:ifNotLoggedIn>
         <g:link controller="login" action="auth" class="ui basic violet button">Войти</g:link>
+        <g:link controller="register" action="index" class="ui basic violet button">Регистрация</g:link>
       </sec:ifNotLoggedIn>
     </div>
   </header>
