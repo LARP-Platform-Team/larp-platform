@@ -16,6 +16,16 @@
 
 if (typeof jQuery !== 'undefined') {
 
+    var CHOSEN_OPTIONS = {
+        no_results_text: "Ничего не найдено",
+        disable_search_threshold: 5,
+        inherit_select_classes: true,
+        placeholder_text_multiple: "Выберите значения",
+        placeholder_text_single: "Выберите значение",
+        search_contains: true,
+        allow_single_deselect: true
+    };
+
     $(function () {
         initSemanticUI();
         initRichTextEditor();
@@ -36,8 +46,13 @@ if (typeof jQuery !== 'undefined') {
 
         // request editing page
         $("#character_request_roles").on('change', function(event, params) {
-            if(params.selected)
-                $("#role_" + params.selected + "_fields").fadeIn();
+            if(params.selected) {
+                $("#role_" + params.selected + "_fields").fadeIn(400, function(){
+                    $("#role_" + params.selected + "_fields")
+                        .find('select.dropdown').chosen(CHOSEN_OPTIONS);
+                });
+
+            }
             else if(params.deselected)
                 $("#role_" + params.deselected + "_fields").fadeOut()
         })
@@ -58,15 +73,7 @@ if (typeof jQuery !== 'undefined') {
 
 		$('.ui.tabular.menu .item').tab();
 
-        $('select.dropdown').chosen({
-            no_results_text: "Ничего не найдено",
-            disable_search_threshold: 5,
-            inherit_select_classes: true,
-            placeholder_text_multiple: "Выберите значения",
-            placeholder_text_single: "Выберите значение",
-            search_contains: true,
-            allow_single_deselect: true
-        });
+        $('select.dropdown:visible').chosen(CHOSEN_OPTIONS);
     }
 
     function initRichTextEditor() {
