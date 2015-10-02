@@ -1,4 +1,4 @@
-<%@ page import="ru.srms.larp.platform.game.character.request.RequestFormField" %>
+<%@ page import="ru.srms.larp.platform.game.roles.GameRole; ru.srms.larp.platform.game.character.request.RequestFormField" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,14 +12,28 @@
 
 <content tag="actions">
 
+  <g:if test="${params.role?.id}">
+    <ingame:link class="item" controller="gameRole" action="index">
+      <i class="arrow left grey icon"></i> Назад</ingame:link>
+  </g:if>
+  <g:else>
   <ingame:link mapping="gameRequest" class="item" action="index" controller="characterRequest">
     <i class="arrow left grey icon"></i> Назад</ingame:link>
+  </g:else>
 
   <ingame:link class="item" action="create"
                params="${params.role?.id ? ['role.id': params.role?.id] : [:]}"><i class="add green icon"></i> Добавить</ingame:link>
 </content>
 
 <content tag="content">
+
+  <g:if test="${params.role?.id && !subject}">
+    <g:set var="isAvailable" value="${GameRole.get(params.role.id)?.requestAvailable}"/>
+    <ingame:link class="ui blue ${isAvailable ? '' : 'basic'} button"
+        controller="gameRole" action="toggleRequestAvailable" id="${params.role.id}">
+        ${isAvailable ? 'Не о' : 'О'}тображать на форме анкеты
+    </ingame:link>
+  </g:if>
 
   <table class="ui celled padded very basic table">
     <thead>

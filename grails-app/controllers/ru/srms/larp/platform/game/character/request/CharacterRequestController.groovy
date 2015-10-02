@@ -193,9 +193,8 @@ class CharacterRequestController extends BaseModuleController {
         fieldValue = valuesHashmap.get(field.id)
 
       String fieldId = "request_from_field_${field.id}"
-      if (params.containsKey(fieldId))
-        fieldValue.value = fieldValue.field.type.transform(
-            [value: params[fieldId], cleaner: htmlCleaner])
+      fieldValue.value = fieldValue.field.type.transform(
+          [value: params.get(fieldId), cleaner: htmlCleaner])
     }
   }
 

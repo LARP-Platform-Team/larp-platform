@@ -14,6 +14,7 @@ class RequestFormField implements InGameStuff {
   String data
 
   static belongsTo = [parent: EntityWrapper]
+  static hasMany = [values: FormFieldValue]
 
   static constraints = {
     title maxSize: 32

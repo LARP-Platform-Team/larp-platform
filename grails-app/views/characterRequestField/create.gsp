@@ -11,7 +11,8 @@
 <body>
 
 <content tag="actions">
-  <ingame:link class="item" action="index"><i class="cancel grey icon"></i> Отмена</ingame:link>
+  <ingame:link class="item" action="index"
+               params="${params.role?.id ? ['role.id': params.role?.id] : [:]}"><i class="cancel grey icon"></i> Отмена</ingame:link>
 </content>
 
 <content tag="content">

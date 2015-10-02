@@ -5,6 +5,7 @@ import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseModuleController
 import ru.srms.larp.platform.CharacterRequestService
 import ru.srms.larp.platform.EntityWrapper
+import ru.srms.larp.platform.GameRoleService
 import ru.srms.larp.platform.domain.Wrapped
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.roles.GameRole
@@ -18,6 +19,7 @@ class CharacterRequestFieldController extends BaseModuleController {
   static allowedMethods = [save: "POST", update: "POST"]
 
   CharacterRequestService characterRequestService
+  GameRoleService gameRoleService
 
   def index() {
     withModule {
@@ -46,11 +48,11 @@ class CharacterRequestFieldController extends BaseModuleController {
   def save(RequestFormField field) {
     withModule {
       field.sortOrder = 0
-      if (!field.parent) {
-        field.parent = getParent() ? EntityWrapper.wrap(getParent()) : null;
-      }
+      def parent = getParent()
+      field.parent = parent ? EntityWrapper.wrap(parent) : null;
       if (validateData(field, 'create')) {
         characterRequestService.saveField(field)
+        updateRoleAvailability(field.parent)
         respondChange('Поле успешно создано', CREATED, redirectRoute())
       }
     }
@@ -72,6 +74,7 @@ class CharacterRequestFieldController extends BaseModuleController {
     withModule {
       if (validateData(field)) {
         characterRequestService.deleteField(field)
+        updateRoleAvailability(field.parent)
         respondChange('Поле удалено', NO_CONTENT, redirectRoute(field))
       }
     }
@@ -80,6 +83,20 @@ class CharacterRequestFieldController extends BaseModuleController {
   @Override
   protected Game.GameModule module() {
     return Game.GameModule.REQUEST_FORM
+  }
+
+  @Transactional
+  private def updateRoleAvailability(EntityWrapper wrapper) {
+    def parent = wrapper.entity
+    if (!(parent instanceof GameRole))
+      return;
+
+    GameRole parentRole = parent as GameRole
+    def fieldsQty = RequestFormField.countByParent(wrapper)
+    if (fieldsQty == 1 || fieldsQty == 0) {
+      parentRole.requestAvailable = fieldsQty == 1
+      gameRoleService.save(parentRole)
+    }
   }
 
   private def redirectRoute(RequestFormField instance = null) {

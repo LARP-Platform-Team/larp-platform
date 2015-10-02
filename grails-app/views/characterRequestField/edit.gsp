@@ -1,4 +1,4 @@
-<%@ page import="ru.srms.larp.platform.game.character.request.RequestFormField" %>
+<%@ page import="ru.srms.larp.platform.game.roles.GameRole; ru.srms.larp.platform.game.character.request.RequestFormField" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +11,9 @@
 <body>
 
 <content tag="actions">
-  <ingame:link class="item" action="index"><i class="cancel grey icon"></i> Отмена</ingame:link>
+  <ingame:link class="item" action="index"
+               params="${subject.parent.entityClass.equals(GameRole.class.name) ? ['role.id': subject.parent.entityId] : [:]}">
+    <i class="cancel grey icon"></i> Отмена</ingame:link>
 </content>
 
 <content tag="content">
