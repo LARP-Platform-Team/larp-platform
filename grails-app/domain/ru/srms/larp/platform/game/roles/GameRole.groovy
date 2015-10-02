@@ -10,6 +10,7 @@ import ru.srms.larp.platform.game.character.GameCharacter
 class GameRole implements InGameStuff, Titled, GrantedAuthority, Wrapped<GameRole> {
 
   String title
+  Boolean requestAvailable = false
 
   static belongsTo = [game: Game, parent: GameRole]
   static hasMany = [subRoles: GameRole]

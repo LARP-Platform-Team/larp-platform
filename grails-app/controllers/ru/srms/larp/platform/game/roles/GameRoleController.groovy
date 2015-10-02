@@ -85,6 +85,15 @@ class GameRoleController extends BaseController {
   }
 
   @Transactional
+  def toggleRequestAvailable() {
+    GameRole role = GameRole.get(params.id)
+    role.requestAvailable = !role.requestAvailable
+    gameRoleService.save(role)
+    respondChange('Роль обновлена', OK,
+        [mapping: 'gameRequest', controller: 'characterRequestField', params: ['role.id': role.id]])
+  }
+
+  @Transactional
   def addToChar(GameRole gameRole) {
     doAjax {
       Long id = params.character?.id as Long

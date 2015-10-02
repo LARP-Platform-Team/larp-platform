@@ -9,6 +9,7 @@ import ru.srms.larp.platform.CharacterRequestService
 import ru.srms.larp.platform.CharacterService
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.character.GameCharacter
+import ru.srms.larp.platform.game.roles.GameRole
 
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.OK
@@ -31,15 +32,22 @@ class CharacterRequestController extends BaseModuleController {
 
   def show(CharacterRequest request) {
     withModule {
-      respond characterRequestService.showRequest(request)
+      respond characterRequestService.showRequest(request), model: [
+          gameFields: gameFields(),
+          roles     : rolesWithFields(request.roles),
+          values    : makeValuesHashmap(request)
+      ]
     }
   }
 
   def create() {
     withModule {
       def characterRequest = characterRequestService.createRequest(params.game)
-      fillRequestWithData(characterRequest)
-      respond characterRequest
+      respond characterRequest, model: [
+          gameFields: gameFields(),
+          roles     : rolesWithFields(),
+          values    : [:]
+      ]
     }
   }
 
@@ -47,7 +55,11 @@ class CharacterRequestController extends BaseModuleController {
     withModule {
       if (!request.status.data.editable)
         throw new AccessDeniedException("Рапрещено редактировать в данном состоянии")
-      respond characterRequestService.editRequest(request)
+      respond characterRequestService.editRequest(request), model: [
+          gameFields: gameFields(),
+          roles     : rolesWithFields(),
+          values    : makeValuesHashmap(request)
+      ]
     }
   }
 
@@ -127,19 +139,62 @@ class CharacterRequestController extends BaseModuleController {
     return Game.GameModule.REQUEST_FORM
   }
 
+  private Map<Long, FormFieldValue> makeValuesHashmap(CharacterRequest request) {
+    !request.values ? [:] :
+        request.values.collectEntries { [(it.fieldId): it] }
+  }
+
+  private List<RequestFormField> gameFields() {
+    RequestFormField.findAllByParent(params.game.wrapper)
+  }
+
+  private Map<GameRole, List<RequestFormField>> rolesWithFields(def requestRoles = null) {
+    def roles = requestRoles ?: GameRole.findAllByGameAndRequestAvailable(params.game, true)
+    roles.collectEntries {
+      [(it): (it.wrapper ?
+          RequestFormField.findAllByParent(it.wrapper) : [])]
+    }
+  }
+
   private void fillRequestWithData(CharacterRequest request) {
-    // create field values for a new request
-    if (!request.id) {
-      RequestFormField.findAllByParent(params.game.wrapper)
-          .findAll { it.type.isInput() }.each {
-        request.addToValues(new FormFieldValue(field: it))
+    def prevRoles = new HashSet<GameRole>(request.roles ?: [])
+    if (params.roles)
+      request.properties['roles'] = params
+    else
+      request.roles = []
+    def valuesHashmap = makeValuesHashmap(request)
+
+    // берем роли, которые были удалены при обновлении
+    prevRoles.findAll { !request.roles.contains(it) }
+        .each { role ->
+      // выбираем все поля, связанные с этими ролями
+      RequestFormField.findAllByParent(role.wrapper).each { field ->
+        // и удаляем из анкеты значения этих полей
+        if (valuesHashmap.containsKey(field.id))
+          request.removeFromValues(valuesHashmap.get(field.id))
       }
     }
 
-    // save values
-    request.values.each {
-      String fieldId = "request_from_field_${it.field.id}"
-      it.value = it.field.type.transform([value: params[fieldId], cleaner: htmlCleaner])
+    // формируем пулл полей: общие игровые + для конкретных ролей
+    def fields = gameFields()
+    request.roles.each { role ->
+      if (RequestFormField.countByParent(role.wrapper))
+        fields.addAll(RequestFormField.findAllByParent(role.wrapper))
+    }
+
+    // обновляем значения полей
+    fields.each { field ->
+
+      FormFieldValue fieldValue;
+      if (!valuesHashmap.containsKey(field.id)) {
+        fieldValue = new FormFieldValue(field: field)
+        request.addToValues(fieldValue)
+      } else
+        fieldValue = valuesHashmap.get(field.id)
+
+      String fieldId = "request_from_field_${field.id}"
+      fieldValue.value = fieldValue.field.type.transform(
+          [value: params.get(fieldId), cleaner: htmlCleaner])
     }
   }
 

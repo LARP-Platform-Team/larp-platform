@@ -23,7 +23,7 @@ class RequestStateFactory {
           .addNext(DRAFT, SENT),
 
       (ACCEPTED): new RequestStateImpl('Принята, создается персонаж', 'olive')
-          .addNext(DONE)
+          .addNext(DONE, REOPEN)
           .setSelectCharacter(true),
 
       (DONE)    : new RequestStateImpl('Персонаж создан', 'green'),

@@ -114,8 +114,6 @@ abstract class BaseController {
     if(route?.mapping) defaults.mapping = route.mapping
 
     defaults = determineMapping(composeAttrs(defaults, params), params)
-//    if (params.gameAlias) defaults.params.gameAlias = params.gameAlias
-//    if (params.charAlias) defaults.params.charAlias = params.charAlias
     return defaults
   }
 

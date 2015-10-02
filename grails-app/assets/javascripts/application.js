@@ -25,16 +25,21 @@ if (typeof jQuery !== 'undefined') {
     });
 
     function initMiscGUI() {
+        // request form config page
         var SELECT_FIELD_TYPE = "SELECT";
-
         $('#requestFieldType').change(function(event){
-            console.log('changed!');
-            console.info($(this).val());
             if($(this).val() == SELECT_FIELD_TYPE)
                 $('#requestFieldDataWrapper').fadeIn();
-
             else
                 $('#requestFieldDataWrapper').fadeOut()
+        });
+
+        // request editing page
+        $("#character_request_roles").on('change', function(event, params) {
+            if(params.selected)
+                $("#role_" + params.selected + "_fields").fadeIn();
+            else if(params.deselected)
+                $("#role_" + params.deselected + "_fields").fadeOut()
         })
     }
 

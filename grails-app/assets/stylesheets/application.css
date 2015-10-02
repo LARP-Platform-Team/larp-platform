@@ -77,6 +77,11 @@ a.deleted {
     top: 11px !important;
 }
 
-.larp-hidden {
+.larp-hidden,
+.ui.grid .column.larp-hidden {
     display: none;
+}
+
+.ui.form .fitted.divider {
+    margin: 0;
 }

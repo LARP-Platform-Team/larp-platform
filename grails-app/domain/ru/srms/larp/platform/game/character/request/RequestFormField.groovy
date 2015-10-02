@@ -14,6 +14,7 @@ class RequestFormField implements InGameStuff {
   String data
 
   static belongsTo = [parent: EntityWrapper]
+  static hasMany = [values: FormFieldValue]
 
   static constraints = {
     title maxSize: 32
@@ -29,6 +30,7 @@ class RequestFormField implements InGameStuff {
   static mapping = {
     table 'character_request_form_field'
     parent cascade: 'save-update'
+    sort sortOrder: 'asc'
   }
 
   @Override
