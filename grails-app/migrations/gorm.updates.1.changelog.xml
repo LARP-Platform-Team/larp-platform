@@ -176,4 +176,8 @@
                               tableName="game_role"/>
     </changeSet>
 
+    <changeSet author="Treble Snake" id="1443796335943-7">
+        <dropNotNullConstraint columnDataType="varchar(1024)" columnName="value"
+                               tableName="character_request_form_field_value"/>
+    </changeSet>
 </databaseChangeLog>
