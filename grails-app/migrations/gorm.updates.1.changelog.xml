@@ -142,4 +142,38 @@
                                  referencesUniqueColumn="false"/>
     </changeSet>
 
+    <changeSet author="Treble Snake" id="1443624105305-1">
+        <createTable tableName="character_request_game_role">
+            <column name="character_request_roles_id" type="int8"/>
+            <column name="game_role_id" type="int8"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="character_request_roles_id"
+                                 baseTableName="character_request_game_role"
+                                 constraintName="FK_p5dm4vpi4mew7x8blhlcfynpk" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id"
+                                 referencedTableName="character_request"
+                                 referencesUniqueColumn="false"/>
+        <addForeignKeyConstraint baseColumnNames="game_role_id"
+                                 baseTableName="character_request_game_role"
+                                 constraintName="FK_2jcvxdhbyl2wb5422w4i0sxxg" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id"
+                                 referencedTableName="game_role" referencesUniqueColumn="false"/>
+    </changeSet>
+
+    <changeSet author="Treble Snake" id="1443624105305-2">
+        <addColumn tableName="game_role">
+            <column name="request_available" type="boolean">
+            </column>
+        </addColumn>
+
+        <sql>
+            update game_role set request_available = FALSE
+        </sql>
+
+        <addNotNullConstraint columnName="request_available"
+                              schemaName="public"
+                              tableName="game_role"/>
+    </changeSet>
+
 </databaseChangeLog>

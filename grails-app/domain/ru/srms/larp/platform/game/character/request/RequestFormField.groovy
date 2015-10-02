@@ -29,6 +29,7 @@ class RequestFormField implements InGameStuff {
   static mapping = {
     table 'character_request_form_field'
     parent cascade: 'save-update'
+    sort sortOrder: 'asc'
   }
 
   @Override
