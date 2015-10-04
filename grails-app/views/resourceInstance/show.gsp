@@ -20,20 +20,31 @@
     <div class="seven wide column">
       <section class="ui pilled segment">
         <div class="ui blue ribbon label">${subject.fullId}</div>
+
         <div class="ui hidden divider"></div>
 
         <sec:permitted object="${subject}" permission="write">
-          <g:render template="/shared/fromErrors" bean="${subject}" var="subject"/>
-          <ingame:form class="ui form" url="[resource: subject, action: 'changeValue']"
-                       method="post">
+          <g:if test="${params.game.active}">
+            <g:render template="/shared/fromErrors" bean="${subject}" var="subject"/>
+            <ingame:form class="ui form" url="[resource: subject, action: 'changeValue']"
+                         method="post">
 
-            <div class="${hasErrors(bean: subject, field: 'value', 'error')} inline required field">
-              <label for="value">Значение:</label>
-              <g:textField name="value" required="" value="${subject?.value}"/>
+              <div
+                  class="${hasErrors(bean: subject, field: 'value', 'error')} inline required field">
+                <label for="value">Значение:</label>
+                <g:textField name="value" required="" value="${subject?.value}"/>
+                <g:if test="${subject.type.measure}">${subject.type.measure}</g:if>
+              </div>
+              <ui:submit name="update" icon="checkmark">Сохранить</ui:submit>
+            </ingame:form>
+          </g:if>
+          <g:else>
+            <div style="padding-top: 10px"></div>
+            <strong>
+              Текущее значение: <span class="ui violet circular label">${subject.value}</span>
               <g:if test="${subject.type.measure}">${subject.type.measure}</g:if>
-            </div>
-            <ui:submit name="update" icon="checkmark">Сохранить</ui:submit>
-          </ingame:form>
+            </strong>
+          </g:else>
         </sec:permitted>
         <sec:notPermitted object="${subject}" permission="write">
           <div style="padding-top: 10px"></div>
@@ -52,44 +63,49 @@
     </div>
 
     <section class="nine wide column">
-      <sec:permitted object="${subject}" permission="create">
-        <section class="ui pilled segment">
-          <div class="ui blue ribbon label">Произвести перевод</div>
+      <g:if test="${params.game.active}">
+        <sec:permitted object="${subject}" permission="create">
 
-          <div class="ui hidden divider"></div>
+          <section class="ui pilled segment">
+            <div class="ui blue ribbon label">Произвести перевод</div>
 
-          <g:render template="/shared/fromErrors" bean="${transferData}" var="subject"/>
-          <ingame:form class="ui form" url="[resource: subject, action: 'transfer']" method="post">
-            <div class="fields">
-              <div
-                  class="${hasErrors(bean: transferData, field: 'transferValue', 'error')} required field">
-                <label for="value">Количество:</label>
-                <g:textField name="transferValue" required=""
-                             placeholder="0 ${subject.type.measure}"
-                             value="${transferData?.transferValue}"/>
+            <div class="ui hidden divider"></div>
+
+            <g:render template="/shared/fromErrors" bean="${transferData}" var="subject"/>
+            <ingame:form class="ui form" url="[resource: subject, action: 'transfer']"
+                         method="post">
+              <div class="fields">
+                <div
+                    class="${hasErrors(bean: transferData, field: 'transferValue', 'error')} required field">
+                  <label for="value">Количество:</label>
+                  <g:textField name="transferValue" required=""
+                               placeholder="0 ${subject.type.measure}"
+                               value="${transferData?.transferValue}"/>
+                </div>
+
+                <div
+                    class="${hasErrors(bean: transferData, field: 'transferTargetId', 'error')} required field">
+                  <label for="value">Кому:</label>
+                  <g:textField name="transferTargetId" required=""
+                               placeholder="${subject.type.identifierTitle}"
+                               value="${transferData?.transferTargetId}"/>
+                </div>
               </div>
 
               <div
-                  class="${hasErrors(bean: transferData, field: 'transferTargetId', 'error')} required field">
-                <label for="value">Кому:</label>
-                <g:textField name="transferTargetId" required=""
-                             placeholder="${subject.type.identifierTitle}"
-                             value="${transferData?.transferTargetId}"/>
+                  class="${hasErrors(bean: transferData, field: 'comment', 'error')} field">
+                <label for="value">Комментарий:</label>
+                <g:textField name="comment"
+                             placeholder="Текст комментария"
+                             value="${transferData?.comment}"/>
+                <div class="ui pointing label">Максимум 128 символов. Можно оставить пустым.</div>
               </div>
-            </div>
-            <div
-                    class="${hasErrors(bean: transferData, field: 'comment', 'error')} field">
-              <label for="value">Комментарий:</label>
-              <g:textField name="comment"
-                          placeholder="Текст комментария"
-                          value="${transferData?.comment}"/>
-              <div class="ui pointing label">Максимум 128 символов. Можно оставить пустым.</div>
-            </div>
 
-            <ui:submit name="send" icon="right arrow">Отправить</ui:submit>
-          </ingame:form>
-        </section>
-      </sec:permitted>
+              <ui:submit name="send" icon="right arrow">Отправить</ui:submit>
+            </ingame:form>
+          </section>
+        </sec:permitted>
+      </g:if>
 
       <section class="ui pilled segment">
         <div class="ui blue ribbon label">История переводов</div>
@@ -103,6 +119,8 @@
           </g:if>
         </div>
       </section>
+
+    </section>
   </div>
 </content>
 </body>

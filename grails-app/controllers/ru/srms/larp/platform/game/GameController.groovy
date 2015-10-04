@@ -64,6 +64,14 @@ class GameController extends BaseController {
     }
   }
 
+  @Transactional
+  def toggleActive(Game game) {
+    game.active = !game.active
+    gameService.update(game)
+    respondChange("Игра успешно ${game.active ? 'запущена' : 'остановлена'}", OK,
+        [action: 'play', params: [gameAlias: game.alias]])
+  }
+
   private void updateRichText(Game game) {
     game.overview = cleanHtml(game.overview, 'rich-text')
     game.preview = cleanHtml(game.preview, 'simple-rich-text')

@@ -200,4 +200,18 @@
         <dropColumn tableName="resource_instance" columnName="title"/>
     </changeSet>
 
+    <changeSet author="Treble Snake" id="1443980803046-1">
+        <addColumn tableName="game">
+            <column name="active" type="boolean"/>
+        </addColumn>
+
+        <sql>
+            update game set active = FALSE
+        </sql>
+
+        <addNotNullConstraint columnName="active"
+                              schemaName="public"
+                              tableName="game"/>
+    </changeSet>
+
 </databaseChangeLog>

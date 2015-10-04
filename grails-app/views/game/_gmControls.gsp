@@ -1,4 +1,14 @@
 <%@ page import="ru.srms.larp.platform.game.Game" %>
+
+<g:link class="item" action="toggleActive" id="${params.game.id}">
+  <g:if test="${params.game.active}">
+    <i class="pause icon"></i> Остановить
+  </g:if>
+  <g:else>
+    <i class="play icon"></i> Запустить
+  </g:else>
+</g:link>
+
 <g:link class="item" action="edit" resource="${game}"><i class="settings icon"></i> Параметры</g:link>
 <g:if test="${params.game.modules.contains(Game.GameModule.REQUEST_FORM)}">
   <ingame:link mapping="gameRequest" class="item"

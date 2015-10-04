@@ -34,7 +34,8 @@ class MailboxService {
     result
   }
 
-  @PreAuthorize("hasPermission(#box, create) or hasPermission(#box.game, admin)")
+  @PreAuthorize("(hasPermission(#box, create) and #box.game.active) or \
+      hasPermission(#box.game, admin)")
   def writeLetter(MailBox box, LetterRef reply = null) {
     def content = new LetterContent(sender: box)
     if(reply) {
@@ -45,10 +46,12 @@ class MailboxService {
     new LetterRef(mailbox: box, type: LetterType.DRAFT, content: content)
   }
 
-  @PreAuthorize("hasPermission(#letter.mailbox, create) or hasPermission(#letter.mailbox.game, admin)")
+  @PreAuthorize("(hasPermission(#letter.mailbox, create) and #letter.mailbox.game.active) or \
+      hasPermission(#letter.mailbox.game, admin)")
   def editLetter(LetterRef letter) { letter }
 
-  @PreAuthorize("hasPermission(#letter.mailbox, create) or hasPermission(#letter.mailbox.game, admin)")
+  @PreAuthorize("(hasPermission(#letter.mailbox, create) and #letter.mailbox.game.active) or \
+       hasPermission(#letter.mailbox.game, admin)")
   @Transactional
   def saveLetter(LetterRef letter) {
     letter.content.save()
@@ -61,7 +64,8 @@ class MailboxService {
     }
   }
 
-  @PreAuthorize("hasPermission(#letter.mailbox, delete) or hasPermission(#letter.mailbox.game, admin)")
+  @PreAuthorize("(hasPermission(#letter.mailbox, delete) and #letter.mailbox.game.active) or \
+      hasPermission(#letter.mailbox.game, admin)")
   @Transactional
   def deleteLetter(LetterRef letter) {
     if(letter.type.equals(LetterType.TRASH))
@@ -105,7 +109,8 @@ class MailboxService {
   @PreAuthorize("hasPermission(#box, write) or hasPermission(#box.game, admin)")
   def readAddressBook(MailBox box) { box }
 
-  @PreAuthorize("hasPermission(#parent, write) or hasPermission(#parent.game, admin)")
+  @PreAuthorize("(hasPermission(#parent, write) and #parent.game.active) or \
+      hasPermission(#parent.game, admin)")
   @Transactional
   def addAddress(MailBox parent, MailBox address) {
     def entry = new AddressBookEntry(entry: address)
@@ -113,7 +118,8 @@ class MailboxService {
     entry.save()
   }
 
-  @PreAuthorize("hasPermission(#entry.mailBox, write) or hasPermission(#entry.extractGame(), admin)")
+  @PreAuthorize("(hasPermission(#entry.mailBox, write) and #entry.extractGame().active) or \
+      hasPermission(#entry.extractGame(), admin)")
   @Transactional
   def deleteSavedAddress(AddressBookEntry entry) {
     entry.delete()

@@ -21,7 +21,8 @@
     <thead>
     <tr>
       <g:sortableColumn property="title" title="Название" class="four wide"/>
-      <th class="twelve wide">Описание</th>
+      <th class="four wide">Статус</th>
+      <th class="eight wide">Описание</th>
     </tr>
     </thead>
     <tbody>
@@ -29,6 +30,14 @@
       <tr>
         <td class="top aligned">
           <link:game gameAlias="${game.alias}">${game.title}</link:game>
+        </td>
+        <td>
+          <g:if test="${game.active}">
+            <div class="ui green label">Игра идет</div>
+          </g:if>
+          <g:else>
+            <div class="ui red label">Игра приостановлена</div>
+          </g:else>
         </td>
         <td>
           <div class="richText">
@@ -39,7 +48,7 @@
     </g:each>
     </tbody>
     <g:render template="/shared/semantic/tablePaginate"
-              model="[colspan: 2, itemsQty: gameInstanceCount]"/>
+              model="[colspan: 3, itemsQty: gameInstanceCount]"/>
   </table>
 </content>
 

@@ -24,6 +24,14 @@
 </content>B
 
 <content tag="content">
+  <g:if test="${params.game.active}">
+    <div class="ui green label">Игра идет</div>
+  </g:if>
+  <g:else>
+    <div class="ui red label">Игра приостановлена</div>
+  </g:else>
+  <div class="ui hidden divider"></div>
+
   <div class="ui two columns stackable grid">
 
     <div class="ten wide column">
