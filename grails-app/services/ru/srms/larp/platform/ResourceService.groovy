@@ -91,13 +91,15 @@ class ResourceService {
   }
 
   @Transactional
-  @PreAuthorize("hasPermission(#resource.extractGame(), admin) or hasPermission(#resource, write)")
+  @PreAuthorize("hasPermission(#resource.extractGame(), admin) or \
+      (hasPermission(#resource, write) and #resource.extractGame().active)")
   def updateResourceValue(ResourceInstance resource) {
     resource.save()
   }
 
   @Transactional
-  @PreAuthorize("hasPermission(#data.source.extractGame(), admin) or hasPermission(#data.source, create)")
+  @PreAuthorize("hasPermission(#data.source.extractGame(), admin) or \
+      (hasPermission(#data.source, create) and #data.source.extractGame().active)")
   def transfer(TransferData data) {
     def source = data.source
     def target = ResourceInstance.findByIdentifierAndType(data.transferTargetId, source.type)

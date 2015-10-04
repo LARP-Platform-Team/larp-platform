@@ -55,28 +55,33 @@ class NewsService {
     @PreAuthorize("hasPermission(#feed.game, admin) or hasPermission(#feed, read)")
     def readFeed(NewsFeed feed) { feed }
 
-    @PreAuthorize("hasPermission(#parent.game, admin) or hasPermission(#parent, create)")
+    @PreAuthorize("hasPermission(#parent.game, admin) or \
+            (hasPermission(#parent, create) and #parent.game.active)")
     NewsItem createNews(NewsFeed parent) {
         new NewsItem(feed: parent)
     }
 
     @Transactional
-    @PreAuthorize("hasPermission(#news.feed.game, admin) or hasPermission(#news.feed, create)")
+    @PreAuthorize("hasPermission(#news.feed.game, admin) or \
+            (hasPermission(#news.feed, create) and #news.feed.game.active)")
     def saveNews(NewsItem news) {
         news.save flush:true
     }
 
-    @PreAuthorize("hasPermission(#news.feed.game, admin) or hasPermission(#news.feed, write)")
+    @PreAuthorize("hasPermission(#news.feed.game, admin) or \
+            (hasPermission(#news.feed, write) and #news.feed.game.active)")
     def editNews(NewsItem news) {news}
 
     @Transactional
-    @PreAuthorize("hasPermission(#news.feed.game, admin) or hasPermission(#news.feed, write)")
+    @PreAuthorize("hasPermission(#news.feed.game, admin) or \
+            (hasPermission(#news.feed, write) and #news.feed.game.active)")
     def updateNews(NewsItem news) {
         news.save flush:true
     }
 
     @Transactional
-    @PreAuthorize("hasPermission(#news.feed.game, admin) or hasPermission(#news.feed, delete)")
+    @PreAuthorize("hasPermission(#news.feed.game, admin) or \
+            (hasPermission(#news.feed, delete) and #news.feed.game.active)")
     def deleteNews(NewsItem news) {
         news.delete flush:true
     }

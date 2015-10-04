@@ -11,10 +11,13 @@
 <body>
 <content tag="actions">
 
-  <sec:permitted object="${subject}" permission="create">
-    <ingame:link class="item" controller="letter" action="compose" params="[mailboxId: subject.id]">
-      <i class="write blue icon"></i> Написать письмо</ingame:link>
-  </sec:permitted>
+  <g:if test="${params.game.active}">
+    <sec:permitted object="${subject}" permission="create">
+      <ingame:link class="item" controller="letter" action="compose"
+                   params="[mailboxId: subject.id]">
+        <i class="write blue icon"></i> Написать письмо</ingame:link>
+    </sec:permitted>
+  </g:if>
 
   <sec:permitted object="${subject}" permission="write">
     <ingame:link class="item" action="addressBook" resource="${subject}">
@@ -58,7 +61,9 @@
                 <tr>
                   <td>
                     ${tab.getAddress(letter.content)}
-                    <tmpl:addAddress letter="${letter}"/>
+                    <g:if test="${params.game.active}">
+                      <tmpl:addAddress letter="${letter}"/>
+                    </g:if>
                   </td>
                   <td><ingame:link controller="letter" class="${letter.deleted ? 'deleted' : ''}"
                                    action="show"

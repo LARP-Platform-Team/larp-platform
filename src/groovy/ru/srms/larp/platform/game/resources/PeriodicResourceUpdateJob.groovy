@@ -38,7 +38,8 @@ class PeriodicResourceUpdateJob implements Job {
     }
 
     try {
-      resourceService.applyPeriodicRule(rule)
+      if(rule.extractGame().active)
+        resourceService.applyPeriodicRule(rule)
     } catch (Exception e) {
       logger.error("Applying of rule [${rule.id}] failed.", e)
     }

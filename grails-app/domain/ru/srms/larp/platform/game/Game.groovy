@@ -10,6 +10,8 @@ class Game implements Titled, Wrapped<Game>, InGameStuff {
   String alias
   String preview
   String overview
+  Boolean active = false
+
   transient int previewPureLength
   static hasMany = [
           masters          : SpringUser,

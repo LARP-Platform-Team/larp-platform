@@ -14,11 +14,13 @@
           class="item"><i
       class="arrow left grey icon"></i> Назад</g:link>
 
-  <sec:permitted object="${subject}" permission="create">
-    <ingame:link class="item" controller="newsItem" action="create" params="[feedId: subject.id]">
-      <i class="add green icon"></i> Добавить новость
-    </ingame:link>
-  </sec:permitted>
+  <g:if test="${params.game.active}">
+    <sec:permitted object="${subject}" permission="create">
+      <ingame:link class="item" controller="newsItem" action="create" params="[feedId: subject.id]">
+        <i class="add green icon"></i> Добавить новость
+      </ingame:link>
+    </sec:permitted>
+  </g:if>
 </content>
 <content tag="content">
   <div class="ui divided items">

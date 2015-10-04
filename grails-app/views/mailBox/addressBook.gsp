@@ -22,6 +22,7 @@
         <div class="ui relaxed divided selection list">
           <g:each in="${subject.savedAddresses}" var="address">
             <div class="item">
+            <g:if test="${params.game.active}">
               <div class="right floated content">
                 <ingame:link class="ui icon red basic button" title="Удалить"
                              action="deleteSavedAddress" resource="${subject}"
@@ -30,6 +31,7 @@
                   <i class="red delete icon"></i>
                 </ingame:link>
               </div>
+            </g:if>
 
               <i class="mail icon"></i>
 
@@ -53,22 +55,27 @@
       </g:else>
     </div>
 
-    <div class="ui eight wide column">
-      <section class="ui pilled segment">
-        <div class="ui blue ribbon label">Добавить адрес</div>
-        <div class="ui hidden divider"></div>
+    <g:if test="${params.game.active}">
+      <div class="ui eight wide column">
+        <section class="ui pilled segment">
+          <div class="ui blue ribbon label">Добавить адрес</div>
 
-        <g:render template="/shared/fromErrors" bean="${addAddressCommand}" var="subject"/>
-        <ingame:form class="ui form" url="[resource: subject, action: 'addSavedAddress']">
-          <div class="${hasErrors(bean: addAddressCommand, field: 'newAddress', 'error')} required field">
-            <label for="newAddress">Адрес</label>
-            <g:textField name="newAddress" required="" value="${addAddressCommand?.newAddress}"/>
-          </div>
-          <ui:submit icon="add">Добавить</ui:submit>
-        </ingame:form>
+          <div class="ui hidden divider"></div>
 
-      </section>
-    </div>
+          <g:render template="/shared/fromErrors" bean="${addAddressCommand}" var="subject"/>
+          <ingame:form class="ui form" url="[resource: subject, action: 'addSavedAddress']">
+            <div
+                class="${hasErrors(bean: addAddressCommand, field: 'newAddress', 'error')} required field">
+              <label for="newAddress">Адрес</label>
+              <g:textField name="newAddress" required="" value="${addAddressCommand?.newAddress}"/>
+            </div>
+            <ui:submit icon="add">Добавить</ui:submit>
+          </ingame:form>
+
+        </section>
+      </div>
+    </g:if>
+
   </div>
 
 </content>
