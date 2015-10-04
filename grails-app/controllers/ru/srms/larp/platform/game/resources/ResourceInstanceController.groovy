@@ -70,7 +70,7 @@ class ResourceInstanceController extends BaseModuleController {
     withModule {
       if (validateData(resource, 'create')) {
         resourceService.saveResourceInstance(resource)
-        respondChange('Экземпляр ресурса успешно создан', CREATED,
+        respondChange('Хранилище ресурса успешно создано', CREATED,
             [controller: 'GameResource', action: 'show', id: resource.type.id])
       }
     }
@@ -86,7 +86,7 @@ class ResourceInstanceController extends BaseModuleController {
 
       if (validateData(resource, 'edit')) {
         resourceService.saveResourceInstance(resource, oldResource)
-        respondChange('Экземпляр ресурса обновлен', OK,
+        respondChange('Хранилище ресурса обновлено', OK,
             [controller: 'GameResource', action: 'show', id: resource.type.id])
       }
     }
@@ -97,7 +97,7 @@ class ResourceInstanceController extends BaseModuleController {
     withModule {
       if (validateData(resource)) {
         resourceService.deleteResourceInstance(resource)
-        respondChange('Экземпляр ресурса удален', NO_CONTENT,
+        respondChange('Хранилище ресурса удалено', NO_CONTENT,
             [controller: 'GameResource', action: 'show', id: resource.type.id])
       }
     }

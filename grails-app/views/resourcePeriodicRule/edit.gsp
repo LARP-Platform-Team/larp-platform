@@ -4,7 +4,7 @@
 <head>
   <meta name="layout" content="mainWithActions">
   <g:set var="subject" value="${resourcePeriodicRuleInstance as ResourcePeriodicRule}"/>
-  <g:set var="title" value="Редактирование правила обновлнеия для ресурса ${subject.target.fullId}"/>
+  <g:set var="title" value="Редактирование правила обновлнеия для ресурса ${subject.target.extractTitle()}"/>
   <title>${title}</title>
 </head>
 

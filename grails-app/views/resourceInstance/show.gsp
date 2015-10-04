@@ -4,7 +4,7 @@
 <head>
   <meta name="layout" content="mainWithActions">
   <g:set var="subject" value="${resourceInstanceInstance as ResourceInstance}"/>
-  <g:set var="title" value="${subject.title}"/>
+  <g:set var="title" value="${subject.extractTitle()}"/>
   <title>${title}</title>
 </head>
 

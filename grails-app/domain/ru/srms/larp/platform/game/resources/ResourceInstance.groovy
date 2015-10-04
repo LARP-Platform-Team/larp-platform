@@ -10,7 +10,6 @@ import ru.srms.larp.platform.game.character.GameCharacter
  */
 class ResourceInstance implements InGameStuff, Titled {
 
-  String title
   String identifier
   ResourceOrigin origin
   Boolean transferable = false
@@ -26,7 +25,6 @@ class ResourceInstance implements InGameStuff, Titled {
   static constraints = {
     owner nullable: true
     origin nullable: true
-    title maxSize: 64, unique: 'type'
     identifier maxSize: 64, unique: 'type'
     minValue nullable: true
     maxValue nullable: true
@@ -39,7 +37,7 @@ class ResourceInstance implements InGameStuff, Titled {
   }
 
   public static def getAllByGame(Game game) {
-    ResourceInstance.findAll("from ResourceInstance as res WHERE res.type.game=? ORDER BY res.type.title, res.title", [game])
+    ResourceInstance.findAll("from ResourceInstance as res WHERE res.type.game=? ORDER BY res.type.title, res.identifier", [game])
   }
 
   public def getTransferLogs() {
@@ -66,7 +64,7 @@ class ResourceInstance implements InGameStuff, Titled {
   String getFullId() {
     def result = this.identifier
     if(this.type.identifierTitle)
-      result = "${this.type.identifierTitle}${result}"
+      result = "${this.type.identifierTitle}: ${result}"
     return result
   }
 
@@ -77,6 +75,6 @@ class ResourceInstance implements InGameStuff, Titled {
 
   @Override
   String extractTitle() {
-    return type.title+ ": " + title
+    return "${type.storage} ($fullId)"
   }
 }

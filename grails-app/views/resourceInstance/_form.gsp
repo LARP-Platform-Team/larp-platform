@@ -2,14 +2,9 @@
 <g:set var="subject" value="${subject as ResourceInstance}"/>
 
 <div class="ui three fields">
-  <div class="${hasErrors(bean: subject, field: 'title', 'error')} required field">
-    <label for="title">Название</label>
-    <g:field type="text" name="title" required="" value="${subject?.title}"/>
-    <div class="ui pointing label">Максимум 64 символа. Должно быть уникальным в рамках типа ресурса.</div>
-  </div>
 
   <div class="${hasErrors(bean: subject, field: 'identifier', 'error')} required field">
-    <label for="identifier">Идентификатор</label>
+    <label for="identifier">${subject.type.identifierTitle}</label>
     <g:field type="text" name="identifier" required="" value="${subject?.identifier}"/>
     <div class="ui pointing label">Максимум 64 символа. Должен быть уникальным в рамках типа ресурса.</div>
   </div>

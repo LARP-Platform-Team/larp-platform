@@ -9,7 +9,7 @@
         <ul>
           <g:each in="${resList}" var="res">
             <li>
-              <ingame:link resource="${res}" action="show">${res.title}</ingame:link>
+              <ingame:link resource="${res}" action="show">${res.extractTitle()}</ingame:link>
               (${res.value}<g:if test="${res.type.measure}"> ${res.type.measure}</g:if>)
             </li>
           </g:each>

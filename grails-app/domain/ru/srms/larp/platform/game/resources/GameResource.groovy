@@ -11,6 +11,7 @@ class GameResource implements InGameStuff, Titled {
 
   String title
   String measure = ""
+  String storage
   String identifierTitle = "Номер счета"
   Double minValue
   Double maxValue
@@ -21,6 +22,7 @@ class GameResource implements InGameStuff, Titled {
   static constraints = {
     measure maxSize: 16, nullable: true
     identifierTitle maxSize: 64
+    storage maxSize: 64
     title maxSize: 64, unique: 'game'
     minValue nullable: true
     maxValue nullable: true
