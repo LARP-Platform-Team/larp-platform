@@ -4,7 +4,7 @@
 <head>
   <meta name="layout" content="mainWithActions">
   <g:set var="subject" value="${resourceInstanceInstance as ResourceInstance}"/>
-  <g:set var="title" value="Редактирование ресурса ${subject.fullId}"/>
+  <g:set var="title" value="Редактирование хранилища для ресурса ${subject.type.title}"/>
   <title>${title}</title>
 </head>
 

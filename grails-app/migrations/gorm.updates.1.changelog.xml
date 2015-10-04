@@ -180,4 +180,24 @@
         <dropNotNullConstraint columnDataType="varchar(1024)" columnName="value"
                                tableName="character_request_form_field_value"/>
     </changeSet>
+
+    <changeSet author="Treble Snake" id="1443894068176-1">
+        <addColumn tableName="game_resource">
+            <column name="storage" type="varchar(64)"/>
+        </addColumn>
+
+        <sql>
+            update game_resource set storage = 'Хранилище'
+        </sql>
+
+        <addNotNullConstraint columnName="storage"
+                              schemaName="public"
+                              tableName="game_resource"/>
+    </changeSet>
+
+    <changeSet author="Treble Snake" id="1443894068176-17">
+        <dropIndex indexName="unique_resource_instance_title" tableName="resource_instance"/>
+        <dropColumn tableName="resource_instance" columnName="title"/>
+    </changeSet>
+
 </databaseChangeLog>

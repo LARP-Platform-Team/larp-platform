@@ -13,17 +13,17 @@
 <content tag="actions">
   <ingame:link class="item" controller="ResourceInstance" action="create"
                params="[typeId: subject.id]">
-    <i class="green plus icon"></i> Создать экземпляр</ingame:link>
+    <i class="green plus icon"></i> Создать хранилище</ingame:link>
   <ingame:link class="item" action="index"><i class="arrow left grey icon"></i> Назад</ingame:link>
 </content>
 
 <content tag="content">
 
   <section>
-    <h2>Экземпляры</h2>
+    <h2>Хранилища</h2>
 
     <g:if test="${subject.instances.size() == 0}">
-      <ui:message type="info">Экземпляров ресурса данного типа пока нет.</ui:message>
+      <ui:message type="info">Хранилищ ресурса данного типа пока нет.</ui:message>
     </g:if>
     <g:else>
       <table class="ui celled padded very basic table">
@@ -40,7 +40,7 @@
         <tbody>
         <g:each in="${subject.instances}" var="item">
           <tr>
-            <td>${item.title}</td>
+            <td>${item.type.storage}</td>
             <td>${item.value} ${item.type.measure}</td>
             <td>${item.fullId}</td>
             <td>${item.owner}</td>
@@ -64,10 +64,10 @@
 
   </section>
 
-  <br/><!-- sorry for that-->
+  <div class="ui hidden divider"></div>
 
   <section class="ui pilled segment">
-    <h2>Источники</h2>
+    <h2>Источники ресурса (например, банки)</h2>
     <ingame:formRemote name="origins" class="ui form"
                        url="[resource: subject, action: 'addOrigin']" method="POST"
                        update="[success: 'itemsContainer', failure: 'addOriginError']">

@@ -184,14 +184,14 @@ class BootStrap {
     new LetterRef(mailbox: mailbox, content: m4, type: LetterType.DRAFT).save()
 
     // ресурсы
-    def money = new GameResource(title: "Деньги", measure: "руб", game: game2, identifierTitle: "Счет #").save()
-    new GameResource(title: "Кровь", measure: "л.", game: game2, identifierTitle: "Карта донора").save()
-    new GameResource(game: game2, title: "Мана", measure: "ед", identifierTitle: "").save()
+    def money = new GameResource(title: "Деньги", storage: 'Счет', measure: "руб", game: game2, identifierTitle: "Счет #").save()
+    new GameResource(title: "Кровь", storage: 'Пакет', measure: "л.", game: game2, identifierTitle: "Карта донора").save()
+    new GameResource(game: game2, title: "Мана", storage: 'Маг', measure: "ед", identifierTitle: "").save()
     def bank = new ResourceOrigin(resource: money, title: "Банк Ололоево").save()
     new ResourceOrigin(resource: money, title: "Банк Пурпурово").save()
 
-    def res1 = new ResourceInstance(type: money, title: "Зарплатный счет", identifier: "1455-13345", value: 66.4).save()
-    def res2 = new ResourceInstance(type: money, title: "Личный счет", identifier: "666ч666",
+    def res1 = new ResourceInstance(type: money, identifier: "1455-13345", value: 66.4).save()
+    def res2 = new ResourceInstance(type: money, identifier: "666ч666",
         value: 651, owner: lancelot, transferable: true, ownerEditable: true, origin: bank).save()
     gameAclService.createAcl(res1)
     gameAclService.createAcl(res2)
