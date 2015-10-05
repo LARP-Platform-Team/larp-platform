@@ -122,3 +122,6 @@ hs_err_pid*
 
 # Semantic UI src
 /semantic/dist/
+
+# LARP-Platform custom configuration
+/larp.platform.config.groovy
