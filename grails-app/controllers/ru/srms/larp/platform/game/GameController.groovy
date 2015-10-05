@@ -19,14 +19,14 @@ class GameController extends BaseController {
   CharacterRequestService characterRequestService
 
   @Secured(['permitAll'])
-  def index(Integer max) {
-    params.max = Math.min(max ?: 10, 100)
-    respond Game.list(params), model: [gameInstanceCount: Game.count()]
+  def index() {
+
+    respond gameService.list(paginator()), model: [gameInstanceCount: gameService.count()]
   }
 
   @Secured(['permitAll'])
   def play() {
-    respond params.game,
+    respond gameService.play(params.game),
         model: [
             characters: gameService.getAvailableCharacters(params.game),
             requests: characterRequestService.findForCurrentUser(params.game)
@@ -90,15 +90,12 @@ class GameController extends BaseController {
   @Transactional
   def addMaster(Game game) {
     doAjax {
-      def masterId = params.long("masterId")
+      def masterId = params.long("user.id")
       if (!masterId) throw new AjaxException("No master id")
       def master = SpringUser.get(masterId)
       if (!master) throw new AjaxException("Wrong master id")
-      try {
-        gameService.addMaster(game, master)
-      } catch (RuntimeException e) {
-        throw new AjaxException(e.getMessage(), e)
-      }
+
+      gameService.addMaster(game, master)
 
       render template: 'masters', model: [masters: game.masters]
     }
@@ -107,17 +104,42 @@ class GameController extends BaseController {
   @Transactional
   def removeMaster(Game game) {
     doAjax {
-      def masterId = params.long("masterId")
+      def masterId = params.long("user.id")
       if (!masterId) throw new AjaxException("No master id")
       def master = SpringUser.get(masterId)
       if (!master) throw new AjaxException("Wrong master id")
-      try {
-        gameService.removeMaster(game, master)
-      } catch (RuntimeException e) {
-        throw new AjaxException(e.getMessage(), e)
-      }
+
+      gameService.removeMaster(game, master)
 
       render template: 'masters', model: [masters: game.masters]
+    }
+  }
+
+  @Transactional
+  def invitePlayer(Game game) {
+    doAjax {
+      def masterId = params.long("user.id")
+      if (!masterId) throw new AjaxException("No master id")
+      def master = SpringUser.get(masterId)
+      if (!master) throw new AjaxException("Wrong master id")
+
+      gameService.invitePlayer(game, master)
+
+      render template: 'masters', model: [masters: game.invitedPlayers]
+    }
+  }
+
+  @Transactional
+  def removePlayer(Game game) {
+    doAjax {
+      def masterId = params.long("user.id")
+      if (!masterId) throw new AjaxException("No master id")
+      def master = SpringUser.get(masterId)
+      if (!master) throw new AjaxException("Wrong master id")
+
+      gameService.removePlayer(game, master)
+
+      render template: 'masters', model: [masters: game.invitedPlayers]
     }
   }
 

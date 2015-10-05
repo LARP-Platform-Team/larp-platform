@@ -11,12 +11,14 @@ class Game implements Titled, Wrapped<Game>, InGameStuff {
   String preview
   String overview
   Boolean active = false
+  Boolean confidential
 
   transient int previewPureLength
   static hasMany = [
           masters          : SpringUser,
           characters       : GameCharacter,
-          modules          : GameModule
+          modules          : GameModule,
+          invitedPlayers   : SpringUser
   ]
 
   static transients = ['previewPureLength', 'wrapper']
@@ -31,6 +33,7 @@ class Game implements Titled, Wrapped<Game>, InGameStuff {
 
   static mapping = {
     masters joinTable: "game_masters"
+    invitedPlayers joinTable: "game_invited_players"
   }
 
   def beforeDelete() {

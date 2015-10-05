@@ -57,17 +57,34 @@ class CharacterService {
         if (oldPlayer) {
             aclUtilService.deletePermission(character, oldPlayer.username, READ)
             aclUtilService.deletePermission(character, oldPlayer.username, WRITE)
+
+            if(GameCharacter.countByPlayerAndGame(oldPlayer, character.game) == 0
+            && !character.game.invitedPlayers.collect {it.id}.contains(oldPlayer.id)) {
+                aclUtilService.deletePermission(character.game, oldPlayer.username, READ)
+            }
+
         }
 
         if (newPlayer) {
             aclUtilService.addPermission(character, newPlayer.username, READ)
             aclUtilService.addPermission(character, newPlayer.username, WRITE)
+
+            if (GameCharacter.countByPlayerAndGame(newPlayer, character.game) == 1
+                && !character.game.invitedPlayers.collect { it.id }.contains(newPlayer.id)) {
+                aclUtilService.addPermission(character.game, newPlayer.username, READ)
+            }
         }
     }
 
     @PreAuthorize("hasPermission(#character.game, admin)")
     def delete(GameCharacter character) {
         aclUtilService.deleteAcl(character)
+        if(character.player) {
+            if (GameCharacter.countByPlayerAndGame(character.player, character.game) == 1
+                && !character.game.invitedPlayers.collect { it.id }.contains(character.player.id)) {
+                aclUtilService.deletePermission(character.game, character.player.username, READ)
+            }
+        }
         character.delete()
     }
 }

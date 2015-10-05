@@ -3,8 +3,8 @@
         <div class="right floated content">
 
     <ingame:remoteLink class="ui icon red basic button larp-ajax-self-delete" title="Удалить"
-                       url="[action: 'removeMaster', id: params.id, params: [masterId: master.id]]"
-                       update="[success: 'gameMasters', failure: 'gameMastersError']">
+                       url="[action: deleteAction, id: params.id, params: ['user.id': master.id]]"
+                       update="${update}">
                 <i class="red delete icon"></i>
             </ingame:remoteLink>
         </div>

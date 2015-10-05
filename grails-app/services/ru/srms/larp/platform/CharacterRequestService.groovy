@@ -46,21 +46,25 @@ class CharacterRequestService {
   }
 
 
+  @PreAuthorize("!#game.confidential || hasPermission(#game, read)")
   def createRequest(Game game) {
     new CharacterRequest(game: game, user: springSecurityService.currentUser)
   }
 
-  @PreAuthorize("isFullyAuthenticated() and principal.username == #request.user.username")
+  @PreAuthorize("(!#request.game.confidential || hasPermission(#request.game, read)) and \
+      (isFullyAuthenticated() and principal.username == #request.user.username)")
   def editRequest(CharacterRequest request) {
     request
   }
 
   @Transactional
+  @PreAuthorize("!#request.game.confidential || hasPermission(#request.game, read)")
   def saveRequest(CharacterRequest request) {
     request.save()
   }
 
-  @PreAuthorize("isFullyAuthenticated() and principal.username == #request.user.username")
+  @PreAuthorize("(!#request.game.confidential || hasPermission(#request.game, read)) and \
+      (isFullyAuthenticated() and principal.username == #request.user.username)")
   @Transactional
   def updateRequest(CharacterRequest request) {
     request.save()
@@ -70,7 +74,8 @@ class CharacterRequestService {
     CharacterRequest.findAllByGameAndUser(game, springSecurityService.currentUser)
   }
 
-  @PreAuthorize("(isFullyAuthenticated() and principal.username == #request.user.username) \
+  @PreAuthorize("((!#request.game.confidential || hasPermission(#request.game, read)) and \
+        isFullyAuthenticated() and principal.username == #request.user.username) \
                         || hasPermission(#request.game, admin)")
   def showRequest(CharacterRequest request) {
     request

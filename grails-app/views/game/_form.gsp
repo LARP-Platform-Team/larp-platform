@@ -37,3 +37,10 @@
   <div class="ui pointing label">Выберите модули, которые вам понадобятся.
   Позже тут будет отдельный блок для их настройки.</div>
 </div>
+
+<div class="${hasErrors(bean: gameInstance, field: 'confidential', 'error')} inline field">
+  <div class="ui toggle checkbox">
+    <g:checkBox name="confidential" value="${gameInstance?.confidential}"/>
+    <label for="confidential">Приватная игра:</label>
+  </div>
+</div>
