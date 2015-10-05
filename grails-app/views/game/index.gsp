@@ -29,6 +29,9 @@
     <g:each in="${subject}" var="game">
       <tr>
         <td class="top aligned">
+          <g:if test="${game.confidential}">
+            <i class="ui lock icon"></i>&nbsp;
+          </g:if>
           <link:game gameAlias="${game.alias}">${game.title}</link:game>
         </td>
         <td>

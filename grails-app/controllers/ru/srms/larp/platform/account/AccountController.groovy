@@ -21,7 +21,7 @@ class AccountController extends BaseController {
 
   def show(SpringUser user) {
     def masters = Game.where { masters { id == user.id } }
-    def plays = Game.where { characters { player.id == user.id } }
+    def plays = Game.where { characters { player.id == user.id } || invitedPlayers { id == user.id} }
     respond user, model: [masters: masters, plays: plays]
   }
 

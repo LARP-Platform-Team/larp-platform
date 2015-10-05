@@ -214,4 +214,37 @@
                               tableName="game"/>
     </changeSet>
 
+    <changeSet author="Treble Snake" id="1444046831312-1">
+        <addColumn tableName="game">
+            <column name="confidential" type="boolean"/>
+        </addColumn>
+
+        <sql>
+            update game set confidential = FALSE
+        </sql>
+
+        <addNotNullConstraint columnName="confidential"
+                              schemaName="public"
+                              tableName="game"/>
+    </changeSet>
+
+    <changeSet author="Treble Snake" id="1444057270157-1">
+        <createTable tableName="game_invited_players">
+            <column name="game_invited_players_id" type="int8"/>
+            <column name="spring_user_id" type="int8"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="game_invited_players_id"
+                                 baseTableName="game_invited_players"
+                                 constraintName="FK_ohvs7omjcbls4go1m6rifrx3s" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id"
+                                 referencedTableName="game" referencesUniqueColumn="false"/>
+
+        <addForeignKeyConstraint baseColumnNames="spring_user_id"
+                                 baseTableName="game_invited_players"
+                                 constraintName="FK_oisyxwjte1nh6kfolnj7gthj4" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id"
+                                 referencedTableName="spring_user" referencesUniqueColumn="false"/>
+    </changeSet>
+
 </databaseChangeLog>
