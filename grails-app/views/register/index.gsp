@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html>
 <head>
   <meta name="layout" content="main">
@@ -19,35 +18,87 @@
     </g:if>
     <g:form action='register' name='registerForm' class="ui form">
 
-      <div class="${hasErrors(bean: command, field: 'username', 'error')} inline required field">
-        <label for="username">Логин (не отображается)</label>
-        <g:textField name="username" required="required" value="${command?.username}"/>
-        <div class="ui pointing label">Максимум 64 символа. Можно использовать латинские буквы, цифры, тире, точку и нижнее подчеркивание.</div>
+      <div class="${hasErrors(bean: command, field: 'username', 'error')} required field">
+        <div class="ui grid">
+          <div class="middle aligned right aligned four wide column">
+            <div class="required field">
+              <label for="username">Логин (не отображается)</label>
+            </div>
+          </div>
+          <div class="middle aligned five wide left aligned column">
+            <g:textField name="username" required="required" value="${command?.username}"/>
+          </div>
+          <div class="middle aligned seven wide left aligned column">
+            <div class="ui left pointing label">Максимум 64 символа. Можно использовать латинские буквы, цифры, тире,
+            точку и нижнее подчеркивание.</div>
+          </div>
+        </div>
       </div>
 
-      <div class="${hasErrors(bean: command, field: 'name', 'error')} inline required field">
-        <label for="username">Имя</label>
-        <g:textField name="name" required="required" value="${command?.name}"/>
-        <div class="ui pointing label">Максимум 64 символа. Можно использовать латинские и русские буквы, пробел, цифры, тире, точку, запятую и нижнее подчеркивание.</div>
+      <div class="${hasErrors(bean: command, field: 'name', 'error')} required field">
+        <div class="ui grid">
+          <div class="middle aligned right aligned four wide column">
+            <div class="required field">
+              <label for="username">Имя</label>
+            </div>
+          </div>
+          <div class="middle aligned five wide left aligned column">
+            <g:textField name="name" required="required" value="${command?.name}"/>
+          </div>
+          <div class="middle aligned seven wide left aligned column">
+            <div class="ui left pointing label">Максимум 64 символа. Можно использовать латинские и русские буквы,
+            пробел, цифры, тире, точку, запятую и нижнее подчеркивание.</div>
+          </div>
+        </div>
       </div>
 
-      <div class="${hasErrors(bean: command, field: 'email', 'error')} inline required field">
-        <label for="email">E-mail</label>
-        <g:textField name="email" type="email" required="required" value="${command?.email}"/>
+      <div class="${hasErrors(bean: command, field: 'email', 'error')} required field">
+        <div class="ui grid">
+          <div class="middle aligned right aligned four wide column">
+            <div class="required field">
+              <label for="email">E-mail</label>
+            </div>
+          </div>
+          <div class="middle aligned five wide left aligned column">
+            <g:textField name="email" type="email" required="required" value="${command?.email}"/>
+          </div>
+        </div>
       </div>
 
-      <div class="${hasErrors(bean: command, field: 'password', 'error')} inline required field">
-        <label for="password">Пароль</label>
-        <g:passwordField name="password" required="required"  value="${command?.password}"/>
+      <div class="${hasErrors(bean: command, field: 'password', 'error')} required field">
+        <div class="ui grid">
+          <div class="middle aligned right aligned four wide column">
+            <div class="required field">
+              <label for="password">Пароль</label>
+            </div>
+          </div>
+          <div class="middle aligned five wide left aligned column">
+            <g:passwordField name="password" required="required"  value="${command?.password}"/>
+          </div>
+        </div>
       </div>
 
-      <div class="${hasErrors(bean: command, field: 'password2', 'error')} inline required field">
-        <label for="password2">Повторите пароль</label>
-        <g:passwordField name="password2" required="required" value="${command?.password2}"/>
+      <div class="${hasErrors(bean: command, field: 'password2', 'error')} required field">
+        <div class="ui grid">
+          <div class="middle aligned right aligned four wide column">
+            <div class="required field">
+              <label for="password2">Повторите пароль</label>
+            </div>
+          </div>
+          <div class="middle aligned five wide left aligned column">
+            <g:passwordField name="password2" required="required" value="${command?.password2}"/>
+          </div>
+        </div>
       </div>
 
-      <ui:submit name="doRegister" icon="privacy">
-        <g:message code='spring.security.ui.register.submit'/></ui:submit>
+      <div class="ui grid">
+        <div class="middle aligned right aligned four wide column"></div>
+        <div class="middle aligned left aligned five wide column">
+          <ui:submit name="doRegister" icon="privacy">
+            <g:message code='spring.security.ui.register.submit'/>
+          </ui:submit>
+        </div>
+      </div>
 
     </g:form>
   </g:else>
