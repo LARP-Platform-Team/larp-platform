@@ -4,6 +4,7 @@ import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseModuleController
 import ru.srms.larp.platform.ResourceService
+import ru.srms.larp.platform.breadcrubms.Descriptor
 import ru.srms.larp.platform.exceptions.AjaxException
 import ru.srms.larp.platform.game.Game
 
@@ -14,9 +15,14 @@ import static org.springframework.http.HttpStatus.*
 @Transactional(readOnly = true)
 class GameResourceController extends BaseModuleController {
 
+  static allowedMethods = [save: "POST", update: "POST"]
+
   ResourceService resourceService
 
-  static allowedMethods = [save: "POST", update: "POST"]
+  @Override
+  Map getBreadcrumbDescriptors() {
+    [index: Descriptor.root()]
+  }
 
   def index() {
     withModule {

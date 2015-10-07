@@ -4,6 +4,7 @@ import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseModuleController
 import ru.srms.larp.platform.NewsService
+import ru.srms.larp.platform.breadcrubms.Descriptor
 import ru.srms.larp.platform.game.Game
 
 import static org.springframework.http.HttpStatus.*
@@ -16,6 +17,14 @@ class NewsFeedController extends BaseModuleController {
   NewsService newsService
 
   static allowedMethods = [save: "POST", update: "POST"]
+
+  @Override
+  public Map getBreadcrumbDescriptors() {
+    [
+        index: Descriptor.root(),
+        show : Descriptor.root()
+    ]
+  }
 
   def index() {
     withModule

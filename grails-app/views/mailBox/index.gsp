@@ -25,7 +25,7 @@
     <tbody>
     <g:each in="${subject}" var="item">
       <tr>
-        <td><ingame:link action="show" id="${item.id}">${item.toString()}</ingame:link></td>
+        <td>${item.toString()}</td>
         <td>${item.owner}</td>
         <td class="buttons">
           <ingame:link action="edit" id="${item.id}" class="ui yellow icon basic button"

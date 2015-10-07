@@ -5,7 +5,7 @@ class UrlMappings {
 
 	static mappings = {
         // main page
-        "/"(controller:'game')
+        "/"(controller:'game', action: 'index')
 
         // TODO optimize this mappings
         // spring security login controller

@@ -5,6 +5,7 @@ import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseController
 import ru.srms.larp.platform.GameAclService
 import ru.srms.larp.platform.GameRoleService
+import ru.srms.larp.platform.breadcrubms.Descriptor
 import ru.srms.larp.platform.exceptions.AjaxException
 import ru.srms.larp.platform.game.character.GameCharacter
 import ru.srms.larp.platform.sec.permissions.GamePermission
@@ -19,6 +20,11 @@ class GameRoleController extends BaseController {
 
   GameRoleService gameRoleService
   GameAclService gameAclService
+
+  @Override
+  Map getBreadcrumbDescriptors() {
+    [index: Descriptor.root()]
+  }
 
   def index() {
     respond gameRoleService.list(params.game, null, paginator()),

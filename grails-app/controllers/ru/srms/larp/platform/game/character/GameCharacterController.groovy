@@ -5,6 +5,7 @@ import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseController
 import ru.srms.larp.platform.CharacterService
 import ru.srms.larp.platform.GameRoleService
+import ru.srms.larp.platform.breadcrubms.Descriptor
 import ru.srms.larp.platform.exceptions.AjaxException
 import ru.srms.larp.platform.game.roles.GameRole
 
@@ -17,6 +18,14 @@ class GameCharacterController extends BaseController {
     static allowedMethods = [save: "POST", update: "POST", addRole: "POST", removeRole: "POST"]
     CharacterService characterService
     GameRoleService gameRoleService
+
+    @Override
+    public Map getBreadcrumbDescriptors() {
+        [
+            index: Descriptor.root(),
+            playAs: Descriptor.empty()
+        ]
+    }
 
     def playAs(String charAlias) {
         def character = characterService.find(charAlias)

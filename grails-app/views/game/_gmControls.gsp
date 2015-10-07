@@ -13,7 +13,7 @@
 <g:if test="${params.game.modules.contains(Game.GameModule.REQUEST_FORM)}">
   <ingame:link mapping="gameRequest" class="item"
                controller="characterRequest" action="index">
-    <i class="browser icon"></i> Анкеты</ingame:link>
+    <i class="browser icon"></i> Заявки</ingame:link>
 </g:if>
 <ingame:link class="item" controller="gameCharacter" action="index"><i class="users icon"></i> Персонажи</ingame:link>
 <ingame:link class="item" controller="gameRole" action="index"><i class="sitemap icon"></i> Роли</ingame:link>

@@ -4,6 +4,7 @@ import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseModuleController
 import ru.srms.larp.platform.MailboxService
+import ru.srms.larp.platform.breadcrubms.Descriptor
 import ru.srms.larp.platform.game.Game
 
 import static org.springframework.http.HttpStatus.CREATED
@@ -13,8 +14,20 @@ import static org.springframework.http.HttpStatus.NO_CONTENT
 @Transactional(readOnly = true)
 class LetterController extends BaseModuleController {
 
-  MailboxService mailboxService
   static allowedMethods = [save: "POST", update: "POST"]
+  MailboxService mailboxService
+
+  @Override
+  public Map getBreadcrumbDescriptors() {
+    [
+        (Descriptor.DEFAULT_KEY): Descriptor.get([controller: 'mailBox', action: 'show'])
+            .modifyParentRouteStrategy { Map route, Map params ->
+          def item = LetterRef.get(params.get('id') as Long)
+          route.put('id', item?.mailbox?.id ?: params.mailboxId)
+          route
+        }
+    ]
+  }
 
   def show(LetterRef letter) {
     withModule {

@@ -4,6 +4,7 @@ import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseController
 import ru.srms.larp.platform.UserService
+import ru.srms.larp.platform.breadcrubms.Descriptor
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.sec.SpringUser
 
@@ -18,6 +19,11 @@ class AccountController extends BaseController {
 
   UserService userService
   def springSecurityService
+
+  @Override
+  Map getBreadcrumbDescriptors() {
+    [(Descriptor.DEFAULT_KEY): Descriptor.root()]
+  }
 
   def show(SpringUser user) {
     def masters = Game.where { masters { id == user.id } }

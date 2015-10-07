@@ -7,6 +7,7 @@ import org.springframework.security.access.AccessDeniedException
 import ru.srms.larp.platform.BaseModuleController
 import ru.srms.larp.platform.CharacterRequestService
 import ru.srms.larp.platform.CharacterService
+import ru.srms.larp.platform.breadcrubms.Descriptor
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.character.GameCharacter
 import ru.srms.larp.platform.game.roles.GameRole
@@ -22,6 +23,13 @@ class CharacterRequestController extends BaseModuleController {
   CharacterRequestService characterRequestService
   CharacterService characterService
   HtmlCleaner htmlCleaner
+
+
+  @Override
+  public Map getBreadcrumbDescriptors() {
+    // TODO 'show' should point to index or game depends on GM or not looks
+    [(Descriptor.DEFAULT_KEY): Descriptor.root()]
+  }
 
   def index() {
     withModule {
