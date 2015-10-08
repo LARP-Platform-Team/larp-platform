@@ -11,7 +11,7 @@ class Game implements Titled, Wrapped<Game>, InGameStuff {
   String preview
   String overview
   Boolean active = false
-  Boolean confidential
+  Boolean confidential = false
 
   transient int previewPureLength
   static hasMany = [
