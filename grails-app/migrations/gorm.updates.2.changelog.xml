@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet author="Treble Snake" id="1444308880858-1">
+        <createTable tableName="game_chip">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="game_chip_PK"/>
+            </column>
+            <column name="version" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="game_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="notes" type="varchar(1024)"/>
+            <column name="owner_id" type="int8"/>
+            <column name="title" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Treble Snake" id="1444308880858-21">
+        <createIndex indexName="unique_chip_code" tableName="game_chip" unique="true">
+            <column name="game_id"/>
+            <column name="code"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1444308880858-19">
+        <addForeignKeyConstraint baseColumnNames="game_id" baseTableName="game_chip"
+                                 constraintName="FK_g2aqd271hsp4qmfr9ua79npso" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id"
+                                 referencedTableName="game" referencesUniqueColumn="false"/>
+    </changeSet>
+    <changeSet author="Treble Snake" id="1444308880858-20">
+        <addForeignKeyConstraint baseColumnNames="owner_id" baseTableName="game_chip"
+                                 constraintName="FK_ofp7wupr58leq4q2m4tofxk7b" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id"
+                                 referencedTableName="game_character"
+                                 referencesUniqueColumn="false"/>
+    </changeSet>
+
+</databaseChangeLog>

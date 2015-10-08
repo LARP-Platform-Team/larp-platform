@@ -68,6 +68,7 @@ if (typeof jQuery !== 'undefined') {
 		$('.ui.checkbox, .ui.radio.checkbox').checkbox();
 
 		$('.ui[title]').popup();
+		$('.ui.html-popup').popup({inline: true});
 
         $('.ui.accordion').accordion({exclusive: false});
 
