@@ -5,6 +5,7 @@ import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseModuleController
 import ru.srms.larp.platform.MailboxService
+import ru.srms.larp.platform.breadcrubms.Descriptor
 import ru.srms.larp.platform.game.Game
 
 import static org.springframework.http.HttpStatus.*
@@ -16,6 +17,19 @@ class MailBoxController extends BaseModuleController {
   static allowedMethods = [save: "POST", update: "POST", addAddressBookEntry: "POST"]
   MailboxService mailboxService
 
+  @Override
+  public Map getBreadcrumbDescriptors() {
+    def addressBookDescriptor = Descriptor.get([controller: 'mailBox', action: 'show'])
+        .modifyParentRouteStrategy { Map route, Map params -> route.id = params.id; route }
+    [
+        index      : Descriptor.root(),
+        show       : Descriptor.root(),
+        addressBook: addressBookDescriptor,
+        addSavedAddress: addressBookDescriptor,
+        deleteSavedAddress: addressBookDescriptor
+    ]
+  }
+
   def index() {
     withModule {
       respond mailboxService.all(params.game, paginator()),
@@ -23,10 +37,9 @@ class MailBoxController extends BaseModuleController {
     }
   }
 
-  // TODO ---
   def show(MailBox instance) {
     withModule {
-      respond instance, model: [
+      respond mailboxService.show(instance), model: [
           letters: mailboxService.letters(instance)]
     }
   }
@@ -84,13 +97,15 @@ class MailBoxController extends BaseModuleController {
 
   @Transactional
   def addAddressBookEntry(MailBox box) {
-    withModule {
-      def result = [success: false]
+    doAjax {
+      withModule {
+        def result = [success: false]
 
-      if(params.target.id && MailBox.exists(params.target.id)) {
-        result = [success: mailboxService.addAddress(box, MailBox.get(params.target.id))]
+        if (params.target.id && MailBox.exists(params.target.id)) {
+          result = [success: mailboxService.addAddress(box, MailBox.get(params.target.id))]
+        }
+        render result as JSON
       }
-      render result as JSON
     }
   }
 

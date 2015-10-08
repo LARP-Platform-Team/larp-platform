@@ -6,6 +6,7 @@ import ru.srms.larp.platform.BaseModuleController
 import ru.srms.larp.platform.CharacterRequestService
 import ru.srms.larp.platform.EntityWrapper
 import ru.srms.larp.platform.GameRoleService
+import ru.srms.larp.platform.breadcrubms.Descriptor
 import ru.srms.larp.platform.domain.Wrapped
 import ru.srms.larp.platform.game.Game
 import ru.srms.larp.platform.game.roles.GameRole
@@ -20,6 +21,30 @@ class CharacterRequestFieldController extends BaseModuleController {
 
   CharacterRequestService characterRequestService
   GameRoleService gameRoleService
+
+
+  @Override
+  public Map getBreadcrumbDescriptors() {
+    [
+        index               : Descriptor.get([controller: 'characterRequest', action: 'index'])
+            .modifyParentRouteStrategy { Map route, Map params ->
+          def item = RequestFormField.get(params.get('id') as Long)
+          if (params.role?.id || item?.parent?.entity instanceof GameRole) {
+            return [controller: 'gameRole', action: 'index']
+          }
+          route
+        },
+        (Descriptor.DEFAULT_KEY): Descriptor.get([controller: 'characterRequestField', action: 'index'])
+            .modifyParentRouteStrategy { Map route, Map params ->
+          def item = RequestFormField.get(params.get('id') as Long)
+          if (params.role?.id || item?.parent?.entity instanceof GameRole) {
+            if (!route.params) route.params = [:]
+            route.params.put('role.id', params.role?.id ?: item.parent.entityId)
+          }
+          route
+        }
+    ]
+  }
 
   def index() {
     withModule {

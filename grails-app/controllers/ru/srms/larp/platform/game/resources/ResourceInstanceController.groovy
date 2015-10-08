@@ -4,6 +4,7 @@ import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseModuleController
 import ru.srms.larp.platform.ResourceService
+import ru.srms.larp.platform.breadcrubms.Descriptor
 import ru.srms.larp.platform.game.Game
 
 import static org.springframework.http.HttpStatus.*
@@ -12,9 +13,24 @@ import static org.springframework.http.HttpStatus.*
 @Transactional(readOnly = true)
 class ResourceInstanceController extends BaseModuleController {
 
+  static allowedMethods = [save: "POST", update: "POST", changeValue: "POST", transfer: "POST"]
+
   ResourceService resourceService
 
-  static allowedMethods = [save: "POST", update: "POST", changeValue: "POST", transfer: "POST"]
+  @Override
+  Map getBreadcrumbDescriptors() {
+    [
+        show: Descriptor.root(),
+        transfer: Descriptor.root(),
+        changeValue: Descriptor.root(),
+        (Descriptor.DEFAULT_KEY): Descriptor.get([controller: 'gameResource', action: 'show'])
+            .modifyParentRouteStrategy { Map route, Map params ->
+          def item = ResourceInstance.get(params.get('id') as Long)
+          route.put('id', item?.type?.id ?: params.typeId)
+          route
+        }
+    ]
+  }
 
   def show(ResourceInstance resource) {
     withModule {

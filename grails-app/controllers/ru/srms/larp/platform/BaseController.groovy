@@ -1,6 +1,9 @@
 package ru.srms.larp.platform
 
 import org.springframework.http.HttpStatus
+import ru.srms.larp.platform.breadcrubms.AutoDescriptor
+import ru.srms.larp.platform.breadcrubms.Breadcrumb
+import ru.srms.larp.platform.breadcrubms.Descriptor
 import ru.srms.larp.platform.exceptions.AjaxException
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST
@@ -8,6 +11,27 @@ import static ru.srms.larp.platform.UrlHelper.composeAttrs
 import static ru.srms.larp.platform.UrlHelper.determineMapping
 
 abstract class BaseController {
+
+  public static final String DEFAULT_ACTION = 'index'
+
+  /**
+   * Adds breadcrumbs data to the model
+   */
+  def afterInterceptor = { model, modelAndView ->
+    if(modelAndView?.model) {
+      def allCrubms = appendRootCrumbs(getCrumbs())
+      Collections.reverse(allCrubms)
+      modelAndView.model.breadcrumbs = allCrubms
+    }
+  }
+
+  /**
+   * Returns a map of breadcrumb descriptors for controller actions.
+   * Should be overridden.
+   *
+   * @return map of breadcrumb descriptors, empty map by default
+   */
+  public Map getBreadcrumbDescriptors() { [:] }
 
   /**
    * Computes maximum of entries per page for pagination
@@ -79,7 +103,6 @@ abstract class BaseController {
    *
    * @return The result of the "request.withFormat" closure call -- not true yet
    */
-  // TODO remove object and id args
   protected def respondChange(String message, HttpStatus status, Map route = null) {
     flash.success = message;
     def map = redirectParams(route)
@@ -102,16 +125,16 @@ abstract class BaseController {
   }
 
   /**
-   * May be overriden for custom redirect rules
+   * May be overridden for custom redirect rules
    * @param route - map with navigation rules; can contain [action, controller, id, method, params]
    * @return map of redirect params
    */
   protected Map redirectParams(Map route = null) {
-    def defaults = [action: route?.action ?: 'index', params: [:], method: route?.method ?: "GET"]
-    if(route?.params) defaults.params += route.params
+    def defaults = [action: route?.action ?: DEFAULT_ACTION, params: [:], method: route?.method ?: "GET"]
+    if (route?.params) defaults.params += route.params
     if (route?.id) defaults.id = route.id
     if (route?.controller) defaults.controller = route.controller
-    if(route?.mapping) defaults.mapping = route.mapping
+    if (route?.mapping) defaults.mapping = route.mapping
 
     defaults = determineMapping(composeAttrs(defaults, params), params)
     return defaults
@@ -137,8 +160,112 @@ abstract class BaseController {
    * Renders an error message for ajax action from exception
    * @param message message it is
    */
-  public def renderAjaxError(String message) {
+  protected def renderAjaxError(String message) {
     response.status = BAD_REQUEST.value()
     render message
+  }
+
+  /**
+   * Creates list of breadcrumbs for a page
+   * @return list of breadcrumbs
+   */
+  private def getCrumbs() {
+    List<Breadcrumb> crumbs = []
+
+    def url = null
+    Descriptor descriptor = getParentDescriptor(Descriptor.get([
+        controller: AutoDescriptor.deHyphenate(params.controller),
+        action    : AutoDescriptor.deHyphenate(params.action)
+    ]))
+
+    while (!descriptor.isEmpty()) {
+      crumbs.add(new Breadcrumb(getCrumbTitle(descriptor), url))
+      if (descriptor.isRoot())
+        break;
+
+      url = getCrumbParentLink(descriptor)
+      descriptor = getParentDescriptor(descriptor)
+    }
+
+    return crumbs
+  }
+
+  /**
+   * Retrieves parent descriptor of the current descriptor
+   * @param current descriptor of the current action
+   * @return parent descriptor
+   */
+  private Descriptor getParentDescriptor(Descriptor current) {
+    Map descriptors;
+    def parentRoute = current?.modifyParentRoute ?
+        current.modifyParentRoute(current.parentRoute, params) : current?.parentRoute
+
+    if (!parentRoute?.controller)
+      throw new RuntimeException("No route controller found in current breadcrumb descriptor")
+
+    def artifact = grailsApplication
+        .getArtefactByLogicalPropertyName("Controller", parentRoute.controller)
+    if (!artifact) return Descriptor.empty()
+    def controller = applicationContext.getBean(artifact.clazz.name)
+    if (!controller) return Descriptor.empty()
+    descriptors = controller.invokeMethod('getBreadcrumbDescriptors', null)
+
+    if (!descriptors)
+      return Descriptor.empty()
+
+    def action = parentRoute.action ?: params.action
+    Descriptor result = action && descriptors.containsKey(action) ?
+        descriptors.get(action) :
+        descriptors.get(Descriptor.DEFAULT_KEY) ?: Descriptor.auto(parentRoute ?: params)
+
+    result.route = new LinkedHashMap<>(parentRoute)
+    return result
+  }
+
+  /**
+   * Determines node title
+   * @param controller
+   * @param action
+   * @return
+   */
+  private String getCrumbTitle(Descriptor descriptor) {
+    descriptor.composeTitle ?
+        descriptor.composeTitle(params) :
+        message(code: "${descriptor.route.controller}.breadcrumb.${descriptor.route.action}",
+            default: message(code: "${descriptor.route.controller}.breadcrumb.defaultAction",
+                default: message(code: "default.breadcrumb.${descriptor.route.action}", default: 'Крошка-картошка')))
+  }
+
+  /**
+   * Creates URL to the parent node for a breadcrumb descriptor
+   * @param descriptor breadcrumb descriptor
+   * @return URL to the parent node
+   */
+  private String getCrumbParentLink(Descriptor descriptor) {
+    if (!descriptor.parentRoute)
+      return null;
+
+    def route = descriptor.modifyParentRoute ?
+        descriptor.modifyParentRoute(descriptor.parentRoute, params) : descriptor.parentRoute
+    return createLink(determineMapping(composeAttrs(route, params), params))
+  }
+
+  /**
+   * Adds root breadcrumbs (for game and character) to the breadcrumbs list
+   * @param crumbs list of current breadcrumbs
+   * @return modified list of breadcrumbs
+   */
+  private def appendRootCrumbs(List<Breadcrumb> crumbs) {
+    if (params.character)
+      crumbs.add(new Breadcrumb(params.character.name,
+          createLink([mapping: 'playAs',
+                      params : [charAlias: params.charAlias, gameAlias: params.gameAlias]])))
+
+    if (params.game)
+      crumbs.add(
+          new Breadcrumb(params.game.title,
+              createLink([mapping: 'game', params: [gameAlias: params.gameAlias]])))
+
+    return crumbs
   }
 }

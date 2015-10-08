@@ -5,6 +5,7 @@ import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseController
 import ru.srms.larp.platform.CharacterRequestService
 import ru.srms.larp.platform.GameService
+import ru.srms.larp.platform.breadcrubms.Descriptor
 import ru.srms.larp.platform.exceptions.AjaxException
 import ru.srms.larp.platform.sec.SpringUser
 
@@ -18,9 +19,17 @@ class GameController extends BaseController {
   GameService gameService
   CharacterRequestService characterRequestService
 
+  @Override
+  public Map getBreadcrumbDescriptors() {
+    [
+        index: Descriptor.empty(),
+        play: Descriptor.empty(),
+        (Descriptor.DEFAULT_KEY): Descriptor.root()
+    ]
+  }
+
   @Secured(['permitAll'])
   def index() {
-
     respond gameService.list(paginator()), model: [gameInstanceCount: gameService.count()]
   }
 

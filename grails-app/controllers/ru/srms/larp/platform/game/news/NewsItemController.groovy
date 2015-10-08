@@ -4,6 +4,7 @@ import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseModuleController
 import ru.srms.larp.platform.NewsService
+import ru.srms.larp.platform.breadcrubms.Descriptor
 import ru.srms.larp.platform.game.Game
 
 import static org.springframework.http.HttpStatus.*
@@ -14,6 +15,18 @@ class NewsItemController extends BaseModuleController {
 
   static allowedMethods = [save: "POST", update: "POST"]
   NewsService newsService
+
+  @Override
+  public Map getBreadcrumbDescriptors() {
+    [
+        (Descriptor.DEFAULT_KEY): Descriptor.get([controller: 'newsFeed', action: 'show'])
+            .modifyParentRouteStrategy { Map route, Map params ->
+          def item = NewsItem.get(params.get('id') as Long)
+          route.put('id', item?.feed?.id ?: params.feedId)
+          route
+        }
+    ]
+  }
 
   def create() {
     withModule {

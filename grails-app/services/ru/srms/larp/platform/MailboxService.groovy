@@ -24,6 +24,9 @@ class MailboxService {
   }
 
   @PreAuthorize("hasPermission(#box, read) or hasPermission(#box.game, admin)")
+  def show(MailBox box) { box }
+
+  @PreAuthorize("hasPermission(#box, read) or hasPermission(#box.game, admin)")
   def letters(MailBox box) {
     Map<LetterType, List<LetterRef>> result = LetterType.values().collectEntries { [(it): []] }
     box.letters

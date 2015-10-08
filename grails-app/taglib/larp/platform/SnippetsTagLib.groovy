@@ -4,9 +4,9 @@ import grails.plugin.springsecurity.SpringSecurityService
 import ru.srms.larp.platform.MailboxService
 import ru.srms.larp.platform.NewsService
 import ru.srms.larp.platform.ResourceService
-import ru.srms.larp.platform.game.Titled
 import ru.srms.larp.platform.game.resources.ResourceInstance
 
+// TODO all this "tag" may be implemented by adding info to the model
 class SnippetsTagLib {
 //  static defaultEncodeAs = [taglib: 'html']
   //static encodeAsForTags = [tagName: [taglib:'html'], otherTagName: [taglib:'none']]
@@ -31,26 +31,4 @@ class SnippetsTagLib {
         items: ResourceInstance.groupByType(
             resourceService.findInstancesByGame(attrs.game ?: params.game))])
   }
-
-
-  def breadCrumbs = {attrs, body ->
-      out << g.link([uri: '/'], 'Главная')
-
-      if(params.game) {
-        out << " &rarr; "
-        out << g.link([mapping: 'game', params: [gameAlias: params.gameAlias]],
-            (params.game as Titled).extractTitle())
-      }
-
-    if(params.character) {
-      out << " &rarr; "
-      out << g.link([
-          mapping: 'playAs',
-          params: [gameAlias: params.gameAlias, charAlias: params.charAlias]],
-          (params.character as Titled).extractTitle())
-    }
-  }
-
-
-
 }

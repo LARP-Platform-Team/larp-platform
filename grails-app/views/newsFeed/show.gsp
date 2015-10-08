@@ -14,12 +14,20 @@
           class="item"><i
       class="arrow left grey icon"></i> Назад</g:link>
 
+  <g:set var="showControls" value="${false}"/>
+  <sec:permitted object="${params.game}" permission="administration">
+    <g:set var="showControls" value="${true}"/>
+  </sec:permitted>
   <g:if test="${params.game.active}">
     <sec:permitted object="${subject}" permission="create">
-      <ingame:link class="item" controller="newsItem" action="create" params="[feedId: subject.id]">
-        <i class="add green icon"></i> Добавить новость
-      </ingame:link>
+      <g:set var="showControls" value="${true}"/>
     </sec:permitted>
+  </g:if>
+
+  <g:if test="${showControls}">
+    <ingame:link class="item" controller="newsItem" action="create" params="[feedId: subject.id]">
+      <i class="add green icon"></i> Добавить новость
+    </ingame:link>
   </g:if>
 </content>
 <content tag="content">

@@ -26,7 +26,7 @@
     <tbody>
     <g:each in="${feeds}" var="item">
       <tr>
-        <td><ingame:link action="show" id="${item.id}">${item.title}</ingame:link></td>
+        <td>${item.title}</td>
         <td>
           <ingame:link action="edit" id="${item.id}" class="ui yellow icon basic button"
                        title="Редактировать"><i class="yellow edit icon"></i></ingame:link>

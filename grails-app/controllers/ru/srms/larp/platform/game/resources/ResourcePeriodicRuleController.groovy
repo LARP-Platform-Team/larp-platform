@@ -4,6 +4,7 @@ import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
 import ru.srms.larp.platform.BaseModuleController
 import ru.srms.larp.platform.ResourceService
+import ru.srms.larp.platform.breadcrubms.Descriptor
 import ru.srms.larp.platform.game.Game
 
 import static org.springframework.http.HttpStatus.*
@@ -12,9 +13,22 @@ import static org.springframework.http.HttpStatus.*
 @Transactional(readOnly = true)
 class ResourcePeriodicRuleController extends BaseModuleController {
 
+  static allowedMethods = [save: "POST", update: "POST"]
+
   ResourceService resourceService
 
-  static allowedMethods = [save: "POST", update: "POST"]
+  @Override
+  Map getBreadcrumbDescriptors() {
+    [
+        show: Descriptor.root(),
+        (Descriptor.DEFAULT_KEY): Descriptor.get([controller: 'resourceInstance', action: 'edit'])
+            .modifyParentRouteStrategy { Map route, Map params ->
+          def item = ResourcePeriodicRule.get(params.get('id') as Long)
+          route.put('id', item?.target?.id ?: params.target?.id)
+          route
+        }
+    ]
+  }
 
   def create() {
     withModule {
