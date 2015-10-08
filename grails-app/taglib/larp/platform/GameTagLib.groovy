@@ -180,6 +180,8 @@ class GameTagLib {
         Map linkParams = [:]
         def gameParams = composeAttrs(determineMapping([:], params), params)
         linkParams += gameParams.params
+        if (params.filter)
+            (params.filter as Map).each { k, v -> linkParams.put('filter.' + k, v) }
 
 
         if (attrs.params instanceof Map) linkParams.putAll((Map)attrs.params)

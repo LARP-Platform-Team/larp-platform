@@ -59,7 +59,8 @@ class Game implements Titled, Wrapped<Game>, InGameStuff {
     NEWS('Новости'),
     MAIL('Почта'),
     REQUEST_FORM('Анкета игрока'),
-    RESOURCES('Ресурсы и банки');
+    RESOURCES('Ресурсы и банки'),
+    CHIP_DATABASE('База чипов');
 
     String title
 

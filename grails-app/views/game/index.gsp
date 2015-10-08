@@ -44,7 +44,7 @@
         </td>
         <td>
           <div class="richText">
-            <hc:cleanHtml unsafe="${game.preview}" whitelist="rich-text"/>
+            <hc:cleanHtml unsafe="${game.preview}" whitelist="simple-rich-text"/>
           </div>
         </td>
       </tr>
