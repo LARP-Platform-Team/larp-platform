@@ -1,3 +1,4 @@
+import org.springframework.cache.ehcache.EhCacheManagerFactoryBean
 import org.springframework.web.servlet.i18n.SessionLocaleResolver
 import ru.srms.larp.platform.DoubleValueConverter
 import ru.srms.larp.platform.db.migrations.MigrationCallbacksHandler
@@ -25,4 +26,8 @@ beans = {
 
   // TODO does not work. find out why
   migrationCallbacks(MigrationCallbacksHandler)
+
+  aclCacheManager(EhCacheManagerFactoryBean) {
+    cacheManagerName = 'spring-security-acl-cache-' + UUID.randomUUID()
+  }
 }

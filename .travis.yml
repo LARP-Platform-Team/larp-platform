@@ -3,7 +3,9 @@ jdk: oraclejdk8
 script:
   - ./grailsw prod war target/ROOT.war
 branches:
-  only: devel
+  only:
+    - devel
+    - grails-2.5.1
 after_success:
   - touch ~/.ssh/deploy_rsa
   - chmod 600 ~/.ssh/deploy_rsa
@@ -15,4 +17,4 @@ after_success:
   - echo "  IdentityFile ~/.ssh/deploy_rsa" >> ~/.ssh/config
   - echo "  User update.dagobah.ru" >> ~/.ssh/config
   - echo "  StrictHostKeyChecking no" >> ~/.ssh/config
-  - scp target/ROOT.war dagobah.ru:~/public_html/ROOT-devel.war
+  - scp target/ROOT.war dagobah.ru:~/public_html/ROOT-$TRAVIS_BRANCH.war

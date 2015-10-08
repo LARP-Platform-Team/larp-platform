@@ -60,12 +60,14 @@ grails.project.dependency.resolution = {
 
   plugins {
     // plugins for the build system only
-    build ':tomcat:7.0.55'
+    build ':tomcat:7.0.55.3'
 
     // plugins needed at runtime but not for compilation
     // if this is an issue (https://jira.grails.org/browse/GRAILS-11600) use 3rd version
     // runtime ':hibernate:3.6.10.18'
-    runtime ':hibernate4:4.3.6.1'
+    runtime(':hibernate4:4.3.10') {
+      excludes "ehcache-core"
+    }
     runtime ':database-migration:1.4.0'
 
     // plugins for the compile step
@@ -75,16 +77,20 @@ grails.project.dependency.resolution = {
 
     // TODO use it or exclude it
     compile ':cache:1.1.8'
+    compile ":cache-ehcache:1.0.5-SNAPSHOT"
 
     compile ':asset-pipeline:1.9.9'
     compile ':quartz2:2.1.6.2'
     compile ":html-cleaner:0.3"
 
     // TODO c RC4 или RC5 вылезают ошибки на серваке. надо бы разобраться
-    compile ':spring-security-core:2.0-RC3'
+    compile ':spring-security-core:2.0-RC5'
+
     compile ':spring-security-acl:2.0-RC2'
 
-    compile ':spring-security-ui:1.0-RC2'
+    compile(':spring-security-ui:1.0-RC2') {
+      excludes "jquery", "spring-security-core"
+    }
       //  Dependencies:
       //  spring-security-core	2.0
       //  mail	1.0
