@@ -28,6 +28,8 @@ class GameRole implements InGameStuff, Titled, GrantedAuthority, Wrapped<GameRol
         return 'gameRole.parent.wrongGame'
       if (val != null && obj.id != null && val.id == obj.id)
         return 'gameRole.parent.selfParent'
+      if (val && !obj.getAvailableParents().contains(val))
+        return 'gameRole.parent.childrenForbidden'
     }
   }
 
@@ -35,6 +37,19 @@ class GameRole implements InGameStuff, Titled, GrantedAuthority, Wrapped<GameRol
 
   Set<GameCharacter> getCharacters() {
     CharacterRole.findAllByRole(this).collect({ it.character }).toSet()
+  }
+
+  List<GameRole> getAvailableParents() {
+    def excludeIds = withAllChildren([this])
+    excludeIds ? GameRole.findAllByGameAndIdNotInList(game, excludeIds) :
+        GameRole.findAllByGame(game)
+  }
+
+  private Collection<Long> withAllChildren(Collection<GameRole> roles) {
+    return roles.findAll { it.id }.collect { it.id } +
+        roles.findAll { it.subRoles }
+            .collect { withAllChildren(it.subRoles) }
+            .flatten()
   }
 
   def beforeDelete() {
