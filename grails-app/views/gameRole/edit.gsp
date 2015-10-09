@@ -17,7 +17,7 @@
   <div class="ui two column stackable grid">
     <div class="eight wide column">
       <g:render template="/shared/fromErrors" bean="${subject}" var="subject"/>
-      <ingame:form class="ui form" url="[resource: subject, action: 'save']">
+      <ingame:form class="ui form" url="[resource: subject, action: 'update']">
         <g:render template="form"/>
         <g:hiddenField name="version" value="${subject?.version}"/>
         <ui:submit icon="checkmark">Сохранить</ui:submit>
