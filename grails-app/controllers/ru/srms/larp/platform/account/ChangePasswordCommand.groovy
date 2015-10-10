@@ -1,8 +1,8 @@
 package ru.srms.larp.platform.account
 
 import grails.plugin.springsecurity.SpringSecurityService
-import grails.plugin.springsecurity.ui.RegisterController
 import grails.validation.Validateable
+import ru.srms.larp.platform.sec.ui.RegisterController
 
 /**
  *
