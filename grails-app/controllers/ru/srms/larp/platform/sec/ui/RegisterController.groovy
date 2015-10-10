@@ -1,96 +1,63 @@
 package ru.srms.larp.platform.sec.ui
 
 import grails.plugin.springsecurity.SpringSecurityUtils
-import grails.plugin.springsecurity.authentication.dao.NullSaltSource
-import grails.plugin.springsecurity.ui.RegistrationCode
+import grails.plugin.springsecurity.annotation.Secured
+import ru.srms.larp.platform.BaseController
+import ru.srms.larp.platform.UserService
 
-/**
- * TODO temp
- */
-class RegisterController extends grails.plugin.springsecurity.ui.RegisterController {
+@Secured(['permitAll'])
+class RegisterController extends BaseController {
 
-  @Override
+  UserService userService
+
+  static def USERNAME_REGEX = /^[A-Za-z0-9\-\._]+$/
+  static def NAME_REGEX = /^[A-Za-zА-Яа-я0-9\-\.\s,_]+$/
+
   def index() {
-    def copy = [:] + (flash.chainedParams ?: [:])
-    copy.remove 'controller'
-    copy.remove 'action'
-    [command: new RegisterCommand(copy)]
+    respond new RegisterCommand()
   }
 
-  @Override
-  def register(grails.plugin.springsecurity.ui.RegisterCommand oldCommand) {
+  def register(RegisterCommand command) {
+    if (validateData(command, 'index')) {
+      userService.register(command)
+      render view: 'index', model: [emailSent: true]
+    }
+  }
 
-    RegisterCommand command = new RegisterCommand()
-    bindData(command, params)
-
-    if(!params.containsKey('doRegister')) {
-      render view: 'index', model: [command: new RegisterCommand()]
-      return
+  static final passwordValidator = { String password, command ->
+    if (command.username && command.username.equals(password)) {
+      return 'command.password.error.username'
     }
 
-    if (command.hasErrors()) {
-      render view: 'index', model: [command: command]
-      return
+    if (!checkPasswordMinLength(password, command) ||
+        !checkPasswordMaxLength(password, command) ||
+        !checkPasswordRegex(password, command)) {
+      return 'command.password.error.strength'
     }
+  }
 
-    String salt = saltSource instanceof NullSaltSource ? null : command.username
-    // TODO makle enabled: true only for dev enviroment
-    def user = lookupUserClass().newInstance(email: command.email, username: command.username,
-        name: command.name, accountLocked: false, enabled: true)
-
-    RegistrationCode registrationCode = springSecurityUiService.register(user, command.password, salt)
-    if (registrationCode == null || registrationCode.hasErrors()) {
-      // null means problem creating the user
-      flash.error = message(code: 'spring.security.ui.register.miscError')
-      flash.chainedParams = params
-      redirect action: 'index'
-      return
-    }
-
-    String url = generateLink('verifyRegistration', [t: registrationCode.token])
-
+  static boolean checkPasswordMinLength(String password, command) {
     def conf = SpringSecurityUtils.securityConfig
-    def body = conf.ui.register.emailBody
-    if (body.contains('$')) {
-      body = evaluate(body, [user: user, url: url])
-    }
-    mailService.sendMail {
-      to command.email
-      from conf.ui.register.emailFrom
-      subject conf.ui.register.emailSubject
-      html body.toString()
-    }
-
-    render view: 'index', model: [emailSent: true]
+    int minLength = conf.ui.password.minLength instanceof Number ? conf.ui.password.minLength : 8
+    password && password.length() >= minLength
   }
-}
 
-class RegisterCommand extends grails.plugin.springsecurity.ui.RegisterCommand {
+  static boolean checkPasswordMaxLength(String password, command) {
+    def conf = SpringSecurityUtils.securityConfig
+    int maxLength = conf.ui.password.maxLength instanceof Number ? conf.ui.password.maxLength : 64
+    password && password.length() <= maxLength
+  }
 
-  String name
+  static boolean checkPasswordRegex(String password, command) {
+    def conf = SpringSecurityUtils.securityConfig
+    String passValidationRegex = conf.ui.password.validationRegex ?:
+        '^.*(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&]).*$'
+    password && password.matches(passValidationRegex)
+  }
 
-  // TODO вынести и использовать валидатор тут и в SpringUser
-  static constraints = {
-    username maxSize: 64, blank: false, matches: /^[A-Za-z0-9\-\._]+$/, validator: { value, command ->
-      if (value) {
-        def User = command.grailsApplication.getDomainClass(
-            SpringSecurityUtils.securityConfig.userLookup.userDomainClassName).clazz
-        if (User.findByUsername(value)) {
-          return 'registerCommand.username.unique'
-        }
-      }
+  static final password2Validator = { value, command ->
+    if (command.password != command.password2) {
+      return 'command.password2.error.mismatch'
     }
-    name maxSize: 64, blank: false, matches: /^[A-Za-zА-Яа-я0-9\-\.\s,_]+$/, validator: { value, command ->
-      if (value) {
-        def User = command.grailsApplication.getDomainClass(
-            SpringSecurityUtils.securityConfig.userLookup.userDomainClassName).clazz
-        if (User.findByName(value)) {
-          return 'registerCommand.username.unique'
-        }
-      }
-    }
-    email blank: false, email: true
-    password blank: false, validator: RegisterController.passwordValidator
-    password2 validator: RegisterController.password2Validator
   }
 }

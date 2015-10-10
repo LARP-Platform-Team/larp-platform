@@ -1,6 +1,7 @@
 package ru.srms.larp.platform.sec
 
 import ru.srms.larp.platform.game.character.GameCharacter
+import ru.srms.larp.platform.sec.ui.RegisterController
 
 class SpringUser {
 
@@ -20,10 +21,10 @@ class SpringUser {
   static transients = ['springSecurityService']
 
   static constraints = {
-    username maxSize: 64, blank: false, unique: true, matches: /^[A-Za-z0-9\-\._]+$/
+    username maxSize: 64, blank: false, unique: true, matches: RegisterController.USERNAME_REGEX
     email blank: false, unique: true, email: true
     password blank: false
-    name maxSize: 64, blank: false, unique: true, matches: /^[A-Za-zА-Яа-я0-9\-\.\s,_]+$/
+    name maxSize: 64, blank: false, unique: true, matches: RegisterController.NAME_REGEX
   }
 
   static mapping = {
