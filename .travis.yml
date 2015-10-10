@@ -5,7 +5,6 @@ script:
 branches:
   only:
     - devel
-    - grails-2.5.1
 after_success:
   - touch ~/.ssh/deploy_rsa
   - chmod 600 ~/.ssh/deploy_rsa
