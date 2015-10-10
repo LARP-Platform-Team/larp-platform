@@ -84,6 +84,18 @@ grails.exceptionresolver.params.exclude = ['password']
 // configure auto-caching of queries by default (if false you can cache individual queries with 'cache: true')
 grails.hibernate.cache.queries = false
 
+// http://www.first8.nl/blog/fix-cachemanager-with-same-name-grails-cache-ehcache/
+def uniqueCacheManagerName = appName + "ConfigEhcache-" + System.currentTimeMillis()
+
+// customize temp ehcache cache manager name upon startup
+grails.cache.ehcache.cacheManagerName = uniqueCacheManagerName
+grails.cache.config = {
+  provider {
+    // unique name when configuring caches
+    name uniqueCacheManagerName
+  }
+}
+
 // configure passing transaction's read-only attribute to Hibernate session, queries and criterias
 // set "singleSession = false" OSIV mode in hibernate configuration after enabling
 grails.hibernate.pass.readonly = false

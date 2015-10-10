@@ -60,37 +60,27 @@ grails.project.dependency.resolution = {
 
   plugins {
     // plugins for the build system only
-    build ':tomcat:7.0.55'
+    build ':tomcat:7.0.55.3'
 
     // plugins needed at runtime but not for compilation
     // if this is an issue (https://jira.grails.org/browse/GRAILS-11600) use 3rd version
     // runtime ':hibernate:3.6.10.18'
-    runtime ':hibernate4:4.3.6.1'
+    runtime(':hibernate4:4.3.10') {
+      excludes "ehcache-core"
+    }
     runtime ':database-migration:1.4.0'
 
     // plugins for the compile step
-
-    // TODO we don't use dynamic scaffolding; is it for smth else?
-    //compile ':scaffolding:2.1.2'
-
-    // TODO use it or exclude it
     compile ':cache:1.1.8'
+    compile ":cache-ehcache:1.0.5-SNAPSHOT"
+
+    compile ':spring-security-core:2.0-RC5'
+    compile ':spring-security-acl:2.0-RC2'
+    compile ":mail:1.0.7"
 
     compile ':asset-pipeline:1.9.9'
     compile ':quartz2:2.1.6.2'
     compile ":html-cleaner:0.3"
-
-    // TODO c RC4 или RC5 вылезают ошибки на серваке. надо бы разобраться
-    compile ':spring-security-core:2.0-RC3'
-    compile ':spring-security-acl:2.0-RC2'
-
-    compile ':spring-security-ui:1.0-RC2'
-      //  Dependencies:
-      //  spring-security-core	2.0
-      //  mail	1.0
-      //  jquery	1.10.2
-      //  jquery-ui	1.10.3
-      //  famfamfam	1.0
 
     // Uncomment these to enable additional asset-pipeline capabilities
     //compile ':sass-asset-pipeline:1.9.0'
