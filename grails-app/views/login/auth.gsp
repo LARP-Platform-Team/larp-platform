@@ -29,7 +29,7 @@
 
     <ui:submit name="enter" icon="privacy">
       <g:message code='spring.security.ui.login.login'/></ui:submit>
-    <g:link class="ui disabled labeled icon button" title="Фича в разработке" controller='register' action='forgotPassword'>
+    <g:link class="ui labeled icon button" controller='register' action='restorePassword'>
       <i class="refresh icon"></i><g:message code='spring.security.ui.login.forgotPassword'/></g:link>
     <g:link class="ui labeled icon button" controller='register' action="index">
       <i class="add user icon"></i><g:message code='spring.security.ui.login.register'/></g:link>

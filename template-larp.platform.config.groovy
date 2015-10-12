@@ -83,6 +83,9 @@ grails {
 /**
  * Custom settings
  */
+// Нужна ли активация пользователей
+grails.larp.platform.user.activation.required = true
+
 // Пароль для админа (по умолчанию, при создании нового)
 grails.larp.platform.adminInitialPassword = "a"
 
