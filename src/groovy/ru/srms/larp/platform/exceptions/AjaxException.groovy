@@ -1,10 +1,5 @@
 package ru.srms.larp.platform.exceptions
 
-/**
- *
- * <p>Created 29.07.15</p>
- * @author kblokhin
- */
 class AjaxException extends Exception {
   AjaxException(Throwable var1) {
     super(var1)
