@@ -17,9 +17,6 @@ class UrlMappings {
         // spring security ui register controller
         "/register/$action?/$id?"(controller: 'register')
 
-        // spring security ui administration
-        "/root/$controller/$action?/$id?"()
-
         // game root actions
         "/game/$action?/$id?"(controller: 'game')
 

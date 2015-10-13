@@ -50,6 +50,7 @@ environments {
   test {
     dataSource {
       // TODO configure after deploying autotests
+      grails.mail.disabled = true
     }
   }
 
@@ -63,16 +64,32 @@ environments {
 /**
  * Mail settings
  */
-grails.mail.default.from = "no-reply@larp.srms.club"
-grails.mail.disabled = true
+grails.mail.default.from = "LARP Platform <sender@email.dom>"
+grails.mail.disabled = false
+// http://grails.org/plugins/mail
+grails {
+  mail {
+    host = "smtp.domain.ru"
+    port = 465
+    username = "username@mailname.dom"
+    password = "password"
+    props = ["mail.smtp.auth"                  : "true",
+             "mail.smtp.socketFactory.port"    : "465",
+             "mail.smtp.socketFactory.class"   : "javax.net.ssl.SSLSocketFactory",
+             "mail.smtp.socketFactory.fallback": "false"]
+  }
+}
 
 /**
  * Custom settings
  */
+// Нужна ли активация пользователей
+grails.larp.platform.user.activation.required = true
+
 // Пароль для админа (по умолчанию, при создании нового)
 grails.larp.platform.adminInitialPassword = "a"
 
 // Заполнять ли базу тестовыми данными
 grails.larp.platform.setupTestData = false
 // Очищать ли задачи Quartz-a, связанные с обновлением ресурсов
-grailsApplication.config.grails.larp.platform.clearQuartzResourceTasks = false
+grails.larp.platform.clearQuartzResourceTasks = false

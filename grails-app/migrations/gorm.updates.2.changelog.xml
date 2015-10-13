@@ -3,6 +3,7 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
+    <!-- Game Chip Database -->
     <changeSet author="Treble Snake" id="1444308880858-1">
         <createTable tableName="game_chip">
             <column name="id" type="int8">
@@ -43,6 +44,32 @@
                                  initiallyDeferred="false" referencedColumnNames="id"
                                  referencedTableName="game_character"
                                  referencesUniqueColumn="false"/>
+    </changeSet>
+
+
+    <!-- User activation and password restore -->
+    <changeSet author="Treble Snake" id="1444556449649-1">
+        <createTable tableName="user_action_token">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_action_token_PK"/>
+            </column>
+            <column name="date_created" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Treble Snake" id="1444556449649-19">
+        <dropTable tableName="registration_code"/>
     </changeSet>
 
 </databaseChangeLog>
