@@ -24,6 +24,9 @@ class GameRole implements InGameStuff, Titled, GrantedAuthority, Wrapped<GameRol
   static constraints = {
     title maxSize: 64
     parent nullable: true, validator: { val, obj ->
+      // don't run checks if the value hasn't changed
+      if(!obj.isDirty('parent'))
+        return true;
       if (!(val == null || val.game == obj.game))
         return 'gameRole.parent.wrongGame'
       if (val != null && obj.id != null && val.id == obj.id)
