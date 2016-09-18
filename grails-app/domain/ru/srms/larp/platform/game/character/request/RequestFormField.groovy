@@ -17,8 +17,8 @@ class RequestFormField implements InGameStuff {
   static hasMany = [values: FormFieldValue]
 
   static constraints = {
-    title maxSize: 32
-    hint nullable: true, maxSize: 128
+    title maxSize: 300
+    hint nullable: true, maxSize: 300
     data nullable: true, maxSize: 512
   }
 

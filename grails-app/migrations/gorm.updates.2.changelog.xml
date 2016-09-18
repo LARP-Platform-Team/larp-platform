@@ -76,4 +76,9 @@
     <changeSet author="Treble Snake" id="1474223763022-18">
         <dropIndex indexName="unique_character_name" tableName="game_character"/>
     </changeSet>
+
+    <changeSet author="Treble Snake" id="14742313723583-1">
+        <modifyDataType columnName="title" newDataType="varchar(300)" tableName="character_request_form_field"/>
+        <modifyDataType columnName="hint" newDataType="varchar(300)" tableName="character_request_form_field"/>
+    </changeSet>
 </databaseChangeLog>

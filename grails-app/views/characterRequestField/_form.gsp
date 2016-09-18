@@ -3,7 +3,7 @@
 <div class="${hasErrors(bean: subject, field: 'title', 'error')} required field">
   <label for="title">Название:</label>
   <g:textField name="title" required="" value="${subject?.title}"/>
-  <div class="ui pointing label">Максимум 32 символа.</div>
+  <div class="ui pointing label">Максимум 300 символов.</div>
 </div>
 
 <div class="${hasErrors(bean: subject, field: 'type', 'error')} required field">
@@ -23,7 +23,7 @@
 <div class="${hasErrors(bean: subject, field: 'hint', 'error')} field">
   <label for="hint">Подсказка:</label>
   <g:textField name="hint" value="${subject?.hint}"/>
-  <div class="ui pointing label">Подсказка для поля, как вот эта. Максимум 128 символов.</div>
+  <div class="ui pointing label">Подсказка для поля, как вот эта. Максимум 300 символов.</div>
 </div>
 
 <div class="${hasErrors(bean: subject, field: 'required', 'error')} field">
