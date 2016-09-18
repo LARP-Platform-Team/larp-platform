@@ -26,7 +26,6 @@ class CharacterRequest {
   }
 
   def beforeValidate() {
-    values?.each { it.validate() }
     if(id == null)
       creationDate = new Date()
   }
