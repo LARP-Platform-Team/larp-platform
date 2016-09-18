@@ -52,14 +52,14 @@ class GameRoleService {
 
   private def addAllRoles(GameRole role, GameCharacter character) {
     if (!CharacterRole.exists(CharacterRole.id(character, role)))
-      CharacterRole.create(character, role);
+      CharacterRole.create(character, role, true);
     if (role.parent)
       addAllRoles(role.parent, character)
   }
 
   private def removeAllRoles(GameRole role, GameCharacter character) {
     if (CharacterRole.exists(CharacterRole.id(character, role)))
-      CharacterRole.remove(character, role);
+      CharacterRole.remove(character, role, true);
     if (role.subRoles)
       role.subRoles.each { removeAllRoles(it, character) }
   }
