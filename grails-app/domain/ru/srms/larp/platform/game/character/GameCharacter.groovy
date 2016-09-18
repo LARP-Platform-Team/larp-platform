@@ -18,8 +18,8 @@ class GameCharacter implements InGameStuff, Titled, GrantedAuthority {
   static belongsTo = [game: Game]
 
   static constraints = {
-    // character names and aliases must be unique in the game context
-    name maxSize: 64, unique: 'game'
+    name maxSize: 64
+    // character alias must be unique in the game context
     alias maxSize: 32, matches: /^[A-Za-z0-9\-]+$/, unique: 'game'
     player nullable: true
   }

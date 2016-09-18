@@ -72,4 +72,8 @@
         <dropTable tableName="registration_code"/>
     </changeSet>
 
+    <!-- Make character name non-unique -->
+    <changeSet author="Treble Snake" id="1474223763022-18">
+        <dropIndex indexName="unique_character_name" tableName="game_character"/>
+    </changeSet>
 </databaseChangeLog>
