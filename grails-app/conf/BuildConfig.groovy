@@ -68,7 +68,7 @@ grails.project.dependency.resolution = {
     runtime(':hibernate4:4.3.10') {
       excludes "ehcache-core"
     }
-    runtime ':database-migration:1.4.0'
+    runtime ':database-migration:1.4.1'
 
     // plugins for the compile step
     compile ':cache:1.1.8'
