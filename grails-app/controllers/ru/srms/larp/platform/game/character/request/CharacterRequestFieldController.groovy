@@ -72,7 +72,6 @@ class CharacterRequestFieldController extends BaseModuleController {
   @Transactional
   def save(RequestFormField field) {
     withModule {
-      field.sortOrder = 0
       def parent = getParent()
       field.parent = parent ? EntityWrapper.wrap(parent) : null;
       if (validateData(field, 'create')) {
@@ -86,7 +85,6 @@ class CharacterRequestFieldController extends BaseModuleController {
   @Transactional
   def update(RequestFormField field) {
     withModule {
-      field.sortOrder = 0
       if (validateData(field, 'edit')) {
         characterRequestService.saveField(field)
         respondChange('Поле обновлено', OK, redirectRoute(field))

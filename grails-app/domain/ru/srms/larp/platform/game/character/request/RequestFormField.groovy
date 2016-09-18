@@ -10,7 +10,7 @@ class RequestFormField implements InGameStuff {
   String title
   String hint
   Boolean required = false
-  Integer sortOrder
+  Integer sortOrder = 0
   String data
 
   static belongsTo = [parent: EntityWrapper]

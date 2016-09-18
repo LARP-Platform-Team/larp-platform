@@ -6,6 +6,12 @@
   <div class="ui pointing label">Максимум 300 символов.</div>
 </div>
 
+<div class="${hasErrors(bean: subject, field: 'sortOrder', 'error')} required field">
+  <label for="sortOrder">Порядок сортировки:</label>
+  <g:textField name="sortOrder" required="" value="${subject?.sortOrder}"/>
+  <div class="ui pointing label">Число. Поля сортируются по возрастанию.</div>
+</div>
+
 <div class="${hasErrors(bean: subject, field: 'type', 'error')} required field">
   <label for="type">Тип:</label>
   <g:select name="type" id="requestFieldType" from="${FieldType.values()}" class="ui dropdown"

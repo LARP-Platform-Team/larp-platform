@@ -39,6 +39,7 @@
     <thead>
     <tr>
       <th>Название</th>
+      <th>Порядок сортировки</th>
       <th>Действия</th>
     </tr>
     </thead>
@@ -46,6 +47,7 @@
     <g:each in="${subject}" var="item">
       <tr>
         <td><ingame:link action="show" id="${item.id}">${item.title}</ingame:link></td>
+        <td>${item.sortOrder}</td>
         <td>
           <ingame:link action="edit" id="${item.id}" class="ui yellow icon basic button"
                        title="Редактировать"><i class="yellow edit icon"></i></ingame:link>
@@ -57,7 +59,7 @@
     </g:each>
     </tbody>
     <g:render template="/shared/semantic/tablePaginate"
-              model="[colspan: 2, itemsQty: itemsQty]"/>
+              model="[colspan: 3, itemsQty: itemsQty]"/>
   </table>
 
 </content>
