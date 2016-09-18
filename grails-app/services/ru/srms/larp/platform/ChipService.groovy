@@ -13,21 +13,24 @@ class ChipService {
   @PreAuthorize("hasPermission(#game, admin)")
   def list(Game game, Map pagination, GrailsParameterMap filter) {
     if(!filter) return GameChip.findAllByGame(game, pagination)
-    buildCriteria(filter).list(pagination)
+    buildCriteria(game, filter).list(pagination)
   }
 
   @PreAuthorize("hasPermission(#game, admin)")
   def count(Game game, GrailsParameterMap filter) {
     if(!filter) return GameChip.countByGame(game)
-    buildCriteria(filter).count()
+    buildCriteria(game, filter).count()
   }
 
-  private DetachedCriteria buildCriteria(GrailsParameterMap filter) {
+  private DetachedCriteria buildCriteria(Game game, GrailsParameterMap filter) {
     new DetachedCriteria(GameChip).build {
-      or {
-        if (filter.title) ilike('title', "%${filter.title}%")
-        if (filter.code) ilike('code', "%${filter.code}%")
-        if (filter.owner) inList('owner.id', filter.list('owner').collect { Long.valueOf(it) })
+      and {
+        eq('game', game)
+        or {
+          if (filter.title) ilike('title', "%${filter.title}%")
+          if (filter.code) ilike('code', "%${filter.code}%")
+          if (filter.owner) inList('owner.id', filter.list('owner').collect { Long.valueOf(it) })
+        }
       }
     }
   }
