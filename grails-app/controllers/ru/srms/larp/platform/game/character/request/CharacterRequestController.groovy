@@ -40,34 +40,22 @@ class CharacterRequestController extends BaseModuleController {
 
   def show(CharacterRequest request) {
     withModule {
-      respond characterRequestService.showRequest(request), model: [
-          gameFields: gameFields(),
-          roles     : rolesWithFields(request.roles),
-          values    : makeValuesHashmap(request)
-      ]
+      respond characterRequestService.showRequest(request), model: generateCommonModel(request, true)
     }
   }
 
   def create() {
     withModule {
       def characterRequest = characterRequestService.createRequest(params.game)
-      respond characterRequest, model: [
-          gameFields: gameFields(),
-          roles     : rolesWithFields(),
-          values    : [:]
-      ]
+      respond characterRequest, model: generateCommonModel(characterRequest)
     }
   }
 
   def edit(CharacterRequest request) {
     withModule {
       if (!request.status.data.editable)
-        throw new AccessDeniedException("Рапрещено редактировать в данном состоянии")
-      respond characterRequestService.editRequest(request), model: [
-          gameFields: gameFields(),
-          roles     : rolesWithFields(),
-          values    : makeValuesHashmap(request)
-      ]
+        throw new AccessDeniedException("Запрещено редактировать в данном состоянии")
+      respond characterRequestService.editRequest(request), model: generateCommonModel(request)
     }
   }
 
@@ -78,7 +66,7 @@ class CharacterRequestController extends BaseModuleController {
     request.status = params.containsKey('sendCharacterRequest') ?
         RequestStatus.SENT : RequestStatus.DRAFT;
     withModule {
-      if (validateData(request, 'create')) {
+      if (validateData(request, 'create', generateCommonModel(request))) {
         characterRequestService.saveRequest(request)
         respondChange('Заявка успешно создана', CREATED, [mapping: 'game'])
       }
@@ -95,7 +83,7 @@ class CharacterRequestController extends BaseModuleController {
       fillRequestWithData(request)
       request.status = params.containsKey('sendCharacterRequest') ?
           RequestStatus.SENT : RequestStatus.DRAFT;
-      if (validateData(request, 'edit')) {
+      if (validateData(request, 'edit', generateCommonModel(request))) {
         characterRequestService.updateRequest(request)
         respondChange('Заявка обновлена', OK, [mapping: 'game'])
       }
@@ -145,6 +133,14 @@ class CharacterRequestController extends BaseModuleController {
   @Override
   protected Game.GameModule module() {
     return Game.GameModule.REQUEST_FORM
+  }
+
+  private def generateCommonModel(CharacterRequest request, forShow = false) {
+    [
+            gameFields: gameFields(),
+            roles     : rolesWithFields(forShow ? request.roles : null),
+            values    : makeValuesHashmap(request)
+    ]
   }
 
   private Map<Long, FormFieldValue> makeValuesHashmap(CharacterRequest request) {

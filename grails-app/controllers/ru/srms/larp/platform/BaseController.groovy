@@ -59,7 +59,7 @@ abstract class BaseController {
    * @param view view to redirect to
    * @return {@code true} if validation is successful, {@code false} otherwise
    */
-  protected boolean validateData(def object, String view) {
+  protected boolean validateData(def object, String view, def model = null) {
     if (object == null) {
       notFound()
       return false
@@ -67,7 +67,10 @@ abstract class BaseController {
 
     object.validate()
     if (view && object.hasErrors()) {
-      respond object.getErrors(), view: view
+      if(model)
+        respond object.getErrors(), view: view, model: model
+      else
+        respond object.getErrors(), view: view
       return false
     }
 

@@ -11,7 +11,7 @@
 
 <div class="${hasErrors(bean: subject, field: 'roles', 'error')} field">
   <label for="roles">Роли:</label>
-  <g:select class="ui dropdown" from="${roles.keySet()}" multiple="true" optionKey="id"
+  <g:select class="ui dropdown" from="${roles?.keySet()}" multiple="true" optionKey="id"
             name="roles" id="character_request_roles" value="${subject.roles}"/>
 </div>
 
