@@ -45,17 +45,24 @@ if (typeof jQuery !== 'undefined') {
         });
 
         // request editing page
-        $("#character_request_roles").on('change', function(event, params) {
-            if(params.selected) {
-                $("#role_" + params.selected + "_fields").fadeIn(400, function(){
+
+        //manage visibility of role fields' blocks
+        $("#character_request_roles").on('change', function (event, params) {
+            if (params.selected) {
+                $("#role_" + params.selected + "_fields").fadeIn(400, function () {
                     $("#role_" + params.selected + "_fields")
-                        .find('select.dropdown').chosen(CHOSEN_OPTIONS);
+                        .find('select.dropdown').chosen(CHOSEN_OPTIONS)
+                        // fix for a "is not focusable" bug for hidden required fields
+                        .end().find('[data-is-required=true]').attr('required', 'required');
                 });
 
             }
-            else if(params.deselected)
+            else if (params.deselected) {
                 $("#role_" + params.deselected + "_fields").fadeOut()
-        })
+                    // fix for a "is not focusable" bug for hidden required fields
+                    .find('[required]').removeAttr('required');
+            }
+        });
     }
 
     function initSemanticUI() {
