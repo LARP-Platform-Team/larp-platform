@@ -17,14 +17,16 @@
 
 <div class="ui stackable grid">
   <g:each in="${roles}" var="roleFields">
-    <div class="ui eight wide column ${subject.roles && subject.roles.contains(roleFields.key) ? '' : 'larp-hidden'}"
+    <g:set var="isShown" value="${subject.roles && subject.roles.contains(roleFields.key)}"/>
+    <div class="ui eight wide column ${isShown ? '' : 'larp-hidden'}"
          id="role_${roleFields.key.id}_fields">
       <div class="ui pilled segment">
         <h4>Поля для роли ${roleFields.key.title}</h4>
 
         <g:each in="${roleFields.value}" var="field">
           <g:render template="inputFields/${field.type.toString()}"
-                    model="[field: values.get(field.id) ?: new FormFieldValue(field: field)]"/>
+                    model="[field: values.get(field.id) ?: new FormFieldValue(field: field),
+                            isHidden: !isShown]"/>
         </g:each>
       </div>
     </div>

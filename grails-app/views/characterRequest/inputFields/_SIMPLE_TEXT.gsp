@@ -4,12 +4,13 @@
 <div class="${hasErrors(bean: fieldValue, field: 'value', 'error')} ${fieldValue.field.required ? 'required' : ''} field">
   <label for="request_from_field_${fieldValue.field.id}">${fieldValue.field.title}:</label>
 
-  <g:if test="${fieldValue.field.required}">
-    <g:textField required="required"
+  <g:if test="${!isHidden && fieldValue.field.required}">
+    <g:textField required="required" data-is-required="true"
         name="request_from_field_${fieldValue.field.id}" value="${fieldValue.value}"/>
   </g:if>
   <g:else>
-    <g:textField name="request_from_field_${fieldValue.field.id}" value="${fieldValue.value}"/>
+    <g:textField data-is-required="${fieldValue.field.required}"
+                 name="request_from_field_${fieldValue.field.id}" value="${fieldValue.value}"/>
   </g:else>
 
   <g:if test="${fieldValue.field.hint}">

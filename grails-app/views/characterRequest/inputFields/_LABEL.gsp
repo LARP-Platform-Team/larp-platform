@@ -2,7 +2,7 @@
 <g:set var="fieldValue" value="${field as FormFieldValue}"/>
 
 <div class="field">
-  <div class="ui basic blsck label">
+  <div class="ui basic black label">
     ${fieldValue.field.title}
   </div>
 </div>
