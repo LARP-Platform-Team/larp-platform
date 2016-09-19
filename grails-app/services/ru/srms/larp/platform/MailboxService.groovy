@@ -39,7 +39,14 @@ class MailboxService {
 
   @PreAuthorize("(hasPermission(#box, create) and #box.game.active) or \
       hasPermission(#box.game, admin)")
-  def writeLetter(MailBox box, LetterRef reply = null) {
+  def writeLetter(MailBox box, String targetAddress = '') {
+    def content = new LetterContent(sender: box, targetAddresses: targetAddress ?: '')
+    new LetterRef(mailbox: box, type: LetterType.DRAFT, content: content)
+  }
+
+  @PreAuthorize("(hasPermission(#box, create) and #box.game.active) or \
+      hasPermission(#box.game, admin)")
+  def replyToLetter(MailBox box, LetterRef reply) {
     def content = new LetterContent(sender: box)
     if(reply) {
       content.targetAddresses = reply.content.sender?.address

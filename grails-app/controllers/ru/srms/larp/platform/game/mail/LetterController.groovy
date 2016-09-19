@@ -41,13 +41,17 @@ class LetterController extends BaseModuleController {
       if (!box || box.game != params.game)
         throw new Exception("Неверный ящик")
 
-      def replyLetter = null
       if(params.reply?.id) {
+        def replyLetter = null
         def letterRef = LetterRef.get(params.reply?.id)
-        if(letterRef.mailbox == box)
+        if(letterRef.mailbox == box) {
           replyLetter = letterRef
+        }
+        respond mailboxService.replyToLetter(box, replyLetter)
+        return
       }
-      respond mailboxService.writeLetter(box, replyLetter)
+
+      respond mailboxService.writeLetter(box, params.targetAddress)
     }
   }
 

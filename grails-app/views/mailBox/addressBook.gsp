@@ -24,6 +24,11 @@
             <div class="item">
             <g:if test="${params.game.active}">
               <div class="right floated content">
+                <ingame:link class="ui icon blue basic button" title="Написать письмо"
+                             controller="letter" action="compose"
+                             params="['targetAddress': address.entry?.address ?: address.entryAddress, mailboxId: subject.id]">
+                  <i class="write blue icon"></i>
+                </ingame:link>
                 <ingame:link class="ui icon red basic button" title="Удалить"
                              action="deleteSavedAddress" resource="${subject}"
                              onclick="return confirm('Вы уверены?');"
