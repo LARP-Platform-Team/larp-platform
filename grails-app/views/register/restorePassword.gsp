@@ -12,7 +12,7 @@
   <ui:message type="info"><g:message code="spring.security.ui.forgotPassword.description"/></ui:message>
   <g:form action='restorePassword' name='passwordRestoreForm' class="ui form">
     <div class="required field">
-      <label for="username">Логин</label>
+      <label for="username">Логин или E-mail</label>
       <g:textField name="username" required="required"/>
     </div>
     <ui:submit name="sendEmail" title="${g.message(code: 'spring.security.ui.forgotPassword.submit')}">

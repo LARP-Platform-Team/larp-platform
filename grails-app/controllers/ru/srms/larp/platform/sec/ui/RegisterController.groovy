@@ -82,17 +82,20 @@ class RegisterController extends BaseController {
           throw new IllegalArgumentException('Кыш, галька!')
 
         def user = SpringUser.findByUsername(params.username)
-        if (!user)
-          throw new IllegalArgumentException('Пользователь с указанным логином не найден')
+        if (!user) {
+          user = SpringUser.findByEmail(params.username)
+          if(!user)
+            throw new IllegalArgumentException('Пользователь не найден')
+        }
 
-        def token = userService.createPasswordRestoreToken(params.username)
+        def token = userService.createPasswordRestoreToken(user.username)
         flash.success = g.message(code: 'spring.security.ui.forgotPassword.sent')
 
         def link = generateLink('setNewPassword', [token: token])
         mailService.sendMail {
           to user.email
           subject "Восстановление пароля на LARP Platform"
-          html g.render(template: 'passwordRestoreLetter', model: [link: link])
+          html g.render(template: 'passwordRestoreLetter', model: [link: link, user: user])
         }
       } catch (IllegalArgumentException e) {
         flash.error = e.getMessage()
