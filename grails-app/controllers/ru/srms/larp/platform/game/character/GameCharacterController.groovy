@@ -39,9 +39,17 @@ class GameCharacterController extends BaseController {
     }
 
     def index() {
+        def findName = '';
+
+        if(!params.containsKey('resetSearch')) {
+            findName = params.findName ?: '';
+        }
+
         render(view: 'index', model: [
-                characters: characterService.list(params.game, paginator()),
-                itemsCount: characterService.count(params.game)])
+                characters: characterService.list(params.game, findName, paginator()),
+                itemsCount: characterService.count(params.game, findName),
+                search: [name: findName]
+        ])
     }
 
     def create() {

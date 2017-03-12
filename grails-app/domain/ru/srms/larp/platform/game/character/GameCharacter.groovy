@@ -12,6 +12,7 @@ class GameCharacter implements InGameStuff, Titled, GrantedAuthority {
 
   String name
   String alias
+  String gmNote
   Boolean isDead = false
   SpringUser player
 
@@ -22,6 +23,7 @@ class GameCharacter implements InGameStuff, Titled, GrantedAuthority {
     // character alias must be unique in the game context
     alias maxSize: 32, matches: /^[A-Za-z0-9\-]+$/, unique: 'game'
     player nullable: true
+    gmNote maxSize: 1000, nullable: true
   }
 
   Set<GameRole> getRoles() {

@@ -81,4 +81,13 @@
         <modifyDataType columnName="title" newDataType="varchar(300)" tableName="character_request_form_field"/>
         <modifyDataType columnName="hint" newDataType="varchar(300)" tableName="character_request_form_field"/>
     </changeSet>
+
+    <!-- Add GM notes for a Character -->
+    <changeSet author="treble.snake" id="1489343258246-1">
+        <addColumn tableName="game_character">
+            <column name="gm_note" type="varchar(1000)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

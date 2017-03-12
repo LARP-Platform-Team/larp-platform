@@ -1,4 +1,4 @@
-<%@ page import="ru.srms.larp.platform.game.resources.GameResource; ru.srms.larp.platform.game.resources.ResourceInstance; org.springframework.validation.FieldError" %>
+<%@ page import="ru.srms.larp.platform.game.character.GameCharacter; ru.srms.larp.platform.game.resources.GameResource; ru.srms.larp.platform.game.resources.ResourceInstance; org.springframework.validation.FieldError" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,6 +22,22 @@
   <section>
     <h2>Хранилища</h2>
 
+
+    <div class="ui form">
+      <ingame:form url="[resource: subject, action: 'show']">
+        <div class="inline field">
+          <label for="characterFilter">Найти по персонажу-владельцу:</label>
+          <g:select name="characterFilter" from="${GameCharacter.findAllByGame(params.game)}"
+                    optionKey="id" class="ui dropdown" value="${params?.characterFilter}" noSelection="${['0': 'Без владельца']}"/>
+          <ui:submit class="search icon" icon="search" title="Найти"/>
+          <g:if test="${params.containsKey('characterFilter')}">
+          <ingame:link resource="${subject}" action="show" class="ui icon button" title="Сбросить фильтр">
+            <i class="ui remove icon"></i></ingame:link>
+          </g:if>
+        </div>
+      </ingame:form>
+    </div>
+
     <g:if test="${subject.instances.size() == 0}">
       <ui:message type="info">Хранилищ ресурса данного типа пока нет.</ui:message>
     </g:if>
@@ -39,22 +55,26 @@
         </thead>
         <tbody>
         <g:each in="${subject.instances}" var="item">
-          <tr>
-            <td>${item.type.storage}</td>
-            <td>${item.value} ${item.type.measure}</td>
-            <td>${item.fullId}</td>
-            <td>${item.owner}</td>
-            <td>${item.origin?.title}</td>
-            <td class="buttons">
-              <ingame:link action="edit" resource="${item}" class="ui yellow icon basic button"
-                           title="Редактировать">
-                <i class="yellow edit icon"></i></ingame:link>
-              <ingame:link action="delete" resource="${item}" class="ui red icon basic button"
-                           title="Удалить"
-                           onclick="return confirm('Вы уверены?');"><i
-                  class="red delete icon"></i></ingame:link>
-            </td>
-          </tr>
+          <g:if test="${!params.containsKey('characterFilter') ||
+              (!item.owner && params.getInt('characterFilter') == 0) ||
+              (item.owner && item.owner.id == params.getLong('characterFilter'))}">
+            <tr>
+              <td>${item.type.storage}</td>
+              <td>${item.value} ${item.type.measure}</td>
+              <td>${item.fullId}</td>
+              <td>${item.owner}</td>
+              <td>${item.origin?.title}</td>
+              <td class="buttons">
+                <ingame:link action="edit" resource="${item}" class="ui yellow icon basic button"
+                             title="Редактировать">
+                  <i class="yellow edit icon"></i></ingame:link>
+                <ingame:link action="delete" resource="${item}" class="ui red icon basic button"
+                             title="Удалить"
+                             onclick="return confirm('Вы уверены?');"><i
+                    class="red delete icon"></i></ingame:link>
+              </td>
+            </tr>
+          </g:if>
         </g:each>
         </tbody>
         <g:render template="/shared/semantic/tablePaginate"

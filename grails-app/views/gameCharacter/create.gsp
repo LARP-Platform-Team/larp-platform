@@ -17,9 +17,7 @@
 <content tag="content">
     <g:render template="/shared/fromErrors" bean="${subject}" var="subject"/>
     <ingame:form class="ui form" url="[resource: subject, action: 'save']">
-        <div class="ui three fields">
-            <g:render template="form"/>
-        </div>
+        <g:render template="form" model="[isCreate: true]"/>
         <ui:submit icon="add">Сохранить</ui:submit>
     </ingame:form>
 </content>
