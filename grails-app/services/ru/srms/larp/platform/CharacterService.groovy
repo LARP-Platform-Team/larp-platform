@@ -23,14 +23,30 @@ class CharacterService {
         GameCharacter.findByAlias(alias)
     }
 
-    @PreAuthorize("hasPermission(#game, admin)")
-    def list(Game game, Map pagination) {
-        GameCharacter.findAllByGame(game, pagination)
+    private String like(String value) {
+        if(value.isEmpty())
+            return value
+
+        if(value.charAt(0) != '%')
+            value = "%" + value
+        if(value.charAt(value.length() - 1) != '%')
+            value = value + "%"
+
+        return value
     }
 
     @PreAuthorize("hasPermission(#game, admin)")
-    def count(Game game) {
-        GameCharacter.countByGame(game)
+    def list(Game game, String findName, Map pagination) {
+        return findName.isEmpty() ?
+            GameCharacter.findAllByGame(game, pagination) :
+            GameCharacter.findAllByGameAndNameIlike(game, this.like(findName), pagination);
+    }
+
+    @PreAuthorize("hasPermission(#game, admin)")
+    def count(Game game, String findName) {
+        return findName.isEmpty() ?
+            GameCharacter.countByGame(game) :
+            GameCharacter.countByGameAndNameIlike(game, this.like(findName));
     }
 
     @PreAuthorize("hasPermission(#game, admin)")
